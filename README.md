@@ -1,70 +1,114 @@
-# Getting Started with Create React App
+<!-- <p align="center">
+  <a href="" rel="noopener">
+ <img width=250px height=180px src="https://dylantsouy.github.io/dylan-web/static/media/logo.d72887e1.png" alt="Project logo"></a>
+</p> -->
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<h3 align="center">Lucky Draw Dashboard</h3>
+<p align="center">https://dylantsouy.github.io/luckydraw-dashboard/
+</p>
 
-## Available Scripts
+---
+
+## 📝 Table of Contents
+
+- [About](#about)
+- [Getting Started](#getting_started)
+- [Deployment](#deployment)
+- [Usage](#usage)
+- [Built Using](#built_using)
+- [Authors](#authors)
+- [Acknowledgments](#acknowledgement)
+
+## 🧐 About <a name = "about"></a>
+
+ This is the dashboard for luckdraw to manage data,include situation romm, If you need more information, Please feel free to contact me at any time
+
+## 🏁 Getting Started <a name = "getting_started"></a>
+
+
+
+### Prerequisites
+
+What things you need to install the software and how to install them.
+
+```
+Give examples
+```
+
+### Installing
 
 In the project directory, you can run:
 
-### `npm start`
+```
+npm i
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Install the necessary package for project before start.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+```
+npm start
+```
 
-### `npm test`
+Runs the app in the development mode.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-### `npm run build`
+The page will reload if you make edits.
+You will also see any lint errors in the console.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 🔧 Running the tests <a name = "tests"></a>
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Tests for this system.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+```
+npm run test
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## 🎈 Usage <a name="usage"></a>
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```
+Example:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+    - src
+        - components
+            |_ common
+                |_ Sidebar.tsx
+        - helpers
+            |_someHelpers.ts
 
-## Learn More
+Then in the Sidebar.tsx:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+    o import { something } from "helpers/someHelpers.ts"
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+> Don't need to write "../../../" thing 👍
 
-### Code Splitting
+    x import { something } from "../../../helpers/someHelpers.ts"
+```
+    
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## 🚀 Deployment <a name = "deployment"></a>
 
-### Analyzing the Bundle Size
+Deploy By github page
+https://dylantsouy.github.io/luckydraw-dashboard/
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## ⛏️ Built Using <a name = "built_using"></a>
 
-### Making a Progressive Web App
+- [React](https://reactjs.org/) - JavaScript library
+- [MUI](https://mui.com/) - UI Framework
+- [Zustand](https://github.com/pmndrs/zustand) - State-management
+- [Mysql](https://www.mysql.com/) - Database
+- [NodeJs](https://nodejs.org/en/) - Server Environment
+- [Express](https://expressjs.com/) - Server Framework
+- [Sequelize](https://sequelize.org/) - Node.js ORM
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## ✍️ Authors <a name = "authors"></a>
 
-### Advanced Configuration
+- [@Dylan Tsou](https://github.com/dylantsouy) 
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## 🎉 Acknowledgements <a name = "acknowledgement"></a>
 
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- Hat tip to anyone whose code was used
+- Inspiration
+- References
