@@ -1,14 +1,16 @@
 import { fetcher } from './apiSetup';
 
-export const loginApi = async ({ account, password }) => {
-    const { data, error } = await fetcher('/api/Login', 'POST', {
-        account,
+export const loginApi = async ({ username, password }) => {
+    const { data, success, token } = await fetcher('/signin', 'POST', {
+        username,
         password,
     });
 
-    return {
-        data: data,
-        isLoading: !error && !data,
-        isError: error,
-    };
+    return { success, data, token };
+};
+
+export const fetchUserList = async () => {
+    const { success, data } = await fetcher('/users', 'get', {});
+
+    return { success, data };
 };

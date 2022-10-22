@@ -1,3 +1,9 @@
 {
-    "dashboard": "圖表"
+    "dashboard": "圖表",
+    "createdAt":"創建時間",
+    "name":"名稱",
+    "code":"工號",
+    "Username Error":"帳號錯誤",
+    "Invalid Password":"密碼錯誤",
+    "loginSuccess":"登入成功"
 }

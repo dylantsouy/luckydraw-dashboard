@@ -1,7 +1,7 @@
 import React from 'react';
 import './styles.scss';
 import { Box, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
-import { Home } from '@mui/icons-material';
+import { Home, People } from '@mui/icons-material';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'langs/useTranslation';
@@ -19,6 +19,11 @@ export default function Sidebar() {
             listIcon: <Home />,
             listText: t('dashboard'),
             path: 'dashboard',
+        },
+        {
+            listIcon: <People />,
+            listText: t('user'),
+            path: 'user',
         },
     ];
 

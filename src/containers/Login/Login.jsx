@@ -8,6 +8,7 @@ import { permissionHandler } from 'auths/permission';
 import { useAuthStore } from 'store/auth';
 import { useSnackbar } from 'notistack';
 import { useTranslation } from 'langs/useTranslation';
+import { loginApi } from 'apis/postApi';
 
 export default function Login() {
     const { setAuthValue } = useAuthStore();
@@ -15,24 +16,33 @@ export default function Login() {
     const navigate = useNavigate();
     const { enqueueSnackbar } = useSnackbar();
     const [loading, setLoading] = useState(false);
-    const [form, setForm] = useState({ account: '', password: '' });
+    const [form, setForm] = useState({ username: '', password: '' });
     const [validation, setValidation] = useState({
-        account: { valid: true, error: '' },
+        username: { valid: true, error: '' },
         password: { valid: true, error: '' },
     });
 
-    const login = async (data, setValidation, setLoading) => {
-        setAuthValue('user', { name: 123 });
-        setAuthValue('token', 'test');
-        setAuthValue('permissionArray', permissionHandler(0));
-        setLoading(false);
-        enqueueSnackbar('登入成功', { variant: 'success' });
-        navigate('/dashboard');
+    const login = async () => {
+        try {
+            let result = await loginApi(form);
+            console.log(result);
+            if (result?.success) {
+                setAuthValue('user', result.data);
+                setAuthValue('token', result.token);
+                setAuthValue('permissionArray', permissionHandler(0));
+                setLoading(false);
+                enqueueSnackbar(t('loginSuccess'), { variant: 'success' });
+                navigate('/dashboard');
+            }
+        } catch (err) {
+            enqueueSnackbar(t(err?.response?.data?.message), { variant: 'error' });
+            setLoading(false);
+        }
     };
 
     const onChange = (e) => {
         setValidation({
-            account: { valid: true, error: '' },
+            username: { valid: true, error: '' },
             password: { valid: true, error: '' },
         });
         setForm({
@@ -45,11 +55,11 @@ export default function Login() {
         e.preventDefault();
         setLoading(true);
 
-        if (!form.account || !form.password) {
+        if (!form.username || !form.password) {
             setValidation({
-                account: {
-                    valid: !!form.account,
-                    error: !form.account ? '此欄位必填' : '',
+                username: {
+                    valid: !!form.username,
+                    error: !form.username ? '此欄位必填' : '',
                 },
                 password: {
                     valid: !!form.password,
@@ -70,12 +80,12 @@ export default function Login() {
                     <h2>{t('dashboard')}</h2>
                     <form className='root' noValidate onSubmit={onSubmit}>
                         <TextField
-                            id='account'
+                            id='username'
                             label={'Email'}
                             variant='outlined'
                             onChange={onChange}
-                            error={!validation.account.valid}
-                            helperText={validation.account.error}
+                            error={!validation.username.valid}
+                            helperText={validation.username.error}
                         />
                         <PasswordInput
                             variant='outlined'

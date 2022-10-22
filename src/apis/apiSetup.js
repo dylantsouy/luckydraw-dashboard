@@ -3,7 +3,6 @@
 // then get the url from local, else get the url from the real url
 
 import axios from 'axios';
-import localforage from 'localforage';
 
 export const urlDeterminator = () => {
     let env = process.env.REACT_APP_ENV;
@@ -15,25 +14,22 @@ export const urlDeterminator = () => {
 export const apiUrl = urlDeterminator();
 
 export const fetcher = async (url, method = 'GET', data = {}) => {
-    const token = await localforage.getItem('token');
+    const auth = localStorage.getItem('auth');
+    const token = JSON.parse(auth)?.state?.token
 
     const result = await axios({
         method,
         url: `${apiUrl}${url}`,
         data,
-        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+        headers: { 'Content-Type': 'application/json', 'x-access-token': token },
     });
 
-    if (result.status !== 200) {
-        const error = {
-            ...new Error('Some error is happened'),
-            info: result.data.message,
-            status: result.status,
-        };
-        throw error;
+    if (result.data.success === 'false' && result.data.message === 'No token provided') {
+        window.location.href = '/login';
+        return null;
     }
-
-    const { resultData } = result;
-
-    return { data: resultData };
+    
+    return {
+        ...result?.data,
+    };
 };

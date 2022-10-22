@@ -9,6 +9,7 @@ import Dashboard from './containers/Dashboard';
 import PrivateRoute from './auths/PrivateRoute';
 import { LanguageProvider } from './langs/LanguageProvider';
 import Compose from 'providers/Compose';
+import User from 'containers/User';
 
 function App() {
     return (
@@ -24,6 +25,7 @@ function App() {
                     }
                 />
                 <Route index path='/login' element={<Login />} />
+                <Route index path='/user' element={<User />} />
                 <Route path='/' element={<Navigate to='/dashboard' replace />} />
                 <Route path='*' element={<Page404 />} />
             </Routes>

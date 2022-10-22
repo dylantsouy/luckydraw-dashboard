@@ -1,0 +1,41 @@
+@import './variables.scss';
+@import './medias.scss';
+
+@mixin wrapper() {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+
+    & .container {
+        padding: 16px;
+        width: 100%;
+        height: calc(100vh - 160px);
+
+        @media screen and ($media-tablet), screen and ($media-phone) {
+            height: calc(100vh - 240px);
+        }
+        .table-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            width: 100%;
+            .table-root {
+                & *,
+                & *:focus {
+                    outline: none !important;
+                }
+
+                & .muidatagrid-columnheaderwrapper > div {
+                    height: 56px;
+                }
+
+                & .first-header-class,
+                & .first-cell-class {
+                    padding-left: 20px;
+                }
+            }
+        }
+    }
+}
