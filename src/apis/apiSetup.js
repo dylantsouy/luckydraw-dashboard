@@ -14,22 +14,24 @@ export const urlDeterminator = () => {
 export const apiUrl = urlDeterminator();
 
 export const fetcher = async (url, method = 'GET', data = {}) => {
-    const auth = localStorage.getItem('auth');
-    const token = JSON.parse(auth)?.state?.token
+    try {
+        const auth = localStorage.getItem('auth');
+        const token = JSON.parse(auth)?.state?.token;
+        const result = await axios({
+            method,
+            url: `${apiUrl}${url}`,
+            data,
+            headers: { 'Content-Type': 'application/json', 'x-access-token': token },
+        });
 
-    const result = await axios({
-        method,
-        url: `${apiUrl}${url}`,
-        data,
-        headers: { 'Content-Type': 'application/json', 'x-access-token': token },
-    });
-
-    if (result.data.success === 'false' && result.data.message === 'No token provided') {
-        window.location.href = '/login';
-        return null;
+        return {
+            ...result?.data,
+        };
+    } catch (err) {
+        if (err.response.data.message === 'Unauthorized' || err.response.data.message === 'No token provided') {
+            window.location.href = '/login';
+            localStorage.clear();
+            return null;
+        }
     }
-    
-    return {
-        ...result?.data,
-    };
 };

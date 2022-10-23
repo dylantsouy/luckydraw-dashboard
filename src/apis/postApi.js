@@ -14,3 +14,19 @@ export const fetchUserList = async () => {
 
     return { success, data };
 };
+
+export const editUser = async (props) => {
+    const { id } = props;
+    const { data, success } = await fetcher(`/users/${id}`, 'PUT', props);
+    return { success, data };
+};
+
+export const createUser = async (props) => {
+    const { data, success } = await fetcher(`/users`, 'POST', props);
+    return { success, data };
+};
+
+export const deleteUser = async (id) => {
+    const { data, success } = await fetcher(`/users/${id}`, 'DELETE', {});
+    return { success, data };
+};

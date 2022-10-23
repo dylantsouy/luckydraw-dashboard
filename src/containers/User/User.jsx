@@ -6,7 +6,10 @@ import { userColumn } from 'helpers/columns';
 import { useSnackbar } from 'notistack';
 import { useTranslation } from 'langs/useTranslation';
 import ConfirmModal from 'components/common/ConfirmModal';
-import { fetchUserList } from 'apis/postApi';
+import { deleteUser, fetchUserList } from 'apis/postApi';
+import EditModal from 'components/user/EditModal';
+import AddModal from 'components/user/AddModal';
+import { Button } from '@mui/material';
 
 export default function User() {
     const { t } = useTranslation('common');
@@ -55,30 +58,27 @@ export default function User() {
     };
 
     const confirmDelete = async () => {
-        setDialogLoading(true);
-        // deleteLocation(deleteData.location)
-        //     .then(async (res) => {
-        //         const { success } = res;
-        //         if (success) {
-        //             getUserList();
-        //             enqueueSnackbar(t('delete_success'), { variant: 'success' });
-        //             setDialogLoading(false);
-        //             setShowDelete(false);
-        //         }
-        //     })
-        //     .catch(() => {
-        //         enqueueSnackbar(t('delete_failed'), { variant: 'error' });
-        //         setDialogLoading(false);
-        //         setLoading(false);
-        //     });
+        try {
+            setDialogLoading(true);
+            let result = await deleteUser(deleteData?.id);
+            const { success } = result;
+            if (success) {
+                enqueueSnackbar(t('delete') + t('success'), { variant: 'success' });
+                setShowDeleteDialog(false);
+                getUserList();
+            }
+            setDialogLoading(false);
+        } catch (err) {
+            enqueueSnackbar(t('delete') + t('failed'), { variant: 'error' });
+            setDialogLoading(false);
+        }
     };
 
     const getUserList = useCallback(async () => {
-        setLoading(true);
         try {
+            setLoading(true);
             let result = await fetchUserList();
             const { success, data } = result;
-            console.log(result);
             if (success) {
                 setUserList(data);
             }
@@ -87,7 +87,7 @@ export default function User() {
             enqueueSnackbar(t(err?.response?.data?.message), { variant: 'error' });
             setLoading(false);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [enqueueSnackbar]);
 
     useEffect(() => {
@@ -97,6 +97,9 @@ export default function User() {
     return (
         <div className='user-wrapper'>
             <div className='container'>
+                <Button variant='contained' onClick={addHandler}>
+                    新增
+                </Button>
                 <div className='table-wrapper'>
                     {loading ? (
                         <Loading size={40} />
@@ -104,7 +107,7 @@ export default function User() {
                         <DataGrid
                             className='table-root'
                             rows={userList || []}
-                            columns={userColumn(t)}
+                            columns={userColumn(t, editHandler, deleteHandler)}
                             pageSize={perPage}
                             getRowId={(row) => row.id}
                             rowsPerPageOptions={[10, 25, 50, 100]}
@@ -127,20 +130,20 @@ export default function User() {
                     )}
                 </div>
             </div>
-            {/* <LocationEditModal
-                open={showEdit}
+            <EditModal
+                open={showEditDialog}
                 editData={editData}
                 setEditData={setEditData}
                 handleClose={handleCloseEdit}
-            /> */}
+            />
+            <AddModal open={showAddDialog} handleClose={handleCloseAdd} />
             <ConfirmModal
                 open={showDeleteDialog}
                 handlerOk={confirmDelete}
                 handleClose={() => setShowDeleteDialog(false)}
                 loading={dialogLoading}
-                text={`${t('confirmDelete')}${t('location')}: ${deleteData?.location}?`}
+                text={`${t('confirmDelete')}${t('user')}: ${deleteData?.name}?`}
             />
-            {/* <LocationAddModal open={showAdd} handleClose={handleCloseAdd} /> */}
         </div>
     );
 }
