@@ -19,8 +19,11 @@
             }
             .MuiDataGrid-row{
                 &:hover{
-                    background-color: $primary;
+                    background-color: $primary_lighter;
                 }
+            }
+            .MuiDataGrid-row.Mui-selected{
+                background-color: $primary_lighter;
             }
         }
     }

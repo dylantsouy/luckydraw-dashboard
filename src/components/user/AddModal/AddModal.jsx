@@ -5,7 +5,7 @@ import './styles.scss';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'langs/useTranslation';
 import { useSnackbar } from 'notistack';
-import { createUser } from 'apis/postApi';
+import { createUser } from 'apis/userApi';
 import ConfirmButton from 'components/common/ConfirmButton';
 
 export default function AddModal(props) {
@@ -104,12 +104,17 @@ export default function AddModal(props) {
                     error={!validation.name.valid}
                     helperText={validation.name.error}
                     variant='standard'
+                    onKeyPress={(e) => {
+                        if (e.key === 'Enter') {
+                            confirmHandler();
+                        }
+                    }}
                     onChange={(e) => handleChange('name', e)}
                 />
             </DialogContent>
             <DialogActions>
                 <ConfirmButton variant='contained' onClick={confirmHandler} loading={loading} text={t('confirm')} />
-                <Button onClick={handleClose}>{t('cancel')}</Button>
+                <Button onClick={() => handleClose()}>{t('cancel')}</Button>
             </DialogActions>
         </Dialog>
     );

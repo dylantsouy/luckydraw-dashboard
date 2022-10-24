@@ -1,0 +1,5 @@
+@import 'src/styles/mixins.scss';
+
+.admin-wrapper {
+    @include wrapper()
+}

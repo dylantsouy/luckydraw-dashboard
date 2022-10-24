@@ -5,7 +5,7 @@
 .sidebar-wrapper {
     height: 100%;
     min-width: 200px;
-    background-color: #fff;
+    background-color: $primary;
     position: relative;
     box-shadow: $boxShadow;
     overflow-y: auto;
@@ -15,18 +15,23 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        h1 {
-            font-family: Georgia, serif;
-            color: $black;
-            font-weight: bold;
-            font-size: 26px;
+        .logo {
+            display: block;
+            width: 35px;
+            height: 35px;
+            margin-right: 10px;
+            img {
+                width: 100%;
+                height: 100%;
+            }
         }
-        span {
-            font-weight: bold;
-            font-size: 12px;
-            color: $primary;
-            margin-top: 15px;
-            margin-left: 5px;
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            color: $primary_light;
+            div {
+                font-family: Georgia, serif;
+            }
         }
     }
     .logo {
@@ -35,16 +40,17 @@
     .menuSliderContainer {
         margin-top: 90px;
         .listItem {
-            color: $gray;
+            color: $primary_light;
             margin: 5px 0;
             position: relative;
             .listItemIcon {
-                color: $gray;
+                color: $primary_light;
             }
             &.active {
-                color: #333;
+                color: #fff;
+                background-color: $primary_dark;
                 .listItemIcon {
-                    color: #333;
+                    color: #fff;
                 }
                 &::after {
                     content: '';
@@ -54,7 +60,7 @@
                     border-radius: 10px;
                     width: 5px;
                     height: 100%;
-                    background-color: $primary;
+                    background-color: $sec_color;
                 }
             }
         }
@@ -63,11 +69,11 @@
         animation-name: closeSide;
         animation-duration: 0.5s;
         animation-fill-mode: forwards;
+        overflow-x: hidden;
         .title,
         .MuiListItemText-primary {
             display: none;
         }
-
         .logo {
             display: flex;
             justify-content: center;
@@ -84,8 +90,8 @@
         }
         .MuiList-root {
             .MuiButtonBase-root {
-                width: 55px;
                 margin: 12.5px 0;
+                width: 55px;
             }
         }
     }
@@ -93,6 +99,7 @@
         animation-name: closeSide;
         animation-duration: 0.5s;
         animation-fill-mode: forwards;
+        overflow-x: hidden;
         .title,
         .MuiListItemText-primary {
             display: none;
@@ -113,8 +120,8 @@
         }
         .MuiList-root {
             .MuiButtonBase-root {
-                width: 55px;
                 margin: 12.5px 0;
+                width: 55px;
             }
         }
     }

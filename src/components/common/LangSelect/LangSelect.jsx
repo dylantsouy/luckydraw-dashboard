@@ -28,7 +28,7 @@ const LangSelect = () => {
                     </MenuItem>
                 ))}
             </Select>
-            <Public color='gray' />
+            <Public color='primary' />
         </>
     );
     return <div className='langSelect-wrapper'>{renderLangMenu}</div>;

@@ -1,11 +1,11 @@
-import { Dialog, DialogActions, DialogContent, TextField } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, TextField } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import DialogTitle from '@mui/material/DialogTitle';
 import './styles.scss';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'langs/useTranslation';
 import { useSnackbar } from 'notistack';
-import { editUser } from 'apis/postApi';
+import { editUser } from 'apis/userApi';
 import ConfirmButton from 'components/common/ConfirmButton';
 
 export default function EditModal(props) {
@@ -55,12 +55,12 @@ export default function EditModal(props) {
         try {
             let result = await editUser(data);
             if (result.success) {
-                enqueueSnackbar(t('update_success'), { variant: 'success' });
+                enqueueSnackbar(t('update') + t('success'), { variant: 'success' });
                 handleClose(true);
                 setLoading(false);
             }
         } catch (err) {
-            enqueueSnackbar(t('update_failed'), { variant: 'error' });
+            enqueueSnackbar(t('update') + t('failed'), { variant: 'error' });
             setLoading(false);
         }
     };
@@ -68,7 +68,7 @@ export default function EditModal(props) {
     return (
         <Dialog className='editDialog' open={open} onClose={() => handleClose()}>
             <DialogTitle>
-                <span className='title-text'>{t('editUser')}</span>
+                <span className='title-text'>{t('edit')}{t('user')}</span>
             </DialogTitle>
             <DialogContent>
                 <TextField
@@ -92,11 +92,17 @@ export default function EditModal(props) {
                     error={!validation.name.valid}
                     helperText={validation.name.error}
                     variant='standard'
+                    onKeyPress={(e) => {
+                        if (e.key === 'Enter') {
+                            confirmHandler();
+                        }
+                    }}
                     onChange={(e) => handleChange('name', e)}
                 />
             </DialogContent>
             <DialogActions>
                 <ConfirmButton variant='contained' onClick={confirmHandler} loading={loading} text={t('confirm')} />
+                <Button onClick={()=>handleClose()}>{t('cancel')}</Button>
             </DialogActions>
         </Dialog>
     );

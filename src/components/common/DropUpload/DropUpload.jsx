@@ -7,7 +7,7 @@ import { useDropzone } from 'react-dropzone';
 import ProgressLinear from '../ProgressLinear';
 
 export default function DropUpload(props) {
-    const { setAddData, validation, setError, percentage, setPercentage, disabled } = props;
+    const { setAddData, validation, setError, percentage, setPercentage, disabled, accept, acceptWarn } = props;
     const { t } = useTranslation('common');
     const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
         // when upload to api need disabled for loading
@@ -17,12 +17,12 @@ export default function DropUpload(props) {
             setPercentage(0);
             setError((prevState) => ({
                 ...prevState,
-                file_name: { valid: true, error: '' },
+                name: { valid: true, error: '' },
                 file: { valid: true, error: '' },
             }));
             setAddData((prevState) => ({
                 ...prevState,
-                file_name: files[0]?.name?.split('.').slice(0, -1).join('.') || '',
+                name: files[0]?.name?.split('.').slice(0, -1).join('.') || '',
                 file: files[0],
             }));
         },
@@ -34,7 +34,7 @@ export default function DropUpload(props) {
             }));
             setAddData((prevState) => ({
                 ...prevState,
-                file_name: '',
+                name: '',
                 file: [],
             }));
         },
@@ -42,7 +42,7 @@ export default function DropUpload(props) {
         onDropRejected: () => {
             setAddData((prevState) => ({
                 ...prevState,
-                file_name: '',
+                name: '',
                 file: [],
             }));
             setError((prevState) => ({
@@ -51,10 +51,7 @@ export default function DropUpload(props) {
             }));
         },
         // accept format
-        accept: {
-            'application/zip': ['.zip'],
-            'application/octet-stream': ['.bin'],
-        },
+        accept: accept,
     });
     // upload file layout
     const files = acceptedFiles.map((file) => (
@@ -80,10 +77,10 @@ export default function DropUpload(props) {
                 ) : (
                     <div className='placeholder'>
                         <div className='placeholder-top'>
-                            {t('DropFile')} <em className='primary'>{t('clickToUpload')}</em>
+                            {t('DropFile')} <em className='third'>{t('clickToUpload')}</em>
                         </div>
                         <div className='placeholder-bottom'>
-                            {t('onlyAccept')} <em className='primary'>.zip</em> or <em className='primary'>.bin</em>
+                            {t('onlyAccept')} <em className='third'>{acceptWarn}</em>
                         </div>
                     </div>
                 )}
@@ -100,5 +97,7 @@ DropUpload.propTypes = {
     validation: PropTypes.object.isRequired,
     percentage: PropTypes.number.isRequired,
     setPercentage: PropTypes.func.isRequired,
+    accept: PropTypes.object,
     disabled: PropTypes.bool,
+    acceptWarn: PropTypes.string,
 };

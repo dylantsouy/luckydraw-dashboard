@@ -1,12 +1,13 @@
 import React from 'react';
 import './styles.scss';
 import { Box, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
-import { Home, People } from '@mui/icons-material';
+import { AdminPanelSettings, CardGiftcard, Home, People, ReceiptLong } from '@mui/icons-material';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'langs/useTranslation';
 import HasPermission from 'auths/HasPermission';
 import { useStorageStore } from 'store/store';
+import logo from 'assets/images/logo.png';
 
 export default function Sidebar() {
     const { t } = useTranslation('common');
@@ -25,6 +26,21 @@ export default function Sidebar() {
             listText: t('user'),
             path: 'user',
         },
+        {
+            listIcon: <CardGiftcard />,
+            listText: t('reward'),
+            path: 'reward',
+        },
+        {
+            listIcon: <ReceiptLong />,
+            listText: t('winning'),
+            path: 'winning',
+        },
+        {
+            listIcon: <AdminPanelSettings />,
+            listText: t('admin'),
+            path: 'admin',
+        },
     ];
 
     const goHandler = (path) => {
@@ -34,10 +50,17 @@ export default function Sidebar() {
     return (
         <div className={`sidebar-wrapper ${sidebarShow === 'close' ? 'hidden' : ''}`}>
             <div className='title' onClick={() => goHandler('/dashboard')}>
-                <h1>Logo</h1>
-                <span>v1.0.0</span>
+                <div className='logo'>
+                    <img src={logo} alt='logo' />
+                </div>
+                <div className='logo-text'>
+                    <div className='top'>Luckdraw</div>
+                    <div className='bottom'>Dashboard</div>
+                </div>
             </div>
-            <div className='logo'>Logo</div>
+            <div className='logo'>
+                <img src={logo} alt='logo' />
+            </div>
             <Box className='menuSliderContainer' component='div'>
                 <List>
                     {listItems.map((e) => (

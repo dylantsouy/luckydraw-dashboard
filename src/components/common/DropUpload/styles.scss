@@ -1,4 +1,4 @@
-@import 'src/styles/var.scss';
+@import 'src/styles/variables.scss';
 
 .dropArea {
     .dropzone {
@@ -11,7 +11,7 @@
         border-radius: 10px;
         border: 1px dotted #c0c0c0;
         &:hover {
-            background: $primary_color_lighter;
+            background: $background;
         }
         .placeholder {
             div {
@@ -23,9 +23,9 @@
         }
         &.disabled {
             cursor: not-allowed;
-            background: $background;
+            background: $gray;
             &:hover {
-                background: $background;
+                background: $gray;
             }
         }
     }

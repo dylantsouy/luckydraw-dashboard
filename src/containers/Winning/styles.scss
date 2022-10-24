@@ -1,0 +1,5 @@
+@import 'src/styles/mixins.scss';
+
+.user-wrapper {
+    @include wrapper()
+}

@@ -125,24 +125,26 @@ p {
 .pointer {
     cursor: pointer;
 }
-
+.MuiDataGrid-main {
+    color: $black;
+}
 .action-icon {
     cursor: pointer;
     transition: 0.3s !important;
     color: $primary;
     background-color: $primary_light;
-    padding: 7.5px;
-    width: 35px !important;
-    height: 35px !important;
-    border-radius: 50%;
+    width: 30px !important;
+    height: 30px !important;
+    padding: 6px;
+    border-radius: 10px;
     &:hover {
-        background-color: $sec_color;
+        opacity: 0.8;
     }
     &.warn {
-        background-color: $warn;
-        color: $warn_dark;
+        color: $sec_color;
+        background-color: $sec_color_light;
         &:hover {
-            background-color: $warn_light;
+            opacity: 0.8;
         }
     }
 }
@@ -201,6 +203,16 @@ p {
 .primary {
     color: $primary;
 }
+.primary_light {
+    color: $primary_light;
+}
+.secondary {
+    color: $sec_color;
+}
+
+.third{
+    color: $third_color;
+}
 
 .chip {
     border-radius: 5px;
@@ -208,8 +220,8 @@ p {
     font-size: 12px;
     font-weight: bold;
     &.danger {
-        color: $warn_dark;
-        background-color: $warn_light;
+        color: $sec_color;
+        background-color: $sec_color_light;
     }
     &.success {
         color: $primary;
@@ -271,7 +283,7 @@ p {
 
 .confirmText {
     margin-top: 5px;
-    color: $warn_dark;
+    color: $sec_color;
 }
 
 .MuiDataGrid-virtualScroller {
@@ -289,4 +301,12 @@ p {
         border-radius: 10px !important;
         background: $gray !important;
     }
+}
+
+.SnackbarItem-variantSuccess {
+    background-color: $third_color !important;
+}
+
+.SnackbarItem-variantError {
+    background-color: $sec_color !important;
 }

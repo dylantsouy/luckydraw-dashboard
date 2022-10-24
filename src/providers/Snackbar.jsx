@@ -8,7 +8,7 @@ const Snackbar = (props) => {
 
     return (
         <SnackbarProvider
-            autoHideDuration={2500}
+            autoHideDuration={3000}
             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
             maxSnack={5}
             action={(snackbarKey) => <SnackCloseBtn snackbarKey={snackbarKey} />}

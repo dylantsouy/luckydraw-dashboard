@@ -8,7 +8,9 @@ import { permissionHandler } from 'auths/permission';
 import { useAuthStore } from 'store/auth';
 import { useSnackbar } from 'notistack';
 import { useTranslation } from 'langs/useTranslation';
-import { loginApi } from 'apis/postApi';
+import { loginApi } from 'apis/authApi';
+import logo from 'assets/images/logo.png';
+
 
 export default function Login() {
     const { setAuthValue } = useAuthStore();
@@ -35,8 +37,9 @@ export default function Login() {
                 navigate('/dashboard');
             }
         } catch (err) {
-            enqueueSnackbar(t(err?.response?.data?.message), { variant: 'error' });
+            console.log(err.message);
             setLoading(false);
+            enqueueSnackbar(t(err?.message), { variant: 'error' });
         }
     };
 
@@ -76,12 +79,19 @@ export default function Login() {
         <>
             <div className='login-wrapper'>
                 <div className='modal'>
-                    <h1>Logo</h1>
-                    <h2>{t('dashboard')}</h2>
+                    <div className='title'>
+                        <div className='logo'>
+                            <img src={logo} alt='logo' />
+                        </div>
+                        <div className='logo-text'>
+                            <div className='top'>Luckdraw</div>
+                            <div className='bottom'>Dashboard</div>
+                        </div>
+                    </div>
                     <form className='root' noValidate onSubmit={onSubmit}>
                         <TextField
                             id='username'
-                            label={'Email'}
+                            label={t('username')}
                             variant='outlined'
                             onChange={onChange}
                             error={!validation.username.valid}
@@ -94,7 +104,7 @@ export default function Login() {
                             helperText={validation.password.error}
                         />
                         <div className='mt-2' />
-                        <ConfirmButton variant='contained' type='submit' loading={loading} text={'登入'} />
+                        <ConfirmButton variant='contained' type='submit' loading={loading} text={t('login')} />
                     </form>
                     <div className='version'>v1.0.0</div>
                 </div>

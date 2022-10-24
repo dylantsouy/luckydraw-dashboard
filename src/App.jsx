@@ -10,6 +10,9 @@ import PrivateRoute from './auths/PrivateRoute';
 import { LanguageProvider } from './langs/LanguageProvider';
 import Compose from 'providers/Compose';
 import User from 'containers/User';
+import Admin from 'containers/Admin';
+import Reward from 'containers/Reward';
+import Winning from 'containers/Winning';
 
 function App() {
     return (
@@ -26,6 +29,9 @@ function App() {
                 />
                 <Route index path='/login' element={<Login />} />
                 <Route index path='/user' element={<User />} />
+                <Route index path='/admin' element={<Admin />} />
+                <Route index path='/reward' element={<Reward />} />
+                <Route index path='/winning' element={<Winning />} />
                 <Route path='/' element={<Navigate to='/dashboard' replace />} />
                 <Route path='*' element={<Page404 />} />
             </Routes>

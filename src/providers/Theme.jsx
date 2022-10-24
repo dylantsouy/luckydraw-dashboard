@@ -5,19 +5,19 @@ import PropTypes from 'prop-types';
 const theme = createTheme({
     palette: {
         primary: {
-            main: '#43a047',
-            contrastText: '#fff',
+            main: '#605bff',
+            contrastText: '#e2e1ff',
         },
         secondary: {
-            main: '#2A1C19',
-            contrastText: '#fff',
+            main: '#fd7468',
+            contrastText: '#ffe7dc',
+        },
+        third: {
+            main: '#6ac1ff',
+            contrastText: '#eaf2f4',
         },
         gray: {
             main: '#a2a2a2',
-            contrastText: '#fff',
-        },
-        s_primary: {
-            main: '#0070f9',
             contrastText: '#fff',
         },
     },

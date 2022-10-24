@@ -10,8 +10,10 @@ import { useStorageStore } from 'store/store';
 import { useAuthStore } from 'store/auth';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
+import { useTranslation } from 'langs/useTranslation';
 
 export default function Header(props) {
+    const { t } = useTranslation('common');
     const { login } = props;
     const { clear } = useAuthStore();
     const { enqueueSnackbar } = useSnackbar();
@@ -35,9 +37,7 @@ export default function Header(props) {
 
     return login ? (
         <div className='header-wrapper'>
-            <div className='container'>
-                <h1 className='title'>Logo</h1>
-            </div>
+            <div></div>
             <div className='buttonWrapper'>
                 <LangSelect />
             </div>
@@ -54,8 +54,8 @@ export default function Header(props) {
                 </div>
             </div>
             <div className='header-right'>
-                <Tooltip placement='bottom' title={'登出'}>
-                    <Logout className='logout-btn' color='gray' onClick={logoutHandler} />
+                <Tooltip placement='bottom' title={t('logout')}>
+                    <Logout className='logout-btn' color='primary' onClick={logoutHandler} />
                 </Tooltip>
 
                 <LangSelect />

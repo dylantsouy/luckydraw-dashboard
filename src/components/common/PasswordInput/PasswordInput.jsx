@@ -2,14 +2,16 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { IconButton, InputAdornment, TextField } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { useTranslation } from 'langs/useTranslation';
 
 export default function PasswordInput(props) {
+    const { t } = useTranslation('common');
     const [showPassword, setShowPassword] = useState(false);
     const { onChange, value, variant, error, helperText, required, disabled } = props;
     return (
         <TextField
             margin='dense'
-            label={'密碼'}
+            label={t('password')}
             id='password'
             type={showPassword ? 'text' : 'password'}
             value={value}
