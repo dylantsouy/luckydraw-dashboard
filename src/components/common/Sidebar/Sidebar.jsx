@@ -16,11 +16,11 @@ export default function Sidebar() {
     const { pathname } = useLocation();
 
     const listItems = [
-        {
-            listIcon: <Home />,
-            listText: t('dashboard'),
-            path: 'dashboard',
-        },
+        // {
+        //     listIcon: <Home />,
+        //     listText: t('dashboard'),
+        //     path: 'dashboard',
+        // },
         {
             listIcon: <People />,
             listText: t('user'),
@@ -49,7 +49,7 @@ export default function Sidebar() {
 
     return (
         <div className={`sidebar-wrapper ${sidebarShow === 'close' ? 'hidden' : ''}`}>
-            <div className='title' onClick={() => goHandler('/dashboard')}>
+            <div className='title' onClick={() => goHandler('/user')}>
                 <div className='logo'>
                     <img src={logo} alt='logo' />
                 </div>

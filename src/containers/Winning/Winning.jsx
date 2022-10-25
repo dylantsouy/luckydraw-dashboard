@@ -2,32 +2,25 @@ import { DataGrid } from '@mui/x-data-grid';
 import React, { useState, useEffect, useCallback } from 'react';
 import Loading from 'components/common/Loading';
 import './styles.scss';
-import { userColumn } from 'helpers/columns';
+import { winningColumn } from 'helpers/columns';
 import { useSnackbar } from 'notistack';
 import { useTranslation } from 'langs/useTranslation';
 import ConfirmModal from 'components/common/ConfirmModal';
-import { deleteAllUsers, deleteUser, deleteUsers, fetchUserList } from 'apis/userApi';
-import EditModal from 'components/user/EditModal';
-import AddModal from 'components/user/AddModal';
+import { deleteAllWinnings, deleteWinning, deleteWinnings, fetchWinningList } from 'apis/winningApi';
 import { Button, InputAdornment, TextField } from '@mui/material';
-import FileUploadModal from 'components/user/FileUploadModal';
 import { Stack } from '@mui/system';
-import { Search } from '@mui/icons-material';
+import { Refresh, Search } from '@mui/icons-material';
 
 export default function Winning() {
     const { t } = useTranslation('common');
     const { enqueueSnackbar } = useSnackbar();
-    const [userList, setUserList] = useState([]);
+    const [winningList, setWinningList] = useState([]);
     const [searchValue, setSearchValue] = useState('');
     const [selectRows, setSelectRows] = useState([]);
-    const [showEditDialog, setShowEditDialog] = useState(false);
     const [showDeleteAllDialog, setShowDeleteAllDialog] = useState(false);
     const [showDeleteMutipleDialog, setShowDeleteMutipleDialog] = useState(false);
-    const [showImportDialog, setShowimportDialog] = useState(false);
     const [dialogLoading, setDialogLoading] = useState(false);
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-    const [showAddDialog, setShowAddDialog] = useState(false);
-    const [editData, setEditData] = useState({});
     const [deleteData, setDeleteData] = useState({});
     const [perPage, setPerPage] = useState(10);
     const [loading, setLoading] = useState(true);
@@ -37,26 +30,11 @@ export default function Winning() {
     };
 
     const filterList = () => {
-        return userList.filter((e) => e.name?.includes(searchValue) || e.code?.includes(searchValue));
+        return winningList.filter((e) => e?.User?.name.includes(searchValue) || e?.User?.code.includes(searchValue)|| e?.Reward?.name.includes(searchValue));
     };
 
     const onSelectionModelChange = (ids) => {
         setSelectRows(ids);
-    };
-
-    const importHandler = () => {
-        setShowimportDialog(true);
-    };
-
-    const handleCloseImport = (refresh) => {
-        setShowimportDialog(false);
-        if (refresh) {
-            getUserList();
-        }
-    };
-
-    const addHandler = () => {
-        setShowAddDialog(true);
     };
 
     const deleteHandler = (e) => {
@@ -72,34 +50,15 @@ export default function Winning() {
         setShowDeleteAllDialog(true);
     };
 
-    const handleCloseAdd = (refresh) => {
-        setShowAddDialog(false);
-        if (refresh) {
-            getUserList();
-        }
-    };
-
-    const editHandler = (e) => {
-        setShowEditDialog(true);
-        setEditData(e);
-    };
-
-    const handleCloseEdit = (refresh) => {
-        setShowEditDialog(false);
-        if (refresh) {
-            getUserList();
-        }
-    };
-
     const confirmDelete = async () => {
         try {
             setDialogLoading(true);
-            let result = await deleteUser(deleteData?.id);
+            let result = await deleteWinning(deleteData?.id);
             const { success } = result;
             if (success) {
                 enqueueSnackbar(t('delete') + t('success'), { variant: 'success' });
                 setShowDeleteDialog(false);
-                getUserList();
+                getWinningList();
             }
             setDialogLoading(false);
         } catch (err) {
@@ -111,13 +70,13 @@ export default function Winning() {
     const confirmDeleteMutiple = async () => {
         try {
             setDialogLoading(true);
-            let result = await deleteUsers(selectRows);
+            let result = await deleteWinnings(selectRows);
             const { success } = result;
             if (success) {
                 enqueueSnackbar(t('delete') + t('success'), { variant: 'success' });
                 setShowDeleteMutipleDialog(false);
                 setSelectRows([]);
-                getUserList();
+                getWinningList();
             }
             setDialogLoading(false);
         } catch (err) {
@@ -129,12 +88,12 @@ export default function Winning() {
     const confirmDeleteAll = async () => {
         try {
             setDialogLoading(true);
-            let result = await deleteAllUsers();
+            let result = await deleteAllWinnings();
             const { success } = result;
             if (success) {
                 enqueueSnackbar(t('delete') + t('success'), { variant: 'success' });
                 setShowDeleteAllDialog(false);
-                getUserList();
+                getWinningList();
             }
             setDialogLoading(false);
         } catch (err) {
@@ -143,13 +102,13 @@ export default function Winning() {
         }
     };
 
-    const getUserList = useCallback(async () => {
+    const getWinningList = useCallback(async () => {
         try {
             setLoading(true);
-            let result = await fetchUserList();
+            let result = await fetchWinningList();
             const { success, data } = result;
             if (success) {
-                setUserList(data);
+                setWinningList(data);
                 setSelectRows([]);
             }
             setLoading(false);
@@ -160,22 +119,16 @@ export default function Winning() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [enqueueSnackbar]);
     useEffect(() => {
-        getUserList();
-    }, [getUserList]);
+        getWinningList();
+    }, [getWinningList]);
 
     return (
-        <div className='user-wrapper'>
+        <div className='winning-wrapper'>
             <div className='container'>
                 {!loading && (
                     <div className='action-area'>
                         <div className='left'>
-                            <Button variant='contained' onClick={addHandler} color='primary'>
-                                {t('create')}
-                            </Button>
-                            <Button variant='contained' onClick={importHandler} color='third'>
-                                {t('import')}
-                            </Button>
-                            {userList?.length > 0 && (
+                            {winningList?.length > 0 && (
                                 <Button variant='contained' onClick={deleteAllHandler} color='secondary'>
                                     {t('delete') + t('all')}
                                 </Button>
@@ -187,6 +140,7 @@ export default function Winning() {
                             )}
                         </div>
                         <div className='right'>
+                            <div className="refresh" onClick={getWinningList}><Refresh color='primary'/></div>
                             <TextField
                                 margin='dense'
                                 label={t('search')}
@@ -208,8 +162,8 @@ export default function Winning() {
                     ) : (
                         <DataGrid
                             className='table-root'
-                            rows={filterList(userList)}
-                            columns={userColumn(t, editHandler, deleteHandler)}
+                            rows={filterList(winningList)}
+                            columns={winningColumn(t, deleteHandler)}
                             pageSize={perPage}
                             getRowId={(row) => row.id}
                             rowsPerPageOptions={[10, 25, 50, 100]}
@@ -248,35 +202,27 @@ export default function Winning() {
                     )}
                 </div>
             </div>
-            <EditModal
-                open={showEditDialog}
-                editData={editData}
-                setEditData={setEditData}
-                handleClose={handleCloseEdit}
-            />
-            <AddModal open={showAddDialog} handleClose={handleCloseAdd} />
             <ConfirmModal
                 open={showDeleteDialog}
                 handlerOk={confirmDelete}
                 handleClose={() => setShowDeleteDialog(false)}
                 loading={dialogLoading}
-                text={`${t('confirmDelete')}${t('user')}: ${deleteData?.name}?`}
+                text={`${t('confirmDelete')}${t('winning')}?`}
             />
             <ConfirmModal
                 open={showDeleteAllDialog}
                 handlerOk={confirmDeleteAll}
                 handleClose={() => setShowDeleteAllDialog(false)}
                 loading={dialogLoading}
-                text={`${t('confirmDelete')}${t('all')}${t('user')}?`}
+                text={`${t('confirmDelete')}${t('all')}${t('winning')}?`}
             />
             <ConfirmModal
                 open={showDeleteMutipleDialog}
                 handlerOk={confirmDeleteMutiple}
                 handleClose={() => setShowDeleteMutipleDialog(false)}
                 loading={dialogLoading}
-                text={`${t('confirmDelete')}${t('selected')}${t('user')}?`}
+                text={`${t('confirmDelete')}${t('selected')}${t('winning')}?`}
             />
-            <FileUploadModal open={showImportDialog} handleClose={handleCloseImport} />
         </div>
     );
 }

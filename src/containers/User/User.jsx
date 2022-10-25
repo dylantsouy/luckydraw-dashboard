@@ -12,7 +12,7 @@ import AddModal from 'components/user/AddModal';
 import { Button, InputAdornment, TextField } from '@mui/material';
 import FileUploadModal from 'components/user/FileUploadModal';
 import { Stack } from '@mui/system';
-import { Search } from '@mui/icons-material';
+import { Refresh, Search } from '@mui/icons-material';
 
 export default function User() {
     const { t } = useTranslation('common');
@@ -187,6 +187,9 @@ export default function User() {
                             )}
                         </div>
                         <div className='right'>
+                            <div className='refresh' onClick={getUserList}>
+                                <Refresh color='primary' />
+                            </div>
                             <TextField
                                 margin='dense'
                                 label={t('search')}

@@ -310,3 +310,9 @@ p {
 .SnackbarItem-variantError {
     background-color: $sec_color !important;
 }
+
+.warn-text{
+    color: $sec_color;
+    font-size: 14px;
+    margin-bottom: 10px;
+}

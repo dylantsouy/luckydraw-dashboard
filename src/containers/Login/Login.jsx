@@ -34,7 +34,7 @@ export default function Login() {
                 setAuthValue('permissionArray', permissionHandler(0));
                 setLoading(false);
                 enqueueSnackbar(t('login') + t('success'), { variant: 'success' });
-                navigate('/dashboard');
+                navigate('/user');
             }
         } catch (err) {
             console.log(err.message);

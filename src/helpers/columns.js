@@ -1,16 +1,13 @@
 import React from 'react';
-import { Delete, Edit } from '@mui/icons-material';
+import { Delete, Edit, RemoveRedEye } from '@mui/icons-material';
 import { Tooltip } from '@mui/material';
 import dayjs from 'dayjs';
 import Zoom from 'react-medium-image-zoom';
 import 'react-medium-image-zoom/dist/styles.css';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
+import { transformedFormatBytes } from 'helpers/formatBytesTransformer';
 
-const arrayBufferToBase64 = (buffer) => {
-    var binary = '';
-    var bytes = [].slice.call(new Uint8Array(buffer));
-    bytes.forEach((b) => (binary += String.fromCharCode(b)));
-    return window.btoa(binary);
-};
 export const userColumn = (t, editHandler, deleteHandler) => {
     return [
         {
@@ -56,20 +53,23 @@ export const userColumn = (t, editHandler, deleteHandler) => {
     ];
 };
 
-export const rewardColumn = (t, deleteHandler) => {
+export const rewardColumn = (t, deleteHandler, editHandler) => {
     return [
         {
-            field: 'data',
+            field: 'url',
             filterable: false,
             headerName: t('image'),
-            minWidth: 141,
+            minWidth: 30,
             renderCell: (params) => {
-                let base64Flag = `data:${params.row.type};base64,`;
-                let imageStr = arrayBufferToBase64(params?.row?.data?.data);
-                let img = base64Flag + imageStr;
                 return (
                     <Zoom>
-                        <img width={20} src={img} alt='Red dot' />
+                        <LazyLoadImage
+                            alt={params.row?.name}
+                            height={20}
+                            effect='blur'
+                            src={params.row?.url}
+                            width={20}
+                        />
                     </Zoom>
                 );
             },
@@ -78,19 +78,49 @@ export const rewardColumn = (t, deleteHandler) => {
             field: 'name',
             filterable: false,
             headerName: t('name'),
-            minWidth: 341,
+            minWidth: 250,
         },
         {
-            field: 'type',
+            field: 'order',
             filterable: false,
-            headerName: t('type'),
-            minWidth: 141,
+            headerName: t('order'),
+            minWidth: 110,
+        },
+        {
+            field: 'count',
+            filterable: false,
+            headerName: t('count'),
+            minWidth: 110,
+        },
+        {
+            field: 'size',
+            filterable: false,
+            headerName: t('size'),
+            minWidth: 110,
+            renderCell: (params) => {
+                return <>{params.row?.size ? transformedFormatBytes(params.row?.size) : '-'}</>;
+            },
+        },
+        {
+            field: 'winning',
+            filterable: false,
+            headerName: t('winning'),
+            minWidth: 100,
+            renderCell: (params) => {
+                return (
+                    <>
+                        <Tooltip title={t('see')} placement='right'>
+                            <RemoveRedEye className='action-icon success' onClick={() => {}} />
+                        </Tooltip>
+                    </>
+                );
+            },
         },
         {
             field: 'createdAt',
             filterable: false,
             headerName: t('createdAt'),
-            minWidth: 241,
+            minWidth: 160,
             renderCell: (params) => {
                 return <>{dayjs(params.row?.createdAt).format('YYYY-MM-DD HH:mm:ss')}</>;
             },
@@ -104,6 +134,9 @@ export const rewardColumn = (t, deleteHandler) => {
             renderCell: (params) => {
                 return (
                     <>
+                        <Tooltip title={t('edit')} placement='right'>
+                            <Edit className='action-icon' onClick={() => editHandler(params.row)} />
+                        </Tooltip>
                         <Tooltip title={t('delete')} placement='right'>
                             <Delete className='action-icon ml-3 warn' onClick={() => deleteHandler(params.row)} />
                         </Tooltip>
@@ -157,6 +190,63 @@ export const adminColumn = (t, editHandler, deleteHandler) => {
                         <Tooltip title={t('edit')} placement='right'>
                             <Edit className='action-icon' onClick={() => editHandler(params.row)} />
                         </Tooltip>
+                        <Tooltip title={t('delete')} placement='right'>
+                            <Delete className='action-icon ml-3 warn' onClick={() => deleteHandler(params.row)} />
+                        </Tooltip>
+                    </>
+                );
+            },
+        },
+    ];
+};
+
+export const winningColumn = (t, deleteHandler) => {
+    return [
+        {
+            field: 'User.code',
+            filterable: false,
+            headerName: `${t('user')}${t('code')}`,
+            minWidth: 141,
+            renderCell: (params) => {
+                return <>{params.row?.User?.code || '-'}</>;
+            },
+        },
+        {
+            field: 'User.name',
+            filterable: false,
+            headerName: `${t('user')}${t('name')}`,
+            minWidth: 141,
+            renderCell: (params) => {
+                return <>{params.row?.User?.name || '-'}</>;
+            },
+        },
+        {
+            field: 'Reward.name',
+            filterable: false,
+            headerName: `${t('reward')}${t('name')}`,
+            minWidth: 141,
+            renderCell: (params) => {
+                return <>{params.row?.Reward?.name || '-'}</>;
+            },
+        },
+        {
+            field: 'createdAt',
+            filterable: false,
+            headerName: t('createdAt'),
+            minWidth: 241,
+            renderCell: (params) => {
+                return <>{dayjs(params.row?.createdAt).format('YYYY-MM-DD HH:mm:ss')}</>;
+            },
+        },
+        {
+            field: 'action',
+            filterable: false,
+            sortable: false,
+            headerName: t('action'),
+            minWidth: 130,
+            renderCell: (params) => {
+                return (
+                    <>
                         <Tooltip title={t('delete')} placement='right'>
                             <Delete className='action-icon ml-3 warn' onClick={() => deleteHandler(params.row)} />
                         </Tooltip>

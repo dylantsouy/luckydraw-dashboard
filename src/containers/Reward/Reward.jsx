@@ -9,8 +9,9 @@ import ConfirmModal from 'components/common/ConfirmModal';
 import { Button, InputAdornment, TextField } from '@mui/material';
 import FileUploadModal from 'components/reward/FileUploadModal';
 import { Stack } from '@mui/system';
-import { Search } from '@mui/icons-material';
-import { deleteAllRewards, deleteReward, deleteRewards,fetchRewardList } from 'apis/rewardApi';
+import { Refresh, Search } from '@mui/icons-material';
+import { deleteAllRewards, deleteReward, deleteRewards, fetchRewardList } from 'apis/rewardApi';
+import EditModal from 'components/reward/EditModal';
 
 export default function Reward() {
     const { t } = useTranslation('common');
@@ -23,7 +24,9 @@ export default function Reward() {
     const [showImportDialog, setShowimportDialog] = useState(false);
     const [dialogLoading, setDialogLoading] = useState(false);
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+    const [showEditDialog, setShowEditDialog] = useState(false);
     const [deleteData, setDeleteData] = useState({});
+    const [editData, setEditData] = useState({});
     const [perPage, setPerPage] = useState(10);
     const [loading, setLoading] = useState(true);
 
@@ -53,6 +56,18 @@ export default function Reward() {
     const deleteHandler = (e) => {
         setShowDeleteDialog(true);
         setDeleteData(e);
+    };
+
+    const editHandler = (e) => {
+        setShowEditDialog(true);
+        setEditData(e);
+    };
+
+    const handleCloseEdit = (refresh) => {
+        setShowEditDialog(false);
+        if (refresh) {
+            getRewardList();
+        }
     };
 
     const deleteMutipleHandler = () => {
@@ -156,6 +171,9 @@ export default function Reward() {
                             )}
                         </div>
                         <div className='right'>
+                            <div className='refresh' onClick={getRewardList}>
+                                <Refresh color='primary' />
+                            </div>
                             <TextField
                                 margin='dense'
                                 label={t('search')}
@@ -178,7 +196,7 @@ export default function Reward() {
                         <DataGrid
                             className='table-root'
                             rows={filterList(rewardList)}
-                            columns={rewardColumn(t, deleteHandler)}
+                            columns={rewardColumn(t, deleteHandler, editHandler)}
                             pageSize={perPage}
                             getRowId={(row) => row.id}
                             rowsPerPageOptions={[10, 25, 50, 100]}
@@ -238,7 +256,14 @@ export default function Reward() {
                 loading={dialogLoading}
                 text={`${t('confirmDelete')}${t('selected')}${t('reward')}?`}
             />
-            <FileUploadModal open={showImportDialog} handleClose={handleCloseImport} />
+            <EditModal
+                open={showEditDialog}
+                editData={editData}
+                setEditData={setEditData}
+                handleClose={handleCloseEdit}
+                rewardList={rewardList}
+            />
+            <FileUploadModal open={showImportDialog} handleClose={handleCloseImport} rewardList={rewardList} />
         </div>
     );
 }

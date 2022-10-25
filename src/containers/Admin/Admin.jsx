@@ -10,7 +10,7 @@ import EditModal from 'components/admin/EditModal';
 import AddModal from 'components/admin/AddModal';
 import { Button, InputAdornment, TextField } from '@mui/material';
 import { Stack } from '@mui/system';
-import { Search } from '@mui/icons-material';
+import { Refresh, Search } from '@mui/icons-material';
 import { deleteAdmin, deleteAdmins, deleteAllAdmins, fetchAdminList } from 'apis/adminApi';
 
 export default function Admin() {
@@ -172,6 +172,9 @@ export default function Admin() {
                             )}
                         </div>
                         <div className='right'>
+                            <div className='refresh' onClick={getAdminList}>
+                                <Refresh color='primary' />
+                            </div>
                             <TextField
                                 margin='dense'
                                 label={t('search')}

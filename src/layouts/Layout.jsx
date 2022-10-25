@@ -37,7 +37,7 @@ const Layout = (props) => {
 
     useEffect(() => {
         if (token && pathname === '/login') {
-            navigate('/dashboard');
+            navigate('/user');
             return;
         }
         if (pathname !== 'login' && !token) {

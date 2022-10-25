@@ -5,7 +5,7 @@ import Layout from './layouts/Layout';
 import Snackbar from './providers/Snackbar';
 import Login from './containers/Login/Login';
 import Page404 from './containers/Page404/Page404';
-import Dashboard from './containers/Dashboard';
+// import Dashboard from './containers/Dashboard';
 import PrivateRoute from './auths/PrivateRoute';
 import { LanguageProvider } from './langs/LanguageProvider';
 import Compose from 'providers/Compose';
@@ -18,7 +18,7 @@ function App() {
     return (
         <Compose components={[Theme, Snackbar, LanguageProvider, Layout]}>
             <Routes>
-                <Route
+                {/* <Route
                     index
                     path='/dashboard'
                     element={
@@ -26,13 +26,45 @@ function App() {
                             <Dashboard />
                         </PrivateRoute>
                     }
-                />
+                /> */}
                 <Route index path='/login' element={<Login />} />
-                <Route index path='/user' element={<User />} />
-                <Route index path='/admin' element={<Admin />} />
-                <Route index path='/reward' element={<Reward />} />
-                <Route index path='/winning' element={<Winning />} />
-                <Route path='/' element={<Navigate to='/dashboard' replace />} />
+                <Route
+                    index
+                    path='/user'
+                    element={
+                        <PrivateRoute permissionName='user'>
+                            <User />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    index
+                    path='/admin'
+                    element={
+                        <PrivateRoute permissionName='admin'>
+                            <Admin />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    index
+                    path='/reward'
+                    element={
+                        <PrivateRoute permissionName='reward'>
+                            <Reward />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    index
+                    path='/winning'
+                    element={
+                        <PrivateRoute permissionName='winning'>
+                            <Winning />
+                        </PrivateRoute>
+                    }
+                />
+                <Route path='/' element={<Navigate to='/user' replace />} />
                 <Route path='*' element={<Page404 />} />
             </Routes>
         </Compose>
