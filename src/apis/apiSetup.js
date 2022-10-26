@@ -5,10 +5,7 @@
 import axios from 'axios';
 
 export const urlDeterminator = () => {
-    let env = process.env.REACT_APP_ENV;
-    let endpoint = `REACT_APP_API_${env.toUpperCase()}_URL`;
-
-    return process.env[endpoint];
+    return 'https://luckydraw-server.herokuapp.com/api';
 };
 
 export const apiUrl = urlDeterminator();
@@ -31,7 +28,7 @@ export const fetcher = async (url, method = 'GET', data = {}) => {
             window.location.href = '/login';
             localStorage.clear();
         }
-        throw new Error(err?.response?.data?.message)
+        throw new Error(err?.response?.data?.message);
     }
 };
 
@@ -58,6 +55,6 @@ export const percentageFetcher = async (url, method = 'GET', data = {}, setPerce
             window.location.href = '/login';
             localStorage.clear();
         }
-        throw new Error(err?.response?.data?.message)
+        throw new Error(err?.response?.data?.message);
     }
 };
