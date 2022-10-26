@@ -3,6 +3,7 @@
     "version": "1.0.0",
     "description": "server for luckydraw",
     "author": "Dylan Tsou",
+    "homepage":"https://dylantsouy.github.io/luckydraw-frontend",
     "private": true,
     "dependencies": {
         "@emotion/react": "^11.10.0",
@@ -54,6 +55,8 @@
         "test": "react-app-rewired test",
         "eject": "react-scripts eject",
         "prepare": "husky install",
+        "predeploy": "npm run build",
+        "deploy": "gh-pages -d build",
         "lint": "eslint \"**/*.{js,jsx}\" --fix"
     },
     "lint-staged": {
