@@ -13,6 +13,7 @@ import User from 'containers/User';
 import Admin from 'containers/Admin';
 import Reward from 'containers/Reward';
 import Winning from 'containers/Winning';
+import LuckyDraw from 'containers/LuckyDraw';
 
 function App() {
     return (
@@ -43,6 +44,15 @@ function App() {
                     element={
                         <PrivateRoute permissionName='admin'>
                             <Admin />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    index
+                    path='/luckyDraw'
+                    element={
+                        <PrivateRoute permissionName='luckyDraw'>
+                            <LuckyDraw />
                         </PrivateRoute>
                     }
                 />

@@ -27,11 +27,10 @@ export const uploadRewards = async (props, setPercentTage) => {
     formData.append('name', props?.name);
     formData.append('order', props?.order);
     formData.append('count', props?.count);
-    
+
     const { data, success } = await percentageFetcher(`/rewards`, 'POST', formData, setPercentTage);
     return { success, data };
 };
-
 
 export const editReward = async (props) => {
     const { id } = props;
@@ -41,5 +40,11 @@ export const editReward = async (props) => {
 
 export const createAdditionalReward = async (props) => {
     const { data, success } = await fetcher(`/rewards/createAdditionalReward`, 'POST', props);
+    return { success, data };
+};
+
+export const getRewardCount = async () => {
+    const { success, data } = await fetcher('/rewards/count', 'POST', {});
+
     return { success, data };
 };

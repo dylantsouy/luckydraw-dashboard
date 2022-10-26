@@ -19,7 +19,6 @@ export default function Header(props) {
     const { enqueueSnackbar } = useSnackbar();
     const navigate = useNavigate();
     const { sidebarShow, setSidebarShow } = useStorageStore();
-
     const logout = () => {
         clear();
         navigate('/login');

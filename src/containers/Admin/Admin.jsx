@@ -147,6 +147,7 @@ export default function Admin() {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [enqueueSnackbar]);
+
     useEffect(() => {
         getAdminList();
     }, [getAdminList]);

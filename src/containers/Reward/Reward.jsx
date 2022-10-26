@@ -12,6 +12,7 @@ import { Stack } from '@mui/system';
 import { Refresh, Search } from '@mui/icons-material';
 import { deleteAllRewards, deleteReward, deleteRewards, fetchRewardList } from 'apis/rewardApi';
 import EditModal from 'components/reward/EditModal';
+import { getUserCount } from 'apis/userApi';
 
 export default function Reward() {
     const { t } = useTranslation('common');
@@ -28,6 +29,7 @@ export default function Reward() {
     const [deleteData, setDeleteData] = useState({});
     const [editData, setEditData] = useState({});
     const [perPage, setPerPage] = useState(10);
+    const [userCount, setUserCount] = useState(0);
     const [loading, setLoading] = useState(true);
 
     const handleSearch = (e) => {
@@ -137,7 +139,6 @@ export default function Reward() {
             const { success, data } = result;
             if (success) {
                 setRewardList(data);
-                setSelectRows([]);
             }
             setLoading(false);
         } catch (err) {
@@ -146,9 +147,27 @@ export default function Reward() {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [enqueueSnackbar]);
+
     useEffect(() => {
         getRewardList();
     }, [getRewardList]);
+
+    const getCount = useCallback(async () => {
+        try {
+            let result = await getUserCount();
+            const { success, data } = result;
+            if (success) {
+                setUserCount(data);
+            }
+        } catch (err) {
+            enqueueSnackbar(t(err?.message), { variant: 'error' });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [enqueueSnackbar]);
+
+    useEffect(() => {
+        getCount();
+    }, [getCount]);
 
     return (
         <div className='reward-wrapper'>
@@ -156,6 +175,10 @@ export default function Reward() {
                 {!loading && (
                     <div className='action-area'>
                         <div className='left'>
+                            <div className='recommend'>
+                                {t('user')}
+                                {t('number')} : <span>{userCount}</span> *{t('recommendCount')}*
+                            </div>
                             <Button variant='contained' onClick={importHandler} color='third'>
                                 {t('import')}
                             </Button>

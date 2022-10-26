@@ -1,0 +1,138 @@
+@import 'src/styles/animations.scss';
+
+.luckydraw-wrapper {
+    text-align: center;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 100%;
+    width: 100%;
+    .content {
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        z-index: -1;
+        background-position: 50%;
+        background-repeat: no-repeat;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-size: cover;
+        .grid-wrapper {
+            height: 100%;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: 5fr 1fr;
+            .top {
+                height: 100%;
+                width: 100%;
+                display: grid;
+                gap: 20px;
+                overflow-y: hidden;
+                grid-template-columns: 1fr 4fr;
+                .reward {
+                    display: flex;
+                    width: 100%;
+                    flex-direction: column;
+                    justify-content: flex-end;
+                    padding-left: 10px;
+                    .reward-name {
+                        font-size: 30px;
+                        color: #fff;
+                        font-weight: 600;
+                    }
+                    .reward-count {
+                        font-size: 24px;
+                        color: #fff;
+                        font-weight: 600;
+                        margin-top: 10px;
+                    }
+                    .reward-img {
+                        border-radius: 20px;
+                        margin-top: 10px;
+                        background-color: #fff;
+                        max-width: 300px;
+                        img {
+                            padding: 10px;
+                            border-radius: 50px;
+                            width: 100%;
+                        }
+                    }
+                }
+                .winnings {
+                    display: grid;
+                    width: 100%;
+                    height: 100%;
+                    max-height: 100%;
+                    font-size: 30px;
+                    place-items: stretch;
+                    overflow-y: auto;
+                    grid-template-columns: repeat(4, minmax(0, 1fr));
+                    gap: 20px;
+                    padding: 20px 50px 0;
+                    .winning-item {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        flex-direction: column;
+                        background-color: #e7ca78;
+                        color: #fff;
+                        border-radius: 10px;
+                    }
+                    &.grid-1 {
+                        grid-template-columns: repeat(1, minmax(0, 1fr));
+                        font-size: 100px;
+                    }
+                    &.grid-2 {
+                        grid-template-columns: repeat(2, minmax(0, 1fr));
+                    }
+                    &.grid-3 {
+                        grid-template-columns: repeat(2, minmax(0, 1fr));
+                    }
+                    &.grid-4 {
+                        grid-template-columns: repeat(2, minmax(0, 1fr));
+                    }
+                    &.grid-5 {
+                        grid-template-columns: repeat(3, minmax(0, 1fr));
+                    }
+                }
+            }
+            .bottom {
+                display: flex;
+                justify-content: center;
+                margin: 20px 0;
+                height: 80px;
+                .draw-button {
+                    display: flex;
+                    justify-content: center;
+                    width: 200px;
+                    height: 100%;
+                    margin: 0 auto 0;
+                    perspective: 1000;
+                    backface-visibility: hidden;
+                    div {
+                        position: relative;
+                        cursor: pointer;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 70px;
+                        height: 70px;
+                        color: #6e1a1a;
+                        border: none;
+                        border-radius: 50%;
+                        background: #e7ca78;
+                        cursor: pointer;
+                        box-shadow: 0 0 0 0 rgba(#e7ca78, 0.5);
+                        animation: pulse 1.5s infinite;
+                        &:hover {
+                            animation: none;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

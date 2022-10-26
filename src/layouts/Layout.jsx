@@ -21,7 +21,8 @@ const Layout = (props) => {
                         {children}
                     </>
                 );
-
+            case '/luckyDraw':
+                return <>{children}</>;
             default:
                 return (
                     <div className='main'>

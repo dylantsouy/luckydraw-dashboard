@@ -13,6 +13,7 @@ import { Button, InputAdornment, TextField } from '@mui/material';
 import FileUploadModal from 'components/user/FileUploadModal';
 import { Stack } from '@mui/system';
 import { Refresh, Search } from '@mui/icons-material';
+import { getRewardCount } from 'apis/rewardApi';
 
 export default function User() {
     const { t } = useTranslation('common');
@@ -30,6 +31,7 @@ export default function User() {
     const [editData, setEditData] = useState({});
     const [deleteData, setDeleteData] = useState({});
     const [perPage, setPerPage] = useState(10);
+    const [rewardCount, setRewardCount] = useState(0);
     const [loading, setLoading] = useState(true);
 
     const handleSearch = (e) => {
@@ -159,9 +161,27 @@ export default function User() {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [enqueueSnackbar]);
+
     useEffect(() => {
         getUserList();
     }, [getUserList]);
+
+    const getCount = useCallback(async () => {
+        try {
+            let result = await getRewardCount();
+            const { success, data } = result;
+            if (success) {
+                setRewardCount(data);
+            }
+        } catch (err) {
+            enqueueSnackbar(t(err?.message), { variant: 'error' });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [enqueueSnackbar]);
+
+    useEffect(() => {
+        getCount();
+    }, [getCount]);
 
     return (
         <div className='user-wrapper'>
@@ -169,6 +189,10 @@ export default function User() {
                 {!loading && (
                     <div className='action-area'>
                         <div className='left'>
+                            <div className='recommend'>
+                                {t('reward')}
+                                {t('number')} : <span>{rewardCount}</span> *{t('recommendCount')}*
+                            </div>
                             <Button variant='contained' onClick={addHandler} color='primary'>
                                 {t('create')}
                             </Button>

@@ -1,7 +1,7 @@
 import React from 'react';
 import './styles.scss';
 import { Box, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
-import { AdminPanelSettings, CardGiftcard, Home, People, ReceiptLong } from '@mui/icons-material';
+import { AdminPanelSettings, CardGiftcard, Celebration, People, ReceiptLong } from '@mui/icons-material';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'langs/useTranslation';
@@ -21,6 +21,11 @@ export default function Sidebar() {
         //     listText: t('dashboard'),
         //     path: 'dashboard',
         // },
+        {
+            listIcon: <Celebration />,
+            listText: t('luckyDraw'),
+            path: 'luckyDraw',
+        },
         {
             listIcon: <People />,
             listText: t('user'),

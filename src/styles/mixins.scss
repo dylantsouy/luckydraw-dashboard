@@ -42,6 +42,17 @@
                     }
                 }
             }
+            .left{
+                position: relative;
+                .recommend{
+                    position: absolute;
+                    top: -25px;
+                    font-size: 14px;
+                    color: $sec_color;
+                    white-space: nowrap;
+                    font-weight: bold;
+                }
+            }
             @media screen and (max-width:700px) {
                 flex-direction: column;
                 .left,

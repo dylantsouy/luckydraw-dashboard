@@ -1,7 +1,7 @@
 import { fetcher, percentageFetcher } from './apiSetup';
 
 export const fetchUserList = async () => {
-    const { success, data } = await fetcher('/users', 'get', {});
+    const { success, data } = await fetcher('/users', 'GET', {});
 
     return { success, data };
 };
@@ -35,7 +35,13 @@ export const deleteUsers = async (ids) => {
 export const uploadUsers = async (file, setPercentTage) => {
     const formData = new FormData();
     formData.append('file', file);
-    
+
     const { data, success } = await percentageFetcher(`/users/uploadUser`, 'POST', formData, setPercentTage);
+    return { success, data };
+};
+
+export const getUserCount = async () => {
+    const { success, data } = await fetcher('/users/count', 'POST', {});
+
     return { success, data };
 };
