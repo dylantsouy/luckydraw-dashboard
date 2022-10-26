@@ -47,6 +47,7 @@
         "react-app-rewired": "^2.2.1"
     },
     "scripts": {
+        "heroku-postbuild": "react-app-rewired build",
         "start": "react-app-rewired start",
         "build": "react-app-rewired build",
         "analyze": "source-map-explorer 'build/static/js/*.js'",
