@@ -187,16 +187,16 @@ p {
 
 @for $i from 1 through 6 {
     .ml-#{$i} {
-        margin-left: $i * 5px;
+        margin-left: $i * 5px !important;
     }
     .mr-#{$i} {
-        margin-right: $i * 5px;
+        margin-right: $i * 5px !important;
     }
     .mt-#{$i} {
-        margin-top: $i * 5px;
+        margin-top: $i * 5px !important;
     }
     .mb-#{$i} {
-        margin-bottom: $i * 5px;
+        margin-bottom: $i * 5px !important;
     }
 }
 

@@ -56,5 +56,18 @@
     "orderExist": "抽獎順序已存在, 請輸入其他數字",
     "orderWarn": "請注意 : 若該抽獎順序已存在, 將與之對調",
     "luckyDraw": "抽獎頁面",
-    "recommendCount": "請保持參加者人數 >= 抽獎次數"
+    "recommendCount": "請保持參加者人數 >= 抽獎次數",
+    "fileTypeError": "檔案類型錯誤",
+    "role": "權限",
+    "manager": "編輯者 ( 無管理帳號功能 )",
+    "visitor": "閱覽者 ( 只可以閱覽名單 )",
+    "setting": "抽獎設定",
+    "bgColor": "背景色 ( 按鈕, 抽獎人 )",
+    "textColor": "字型顏色",
+    "title": "標題",
+    "subTitle": "副標題",
+    "background": "背景圖",
+    "rewardMoreThanUser": "獎品數大於參加者人數, 請重新設定",
+    "noUser": "沒有參加者, 請重新設定",
+    "noReward": "沒有抽獎項目, 請重新設定"
 }

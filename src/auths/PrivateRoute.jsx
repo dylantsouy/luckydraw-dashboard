@@ -5,7 +5,7 @@ import { useAuthStore } from 'store/auth';
 
 // Check if the user is permitted to access router
 const PrivateRoute = (props) => {
-    const { children, permissionName, redirectPath = '/user' } = props;
+    const { children, permissionName, redirectPath = '/404' } = props;
     const { permissionArray, token } = useAuthStore();
 
     const checkIsPermitted = () => {

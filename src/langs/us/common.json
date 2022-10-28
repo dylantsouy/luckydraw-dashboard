@@ -56,5 +56,6 @@
     "orderExist": "The order already exists, please enter another number",
     "orderWarn": "Please note: If the order already exists, it will be reversed",
     "luckyDraw": "Llucky Draw Page",
-    "recommendCount": "Please keep the number of participants >= rewards"
+    "recommendCount": "Please keep the number of participants >= rewards",
+    "fileTypeError": "File Type Error"
 }

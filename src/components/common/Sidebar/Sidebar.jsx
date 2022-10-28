@@ -1,7 +1,7 @@
 import React from 'react';
 import './styles.scss';
 import { Box, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
-import { AdminPanelSettings, CardGiftcard, Celebration, People, ReceiptLong } from '@mui/icons-material';
+import { AdminPanelSettings, CardGiftcard, Celebration, People, ReceiptLong, Settings } from '@mui/icons-material';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'langs/useTranslation';
@@ -46,6 +46,11 @@ export default function Sidebar() {
             listText: t('admin'),
             path: 'admin',
         },
+        {
+            listIcon: <Settings />,
+            listText: t('setting'),
+            path: 'setting',
+        },
     ];
 
     const goHandler = (path) => {
@@ -72,8 +77,8 @@ export default function Sidebar() {
                         <HasPermission key={e.path} permission={e.path}>
                             <ListItem
                                 className={`listItem ${`/${e.path}` === pathname && 'active'}`}
-                                button
                                 onClick={() => goHandler(`/${e.path}`)}
+                                button
                             >
                                 <ListItemIcon className='listItemIcon'>{e.listIcon}</ListItemIcon>
                                 <ListItemText primary={e.listText} />

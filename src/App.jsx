@@ -14,6 +14,7 @@ import Admin from 'containers/Admin';
 import Reward from 'containers/Reward';
 import Winning from 'containers/Winning';
 import LuckyDraw from 'containers/LuckyDraw';
+import Setting from 'containers/Setting';
 
 function App() {
     return (
@@ -71,6 +72,15 @@ function App() {
                     element={
                         <PrivateRoute permissionName='winning'>
                             <Winning />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    index
+                    path='/setting'
+                    element={
+                        <PrivateRoute permissionName='setting'>
+                            <Setting />
                         </PrivateRoute>
                     }
                 />

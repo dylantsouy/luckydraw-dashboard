@@ -4,13 +4,12 @@ import { TextField } from '@mui/material';
 import './styles.scss';
 import ConfirmButton from 'components/common/ConfirmButton';
 import PasswordInput from 'components/common/PasswordInput';
-import { permissionHandler } from 'auths/permission';
+import { permissionHandler } from 'auths/roleHandler';
 import { useAuthStore } from 'store/auth';
 import { useSnackbar } from 'notistack';
 import { useTranslation } from 'langs/useTranslation';
 import { loginApi } from 'apis/authApi';
 import logo from 'assets/images/logo.png';
-
 
 export default function Login() {
     const { setAuthValue } = useAuthStore();
@@ -31,7 +30,7 @@ export default function Login() {
             if (result?.success) {
                 setAuthValue('user', result.data);
                 setAuthValue('token', result.token);
-                setAuthValue('permissionArray', permissionHandler(0));
+                setAuthValue('permissionArray', permissionHandler(result.data.role));
                 setLoading(false);
                 enqueueSnackbar(t('login') + t('success'), { variant: 'success' });
                 navigate('/user');

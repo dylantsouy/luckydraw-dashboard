@@ -7,6 +7,7 @@ import 'react-medium-image-zoom/dist/styles.css';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import { transformedFormatBytes } from 'helpers/formatBytesTransformer';
+import HasPermission from 'auths/HasPermission';
 
 export const userColumn = (t, editHandler, deleteHandler) => {
     return [
@@ -40,12 +41,14 @@ export const userColumn = (t, editHandler, deleteHandler) => {
             renderCell: (params) => {
                 return (
                     <>
-                        <Tooltip title={t('edit')} placement='right'>
-                            <Edit className='action-icon' onClick={() => editHandler(params.row)} />
-                        </Tooltip>
-                        <Tooltip title={t('delete')} placement='right'>
-                            <Delete className='action-icon ml-3 warn' onClick={() => deleteHandler(params.row)} />
-                        </Tooltip>
+                        <HasPermission permission='action'>
+                            <Tooltip title={t('edit')} placement='right'>
+                                <Edit className='action-icon' onClick={() => editHandler(params.row)} />
+                            </Tooltip>
+                            <Tooltip title={t('delete')} placement='right'>
+                                <Delete className='action-icon ml-3 warn' onClick={() => deleteHandler(params.row)} />
+                            </Tooltip>
+                        </HasPermission>
                     </>
                 );
             },
@@ -134,12 +137,14 @@ export const rewardColumn = (t, deleteHandler, editHandler) => {
             renderCell: (params) => {
                 return (
                     <>
-                        <Tooltip title={t('edit')} placement='right'>
-                            <Edit className='action-icon' onClick={() => editHandler(params.row)} />
-                        </Tooltip>
-                        <Tooltip title={t('delete')} placement='right'>
-                            <Delete className='action-icon ml-3 warn' onClick={() => deleteHandler(params.row)} />
-                        </Tooltip>
+                        <HasPermission permission='action'>
+                            <Tooltip title={t('edit')} placement='right'>
+                                <Edit className='action-icon' onClick={() => editHandler(params.row)} />
+                            </Tooltip>
+                            <Tooltip title={t('delete')} placement='right'>
+                                <Delete className='action-icon ml-3 warn' onClick={() => deleteHandler(params.row)} />
+                            </Tooltip>
+                        </HasPermission>
                     </>
                 );
             },
@@ -187,12 +192,14 @@ export const adminColumn = (t, editHandler, deleteHandler) => {
             renderCell: (params) => {
                 return (
                     <>
-                        <Tooltip title={t('edit')} placement='right'>
-                            <Edit className='action-icon' onClick={() => editHandler(params.row)} />
-                        </Tooltip>
-                        <Tooltip title={t('delete')} placement='right'>
-                            <Delete className='action-icon ml-3 warn' onClick={() => deleteHandler(params.row)} />
-                        </Tooltip>
+                        <HasPermission permission='action'>
+                            <Tooltip title={t('edit')} placement='right'>
+                                <Edit className='action-icon' onClick={() => editHandler(params.row)} />
+                            </Tooltip>
+                            <Tooltip title={t('delete')} placement='right'>
+                                <Delete className='action-icon ml-3 warn' onClick={() => deleteHandler(params.row)} />
+                            </Tooltip>
+                        </HasPermission>
                     </>
                 );
             },
@@ -247,9 +254,11 @@ export const winningColumn = (t, deleteHandler) => {
             renderCell: (params) => {
                 return (
                     <>
-                        <Tooltip title={t('delete')} placement='right'>
-                            <Delete className='action-icon ml-3 warn' onClick={() => deleteHandler(params.row)} />
-                        </Tooltip>
+                        <HasPermission permission='action'>
+                            <Tooltip title={t('delete')} placement='right'>
+                                <Delete className='action-icon ml-3 warn' onClick={() => deleteHandler(params.row)} />
+                            </Tooltip>
+                        </HasPermission>
                     </>
                 );
             },

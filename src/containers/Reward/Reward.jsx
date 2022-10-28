@@ -13,6 +13,7 @@ import { Refresh, Search } from '@mui/icons-material';
 import { deleteAllRewards, deleteReward, deleteRewards, fetchRewardList } from 'apis/rewardApi';
 import EditModal from 'components/reward/EditModal';
 import { getUserCount } from 'apis/userApi';
+import HasPermission from 'auths/HasPermission';
 
 export default function Reward() {
     const { t } = useTranslation('common');
@@ -175,23 +176,25 @@ export default function Reward() {
                 {!loading && (
                     <div className='action-area'>
                         <div className='left'>
-                            <div className='recommend'>
-                                {t('user')}
-                                {t('number')} : <span>{userCount}</span> *{t('recommendCount')}*
-                            </div>
-                            <Button variant='contained' onClick={importHandler} color='third'>
-                                {t('import')}
-                            </Button>
-                            {rewardList?.length > 0 && (
-                                <Button variant='contained' onClick={deleteAllHandler} color='secondary'>
-                                    {t('delete') + t('all')}
+                            <HasPermission permission='action'>
+                                <div className='recommend'>
+                                    {t('user')}
+                                    {t('number')} : <span>{userCount}</span> *{t('recommendCount')}*
+                                </div>
+                                <Button variant='contained' onClick={importHandler} color='third'>
+                                    {t('import')}
                                 </Button>
-                            )}
-                            {selectRows?.length > 0 && (
-                                <Button variant='contained' onClick={deleteMutipleHandler} color='secondary'>
-                                    {t('delete') + t('selected')}
-                                </Button>
-                            )}
+                                {rewardList?.length > 0 && (
+                                    <Button variant='contained' onClick={deleteAllHandler} color='secondary'>
+                                        {t('delete') + t('all')}
+                                    </Button>
+                                )}
+                                {selectRows?.length > 0 && (
+                                    <Button variant='contained' onClick={deleteMutipleHandler} color='secondary'>
+                                        {t('delete') + t('selected')}
+                                    </Button>
+                                )}
+                            </HasPermission>
                         </div>
                         <div className='right'>
                             <div className='refresh' onClick={getRewardList}>

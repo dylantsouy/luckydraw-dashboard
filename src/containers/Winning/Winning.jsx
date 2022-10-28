@@ -10,6 +10,7 @@ import { deleteAllWinnings, deleteWinning, deleteWinnings, fetchWinningList } fr
 import { Button, InputAdornment, TextField } from '@mui/material';
 import { Stack } from '@mui/system';
 import { Refresh, Search } from '@mui/icons-material';
+import HasPermission from 'auths/HasPermission';
 
 export default function Winning() {
     const { t } = useTranslation('common');
@@ -30,7 +31,12 @@ export default function Winning() {
     };
 
     const filterList = () => {
-        return winningList.filter((e) => e?.User?.name.includes(searchValue) || e?.User?.code.includes(searchValue)|| e?.Reward?.name.includes(searchValue));
+        return winningList.filter(
+            (e) =>
+                e?.User?.name.includes(searchValue) ||
+                e?.User?.code.includes(searchValue) ||
+                e?.Reward?.name.includes(searchValue)
+        );
     };
 
     const onSelectionModelChange = (ids) => {
@@ -128,19 +134,23 @@ export default function Winning() {
                 {!loading && (
                     <div className='action-area'>
                         <div className='left'>
-                            {winningList?.length > 0 && (
-                                <Button variant='contained' onClick={deleteAllHandler} color='secondary'>
-                                    {t('delete') + t('all')}
-                                </Button>
-                            )}
-                            {selectRows?.length > 0 && (
-                                <Button variant='contained' onClick={deleteMutipleHandler} color='secondary'>
-                                    {t('delete') + t('selected')}
-                                </Button>
-                            )}
+                            <HasPermission permission='action'>
+                                {winningList?.length > 0 && (
+                                    <Button variant='contained' onClick={deleteAllHandler} color='secondary'>
+                                        {t('delete') + t('all')}
+                                    </Button>
+                                )}
+                                {selectRows?.length > 0 && (
+                                    <Button variant='contained' onClick={deleteMutipleHandler} color='secondary'>
+                                        {t('delete') + t('selected')}
+                                    </Button>
+                                )}
+                            </HasPermission>
                         </div>
                         <div className='right'>
-                            <div className="refresh" onClick={getWinningList}><Refresh color='primary'/></div>
+                            <div className='refresh' onClick={getWinningList}>
+                                <Refresh color='primary' />
+                            </div>
                             <TextField
                                 margin='dense'
                                 label={t('search')}

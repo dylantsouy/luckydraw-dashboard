@@ -1,4 +1,14 @@
-import { Button, Dialog, DialogActions, DialogContent, TextField } from '@mui/material';
+import {
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    FormControl,
+    InputLabel,
+    MenuItem,
+    Select,
+    TextField,
+} from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import DialogTitle from '@mui/material/DialogTitle';
 import './styles.scss';
@@ -8,6 +18,7 @@ import { useSnackbar } from 'notistack';
 import { editAdmin } from 'apis/adminApi';
 import ConfirmButton from 'components/common/ConfirmButton';
 import { emailRegex, passwordRegex, usernameRegex } from 'helpers/regex';
+import { roleName } from 'auths/roleHandler';
 
 export default function EditModal(props) {
     const { t } = useTranslation('common');
@@ -48,6 +59,7 @@ export default function EditModal(props) {
             username: editData.username.trim(),
             password: editData.password.trim(),
             email: editData.email.trim(),
+            role: editData.role,
         };
         if (data.username.length === 0 || data.password.length === 0 || data.email.length === 0) {
             setValidation({
@@ -88,7 +100,10 @@ export default function EditModal(props) {
     return (
         <Dialog className='editDialog' open={open} onClose={() => handleClose()}>
             <DialogTitle>
-                <span className='title-text'>{t('edit')}{t('admin')}</span>
+                <span className='title-text'>
+                    {t('edit')}
+                    {t('admin')}
+                </span>
             </DialogTitle>
             <DialogContent>
                 <TextField
@@ -96,6 +111,7 @@ export default function EditModal(props) {
                     label={t('username')}
                     type='text'
                     required
+                    autoFocus
                     value={editData.username}
                     fullWidth
                     variant='standard'
@@ -107,7 +123,6 @@ export default function EditModal(props) {
                     type='text'
                     value={editData.password}
                     fullWidth
-                    autoFocus
                     required
                     error={!validation.password.valid}
                     helperText={validation.password.error}
@@ -125,7 +140,6 @@ export default function EditModal(props) {
                     type='text'
                     value={editData.email}
                     fullWidth
-                    autoFocus
                     required
                     error={!validation.email.valid}
                     helperText={validation.email.error}
@@ -137,10 +151,25 @@ export default function EditModal(props) {
                     }}
                     onChange={(e) => handleChange('email', e)}
                 />
+                <FormControl className='mt-6' fullWidth>
+                    <InputLabel id='role-select-label'>{t('role')}</InputLabel>
+                    <Select
+                        labelId='role-select-label'
+                        id='role-select'
+                        variant='outlined'
+                        value={editData.role}
+                        label='role'
+                        onChange={(e) => handleChange('role', e)}
+                    >
+                        <MenuItem value={0}>{roleName(0, t)}</MenuItem>
+                        <MenuItem value={1}>{roleName(1, t)}</MenuItem>
+                        <MenuItem value={2}>{roleName(2, t)}</MenuItem>
+                    </Select>
+                </FormControl>
             </DialogContent>
             <DialogActions>
                 <ConfirmButton variant='contained' onClick={confirmHandler} loading={loading} text={t('confirm')} />
-                <Button onClick={()=>handleClose()}>{t('cancel')}</Button>
+                <Button onClick={() => handleClose()}>{t('cancel')}</Button>
             </DialogActions>
         </Dialog>
     );

@@ -1,4 +1,14 @@
-import { Button, Dialog, DialogActions, DialogContent, TextField } from '@mui/material';
+import {
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    FormControl,
+    InputLabel,
+    MenuItem,
+    Select,
+    TextField,
+} from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import DialogTitle from '@mui/material/DialogTitle';
 import './styles.scss';
@@ -8,6 +18,7 @@ import { useSnackbar } from 'notistack';
 import ConfirmButton from 'components/common/ConfirmButton';
 import { emailRegex, passwordRegex, usernameRegex } from 'helpers/regex';
 import { signupApi } from 'apis/authApi';
+import { roleName } from 'auths/roleHandler';
 
 export default function AddModal(props) {
     const { t } = useTranslation('common');
@@ -18,6 +29,7 @@ export default function AddModal(props) {
         username: '',
         password: '',
         email: '',
+        role: 0,
     });
     const [validation, setValidation] = useState({
         username: { valid: true, error: '' },
@@ -48,6 +60,7 @@ export default function AddModal(props) {
                 password: '',
                 username: '',
                 email: '',
+                role: 0,
             });
         }
     }, [open]);
@@ -57,6 +70,7 @@ export default function AddModal(props) {
             password: addData.password.trim(),
             username: addData.username.trim(),
             email: addData.email.trim(),
+            role: addData.role,
         };
         if (data.username.length === 0 || data.password.length === 0 || data.email.length === 0) {
             setValidation({
@@ -107,6 +121,7 @@ export default function AddModal(props) {
                     margin='dense'
                     label={t('username')}
                     type='text'
+                    autoFocus
                     error={!validation.username.valid}
                     helperText={validation.username.error}
                     value={addData.username}
@@ -121,7 +136,6 @@ export default function AddModal(props) {
                     type='text'
                     value={addData.password}
                     fullWidth
-                    autoFocus
                     required
                     error={!validation.password.valid}
                     helperText={validation.password.error}
@@ -139,7 +153,6 @@ export default function AddModal(props) {
                     type='text'
                     value={addData.email}
                     fullWidth
-                    autoFocus
                     required
                     error={!validation.email.valid}
                     helperText={validation.email.error}
@@ -151,6 +164,21 @@ export default function AddModal(props) {
                     }}
                     onChange={(e) => handleChange('email', e)}
                 />
+                <FormControl className='mt-6' fullWidth>
+                    <InputLabel id='role-select-label'>{t('role')}</InputLabel>
+                    <Select
+                        labelId='role-select-label'
+                        id='role-select'
+                        variant='outlined'
+                        value={addData.role}
+                        label='role'
+                        onChange={(e) => handleChange('role', e)}
+                    >
+                        <MenuItem value={0}>{roleName(0, t)}</MenuItem>
+                        <MenuItem value={1}>{roleName(1, t)}</MenuItem>
+                        <MenuItem value={2}>{roleName(2, t)}</MenuItem>
+                    </Select>
+                </FormControl>
             </DialogContent>
             <DialogActions>
                 <ConfirmButton variant='contained' onClick={confirmHandler} loading={loading} text={t('confirm')} />

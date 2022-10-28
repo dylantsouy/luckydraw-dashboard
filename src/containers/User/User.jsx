@@ -14,6 +14,7 @@ import FileUploadModal from 'components/user/FileUploadModal';
 import { Stack } from '@mui/system';
 import { Refresh, Search } from '@mui/icons-material';
 import { getRewardCount } from 'apis/rewardApi';
+import HasPermission from 'auths/HasPermission';
 
 export default function User() {
     const { t } = useTranslation('common');
@@ -189,26 +190,28 @@ export default function User() {
                 {!loading && (
                     <div className='action-area'>
                         <div className='left'>
-                            <div className='recommend'>
-                                {t('reward')}
-                                {t('number')} : <span>{rewardCount}</span> *{t('recommendCount')}*
-                            </div>
-                            <Button variant='contained' onClick={addHandler} color='primary'>
-                                {t('create')}
-                            </Button>
-                            <Button variant='contained' onClick={importHandler} color='third'>
-                                {t('import')}
-                            </Button>
-                            {userList?.length > 0 && (
-                                <Button variant='contained' onClick={deleteAllHandler} color='secondary'>
-                                    {t('delete') + t('all')}
+                            <HasPermission permission='action'>
+                                <div className='recommend'>
+                                    {t('reward')}
+                                    {t('number')} : <span>{rewardCount}</span> *{t('recommendCount')}*
+                                </div>
+                                <Button variant='contained' onClick={addHandler} color='primary'>
+                                    {t('create')}
                                 </Button>
-                            )}
-                            {selectRows?.length > 0 && (
-                                <Button variant='contained' onClick={deleteMutipleHandler} color='secondary'>
-                                    {t('delete') + t('selected')}
+                                <Button variant='contained' onClick={importHandler} color='third'>
+                                    {t('import')}
                                 </Button>
-                            )}
+                                {userList?.length > 0 && (
+                                    <Button variant='contained' onClick={deleteAllHandler} color='secondary'>
+                                        {t('delete') + t('all')}
+                                    </Button>
+                                )}
+                                {selectRows?.length > 0 && (
+                                    <Button variant='contained' onClick={deleteMutipleHandler} color='secondary'>
+                                        {t('delete') + t('selected')}
+                                    </Button>
+                                )}
+                            </HasPermission>
                         </div>
                         <div className='right'>
                             <div className='refresh' onClick={getUserList}>

@@ -88,6 +88,7 @@ export default function AddModal(props) {
                     error={!validation.code.valid}
                     helperText={validation.code.error}
                     value={addData.code}
+                    autoFocus
                     fullWidth
                     required
                     variant='standard'
@@ -99,7 +100,6 @@ export default function AddModal(props) {
                     type='text'
                     value={addData.name}
                     fullWidth
-                    autoFocus
                     required
                     error={!validation.name.valid}
                     helperText={validation.name.error}

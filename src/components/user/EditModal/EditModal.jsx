@@ -68,7 +68,10 @@ export default function EditModal(props) {
     return (
         <Dialog className='editDialog' open={open} onClose={() => handleClose()}>
             <DialogTitle>
-                <span className='title-text'>{t('edit')}{t('user')}</span>
+                <span className='title-text'>
+                    {t('edit')}
+                    {t('user')}
+                </span>
             </DialogTitle>
             <DialogContent>
                 <TextField
@@ -77,6 +80,7 @@ export default function EditModal(props) {
                     type='text'
                     required
                     value={editData.code}
+                    autoFocus
                     fullWidth
                     variant='standard'
                     onChange={(e) => handleChange('code', e)}
@@ -87,7 +91,6 @@ export default function EditModal(props) {
                     type='text'
                     value={editData.name}
                     fullWidth
-                    autoFocus
                     required
                     error={!validation.name.valid}
                     helperText={validation.name.error}
@@ -102,7 +105,7 @@ export default function EditModal(props) {
             </DialogContent>
             <DialogActions>
                 <ConfirmButton variant='contained' onClick={confirmHandler} loading={loading} text={t('confirm')} />
-                <Button onClick={()=>handleClose()}>{t('cancel')}</Button>
+                <Button onClick={() => handleClose()}>{t('cancel')}</Button>
             </DialogActions>
         </Dialog>
     );

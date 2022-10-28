@@ -12,6 +12,7 @@ import { Button, InputAdornment, TextField } from '@mui/material';
 import { Stack } from '@mui/system';
 import { Refresh, Search } from '@mui/icons-material';
 import { deleteAdmin, deleteAdmins, deleteAllAdmins, fetchAdminList } from 'apis/adminApi';
+import HasPermission from 'auths/HasPermission';
 
 export default function Admin() {
     const { t } = useTranslation('common');
@@ -157,21 +158,23 @@ export default function Admin() {
             <div className='container'>
                 {!loading && (
                     <div className='action-area'>
-                        <div className='left'>
-                            <Button variant='contained' onClick={addHandler} color='primary'>
-                                {t('create')}
-                            </Button>
-                            {adminList?.length > 0 && (
-                                <Button variant='contained' onClick={deleteAllHandler} color='secondary'>
-                                    {t('delete') + t('all')}
+                        <HasPermission permission='action'>
+                            <div className='left'>
+                                <Button variant='contained' onClick={addHandler} color='primary'>
+                                    {t('create')}
                                 </Button>
-                            )}
-                            {selectRows?.length > 0 && (
-                                <Button variant='contained' onClick={deleteMutipleHandler} color='secondary'>
-                                    {t('delete') + t('selected')}
-                                </Button>
-                            )}
-                        </div>
+                                {adminList?.length > 0 && (
+                                    <Button variant='contained' onClick={deleteAllHandler} color='secondary'>
+                                        {t('delete') + t('all')}
+                                    </Button>
+                                )}
+                                {selectRows?.length > 0 && (
+                                    <Button variant='contained' onClick={deleteMutipleHandler} color='secondary'>
+                                        {t('delete') + t('selected')}
+                                    </Button>
+                                )}
+                            </div>
+                        </HasPermission>
                         <div className='right'>
                             <div className='refresh' onClick={getAdminList}>
                                 <Refresh color='primary' />
