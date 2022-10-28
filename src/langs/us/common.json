@@ -57,5 +57,17 @@
     "orderWarn": "Please note: If the order already exists, it will be reversed",
     "luckyDraw": "Llucky Draw Page",
     "recommendCount": "Please keep the number of participants >= rewards",
-    "fileTypeError": "File Type Error"
+    "fileTypeError": "File Type Error",
+    "role": "Permission",
+    "manager": "Editor (no account management function)",
+    "visitor": "Visitor (can only view the page)",
+    "setting": "Settings",
+    "bgColor": "Background Color (Button, Drawer)",
+    "textColor": "Font Color",
+    "title": "Title",
+    "subTitle": "Subtitle",
+    "background": "Background Image",
+    "rewardMoreThanUser": "The number of rewards is greater than the number of participants, please reset",
+    "noUser": "No participants, please reset",
+    "noReward": "No rewards, please reset"
 }
