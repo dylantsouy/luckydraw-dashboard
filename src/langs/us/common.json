@@ -50,6 +50,7 @@
     "type": "Type",
     "size": "Size",
     "order": "Order",
+    "rewardCount": "Rwards Count",
     "count": "Count",
     "number": "Number",
     "see": "See",
@@ -69,5 +70,8 @@
     "background": "Background Image",
     "rewardMoreThanUser": "The number of rewards is greater than the number of participants, please reset",
     "noUser": "No participants, please reset",
-    "noReward": "No rewards, please reset"
+    "noReward": "No rewards, please reset",
+    "change": "Change",
+    "emptyReward": "Empty Result",
+    "dateError": "Date Error"
 }

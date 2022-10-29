@@ -10,10 +10,11 @@ import { Button, InputAdornment, TextField } from '@mui/material';
 import FileUploadModal from 'components/reward/FileUploadModal';
 import { Stack } from '@mui/system';
 import { Refresh, Search } from '@mui/icons-material';
-import { deleteAllRewards, deleteReward, deleteRewards, fetchRewardList } from 'apis/rewardApi';
+import { deleteAllRewards, deleteReward, deleteRewards, fetchRewardList, updateWinningResult } from 'apis/rewardApi';
 import EditModal from 'components/reward/EditModal';
 import { getUserCount } from 'apis/userApi';
 import HasPermission from 'auths/HasPermission';
+import ResultModal from 'components/reward/ResultModal';
 
 export default function Reward() {
     const { t } = useTranslation('common');
@@ -27,8 +28,12 @@ export default function Reward() {
     const [dialogLoading, setDialogLoading] = useState(false);
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
     const [showEditDialog, setShowEditDialog] = useState(false);
+    const [showEmptyDialog, setShowEmptyDialog] = useState(false);
+    const [showResultDialog, setShowResultDialog] = useState(false);
+    const [emptyId, setEmptyId] = useState(false);
     const [deleteData, setDeleteData] = useState({});
     const [editData, setEditData] = useState({});
+    const [resultData, setResultData] = useState([]);
     const [perPage, setPerPage] = useState(10);
     const [userCount, setUserCount] = useState(0);
     const [loading, setLoading] = useState(true);
@@ -70,6 +75,33 @@ export default function Reward() {
         setShowEditDialog(false);
         if (refresh) {
             getRewardList();
+        }
+    };
+
+    const showResultHandler = (e) => {
+        setResultData(e);
+        setShowResultDialog(true);
+    };
+
+    const emptyRewardHandler = (e) => {
+        setShowEmptyDialog(true);
+        setEmptyId(e?.id);
+    };
+
+    const confirmEmptyResult = async () => {
+        try {
+            setDialogLoading(true);
+            let result = await updateWinningResult({ id: emptyId, winning: null });
+            const { success } = result;
+            if (success) {
+                enqueueSnackbar(t('delete') + t('success'), { variant: 'success' });
+                setShowEmptyDialog(false);
+                getRewardList();
+            }
+            setDialogLoading(false);
+        } catch (err) {
+            enqueueSnackbar(t('delete') + t('failed'), { variant: 'error' });
+            setDialogLoading(false);
         }
     };
 
@@ -222,7 +254,7 @@ export default function Reward() {
                         <DataGrid
                             className='table-root'
                             rows={filterList(rewardList)}
-                            columns={rewardColumn(t, deleteHandler, editHandler)}
+                            columns={rewardColumn(t, deleteHandler, editHandler, emptyRewardHandler, showResultHandler)}
                             pageSize={perPage}
                             getRowId={(row) => row.id}
                             rowsPerPageOptions={[10, 25, 50, 100]}
@@ -269,6 +301,13 @@ export default function Reward() {
                 text={`${t('confirmDelete')}${t('reward')}: ${deleteData?.name}?`}
             />
             <ConfirmModal
+                open={showEmptyDialog}
+                handlerOk={confirmEmptyResult}
+                handleClose={() => setShowEmptyDialog(false)}
+                loading={dialogLoading}
+                text={`${t('confirm')}${t('emptyReward')}?`}
+            />
+            <ConfirmModal
                 open={showDeleteAllDialog}
                 handlerOk={confirmDeleteAll}
                 handleClose={() => setShowDeleteAllDialog(false)}
@@ -288,6 +327,11 @@ export default function Reward() {
                 setEditData={setEditData}
                 handleClose={handleCloseEdit}
                 rewardList={rewardList}
+            />
+            <ResultModal
+                resultData={resultData}
+                open={showResultDialog}
+                handleClose={() => setShowResultDialog(false)}
             />
             <FileUploadModal open={showImportDialog} handleClose={handleCloseImport} rewardList={rewardList} />
         </div>

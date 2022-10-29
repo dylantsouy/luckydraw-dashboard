@@ -25,6 +25,6 @@ const HasPermission = (props) => {
 export default HasPermission;
 
 HasPermission.propTypes = {
-    children: PropTypes.element,
+    children: PropTypes.any,
     permission: PropTypes.string,
 };

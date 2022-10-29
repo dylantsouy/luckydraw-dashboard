@@ -50,7 +50,8 @@
     "type": "類型",
     "size": "容量",
     "order": "抽獎順序",
-    "count": "抽獎數量",
+    "rewardCount": "抽獎次數",
+    "count": "次數",
     "number": "數量",
     "see": "查看",
     "orderExist": "抽獎順序已存在, 請輸入其他數字",
@@ -69,5 +70,8 @@
     "background": "背景圖",
     "rewardMoreThanUser": "獎品數大於參加者人數, 請重新設定",
     "noUser": "沒有參加者, 請重新設定",
-    "noReward": "沒有抽獎項目, 請重新設定"
+    "noReward": "沒有抽獎項目, 請重新設定",
+    "change": "更改",
+    "emptyReward": "清空結果",
+    "dateError": "資料錯誤"
 }

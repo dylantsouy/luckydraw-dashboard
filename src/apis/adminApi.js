@@ -1,7 +1,7 @@
 import { fetcher } from './apiSetup';
 
 export const fetchAdminList = async () => {
-    const { success, data } = await fetcher('/admins', 'get', {});
+    const { success, data } = await fetcher('/admins', 'GET', {});
 
     return { success, data };
 };
@@ -29,5 +29,10 @@ export const deleteAllAdmins = async () => {
 
 export const deleteAdmins = async (ids) => {
     const { data, success } = await fetcher(`/admins/deleteAdmins`, 'POST', { ids });
+    return { success, data };
+};
+
+export const changePassword = async (props) => {
+    const { data, success } = await fetcher(`/admins/updatePassword`, 'POST', props);
     return { success, data };
 };

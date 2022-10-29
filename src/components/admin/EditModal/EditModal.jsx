@@ -17,7 +17,7 @@ import { useTranslation } from 'langs/useTranslation';
 import { useSnackbar } from 'notistack';
 import { editAdmin } from 'apis/adminApi';
 import ConfirmButton from 'components/common/ConfirmButton';
-import { emailRegex, passwordRegex, usernameRegex } from 'helpers/regex';
+import { emailRegex, usernameRegex } from 'helpers/regex';
 import { roleName } from 'auths/roleHandler';
 
 export default function EditModal(props) {
@@ -27,14 +27,12 @@ export default function EditModal(props) {
     const [loading, setLoading] = useState(false);
     const [validation, setValidation] = useState({
         username: { valid: true, error: '' },
-        password: { valid: true, error: '' },
         email: { valid: true, error: '' },
     });
 
     const handleChange = (type, e) => {
         setValidation({
             username: { valid: true, error: '' },
-            password: { valid: true, error: '' },
             email: { valid: true, error: '' },
         });
         setEditData((prevState) => ({
@@ -47,7 +45,6 @@ export default function EditModal(props) {
         if (open) {
             setValidation({
                 username: { valid: true, error: '' },
-                password: { valid: true, error: '' },
                 email: { valid: true, error: '' },
             });
         }
@@ -57,27 +54,21 @@ export default function EditModal(props) {
         let data = {
             id: editData.id,
             username: editData.username.trim(),
-            password: editData.password.trim(),
             email: editData.email.trim(),
             role: editData.role,
         };
-        if (data.username.length === 0 || data.password.length === 0 || data.email.length === 0) {
+        if (data.username.length === 0 || data.email.length === 0) {
             setValidation({
                 username: { valid: !!data.username, error: data.username.length === 0 ? t('required') : '' },
-                password: { valid: !!data.password, error: data.password.length === 0 ? t('required') : '' },
                 email: { valid: !!data.email, error: data.email.length === 0 ? t('required') : '' },
             });
             return;
         }
-        if (!usernameRegex(data.username) || !passwordRegex(data.password) || !emailRegex(data.email)) {
+        if (!usernameRegex(data.username) || !emailRegex(data.email)) {
             setValidation({
                 username: {
                     valid: usernameRegex(data.username),
                     error: !usernameRegex(data.username) ? t('regexError') : '',
-                },
-                password: {
-                    valid: passwordRegex(data.password),
-                    error: !passwordRegex(data.password) ? t('regexError') : '',
                 },
                 email: { valid: emailRegex(data.email), error: !emailRegex(data.email) ? t('regexError') : '' },
             });
@@ -116,23 +107,6 @@ export default function EditModal(props) {
                     fullWidth
                     variant='standard'
                     onChange={(e) => handleChange('username', e)}
-                />
-                <TextField
-                    margin='dense'
-                    label={t('password')}
-                    type='text'
-                    value={editData.password}
-                    fullWidth
-                    required
-                    error={!validation.password.valid}
-                    helperText={validation.password.error}
-                    variant='standard'
-                    onKeyPress={(e) => {
-                        if (e.key === 'Enter') {
-                            confirmHandler();
-                        }
-                    }}
-                    onChange={(e) => handleChange('password', e)}
                 />
                 <TextField
                     margin='dense'

@@ -13,6 +13,7 @@ import { Stack } from '@mui/system';
 import { Refresh, Search } from '@mui/icons-material';
 import { deleteAdmin, deleteAdmins, deleteAllAdmins, fetchAdminList } from 'apis/adminApi';
 import HasPermission from 'auths/HasPermission';
+import PasswordModal from 'components/admin/PasswordModal';
 
 export default function Admin() {
     const { t } = useTranslation('common');
@@ -30,6 +31,8 @@ export default function Admin() {
     const [deleteData, setDeleteData] = useState({});
     const [perPage, setPerPage] = useState(10);
     const [loading, setLoading] = useState(true);
+    const [changePasswordId, setChangePasswordId] = useState('');
+    const [showPasswordDialog, setShowPasswordDialog] = useState(false);
 
     const handleSearch = (e) => {
         setSearchValue(e.target.value);
@@ -50,6 +53,18 @@ export default function Admin() {
     const deleteHandler = (e) => {
         setShowDeleteDialog(true);
         setDeleteData(e);
+    };
+
+    const passwordHandler = (e) => {
+        setShowPasswordDialog(true);
+        setChangePasswordId(e?.id);
+    };
+
+    const handleClosePassword = (refresh) => {
+        setShowPasswordDialog(false);
+        if (refresh) {
+            getAdminList();
+        }
     };
 
     const deleteMutipleHandler = () => {
@@ -201,7 +216,7 @@ export default function Admin() {
                         <DataGrid
                             className='table-root'
                             rows={filterList(adminList)}
-                            columns={adminColumn(t, editHandler, deleteHandler)}
+                            columns={adminColumn(t, editHandler, deleteHandler, passwordHandler)}
                             pageSize={perPage}
                             getRowId={(row) => row.id}
                             rowsPerPageOptions={[10, 25, 50, 100]}
@@ -245,6 +260,11 @@ export default function Admin() {
                 editData={editData}
                 setEditData={setEditData}
                 handleClose={handleCloseEdit}
+            />
+            <PasswordModal
+                open={showPasswordDialog}
+                changePasswordId={changePasswordId}
+                handleClose={handleClosePassword}
             />
             <AddModal open={showAddDialog} handleClose={handleCloseAdd} />
             <ConfirmModal

@@ -1,0 +1,32 @@
+@import 'src/styles/medias.scss';
+@import 'src/styles/variables.scss';
+
+.ResultModal{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 7.5px;
+    .MuiDialogTitle-root {
+        padding-bottom: 20px;
+        .title-text {
+            font-weight: bold;
+            color: $black;
+        }
+    }
+
+    & .MuiPaper-root {
+        min-width: 500px;
+        @media screen and ($media-tablet), screen and ($media-phone) {
+            min-width: 100%;
+        }
+    }
+    .MuiButtonBase-root{
+        &.header{
+            border-bottom: 1px solid #333;
+        }
+        .MuiListItemText-root{
+            flex: 1;
+            justify-content: flex-start;
+        }
+    }
+}

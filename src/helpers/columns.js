@@ -1,5 +1,5 @@
 import React from 'react';
-import { Delete, Edit, RemoveRedEye } from '@mui/icons-material';
+import { Delete, Edit, Password, RemoveRedEye } from '@mui/icons-material';
 import { Tooltip } from '@mui/material';
 import dayjs from 'dayjs';
 import Zoom from 'react-medium-image-zoom';
@@ -8,6 +8,7 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import { transformedFormatBytes } from 'helpers/formatBytesTransformer';
 import HasPermission from 'auths/HasPermission';
+import { roleName } from 'auths/roleHandler';
 
 export const userColumn = (t, editHandler, deleteHandler) => {
     return [
@@ -56,7 +57,7 @@ export const userColumn = (t, editHandler, deleteHandler) => {
     ];
 };
 
-export const rewardColumn = (t, deleteHandler, editHandler) => {
+export const rewardColumn = (t, deleteHandler, editHandler, emptyRewardHandler, showResultHandler) => {
     return [
         {
             field: 'url',
@@ -108,13 +109,28 @@ export const rewardColumn = (t, deleteHandler, editHandler) => {
             field: 'winning',
             filterable: false,
             headerName: t('winning'),
-            minWidth: 100,
+            minWidth: 120,
             renderCell: (params) => {
                 return (
                     <>
-                        <Tooltip title={t('see')} placement='right'>
-                            <RemoveRedEye className='action-icon success' onClick={() => {}} />
-                        </Tooltip>
+                        {params.row?.winning ? (
+                            <>
+                                <Tooltip title={t('see')} placement='right'>
+                                    <RemoveRedEye
+                                        className='action-icon success'
+                                        onClick={() => showResultHandler(params.row)}
+                                    />
+                                </Tooltip>
+                                <Tooltip title={t('emptyReward')} placement='right'>
+                                    <Delete
+                                        className='action-icon ml-3 warn'
+                                        onClick={() => emptyRewardHandler(params.row)}
+                                    />
+                                </Tooltip>
+                            </>
+                        ) : (
+                            <div>尚未抽獎</div>
+                        )}
                     </>
                 );
             },
@@ -151,7 +167,7 @@ export const rewardColumn = (t, deleteHandler, editHandler) => {
         },
     ];
 };
-export const adminColumn = (t, editHandler, deleteHandler) => {
+export const adminColumn = (t, editHandler, deleteHandler, passwordHandler) => {
     return [
         {
             field: 'username',
@@ -175,6 +191,15 @@ export const adminColumn = (t, editHandler, deleteHandler) => {
             minWidth: 241,
         },
         {
+            field: 'role',
+            filterable: false,
+            headerName: t('role'),
+            minWidth: 241,
+            renderCell: (params) => {
+                return <>{roleName(params.row?.role, t)}</>;
+            },
+        },
+        {
             field: 'createdAt',
             filterable: false,
             headerName: t('createdAt'),
@@ -195,6 +220,9 @@ export const adminColumn = (t, editHandler, deleteHandler) => {
                         <HasPermission permission='action'>
                             <Tooltip title={t('edit')} placement='right'>
                                 <Edit className='action-icon' onClick={() => editHandler(params.row)} />
+                            </Tooltip>
+                            <Tooltip title={t('change') + t('password')} placement='right'>
+                                <Password className='action-icon ml-3 ' onClick={() => passwordHandler(params.row)} />
                             </Tooltip>
                             <Tooltip title={t('delete')} placement='right'>
                                 <Delete className='action-icon ml-3 warn' onClick={() => deleteHandler(params.row)} />

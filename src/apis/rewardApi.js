@@ -1,7 +1,13 @@
 import { fetcher, percentageFetcher } from './apiSetup';
 
 export const fetchRewardList = async () => {
-    const { success, data } = await fetcher('/rewards', 'get', {});
+    const { success, data } = await fetcher('/rewards', 'GET', {});
+
+    return { success, data };
+};
+
+export const fetchNoWinningsRewards = async () => {
+    const { success, data } = await fetcher('/rewards/getNoWinningsRewards', 'POST', {});
 
     return { success, data };
 };
@@ -46,5 +52,11 @@ export const createAdditionalReward = async (props) => {
 export const getRewardCount = async () => {
     const { success, data } = await fetcher('/rewards/count', 'POST', {});
 
+    return { success, data };
+};
+
+export const updateWinningResult = async (props) => {
+    const { id, winning } = props;
+    const { data, success } = await fetcher(`/rewards/updateWinningResult/${id}`, 'POST', { winning });
     return { success, data };
 };

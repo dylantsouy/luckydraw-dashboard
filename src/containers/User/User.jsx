@@ -171,8 +171,8 @@ export default function User() {
         try {
             let result = await getRewardCount();
             const { success, data } = result;
-            if (success) {
-                setRewardCount(data);
+            if (success && data) {
+                setRewardCount(data[0]?.count || 0);
             }
         } catch (err) {
             enqueueSnackbar(t(err?.message), { variant: 'error' });
@@ -192,8 +192,7 @@ export default function User() {
                         <div className='left'>
                             <HasPermission permission='action'>
                                 <div className='recommend'>
-                                    {t('reward')}
-                                    {t('number')} : <span>{rewardCount}</span> *{t('recommendCount')}*
+                                    {t('rewardCount')} : <span>{rewardCount}</span> *{t('recommendCount')}*
                                 </div>
                                 <Button variant='contained' onClick={addHandler} color='primary'>
                                     {t('create')}

@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './styles.scss';
 import background from 'assets/images/background.png';
-import { fetchRewardList } from 'apis/rewardApi';
+import { fetchNoWinningsRewards, updateWinningResult, getRewardCount } from 'apis/rewardApi';
 import { useTranslation } from 'langs/useTranslation';
 import { useSnackbar } from 'notistack';
 import 'react-medium-image-zoom/dist/styles.css';
@@ -18,12 +18,12 @@ export default function LuckyDraw() {
     const goingRef = useRef(null);
     const { enqueueSnackbar } = useSnackbar();
     const [loading, setLoading] = useState(true);
+    const [debounce, setDebounce] = useState(false);
     const [rewardList, setRewardList] = useState([]);
     const [userList, setUserList] = useState([]);
     const [current, setCurrent] = useState(0);
     const [step, setStep] = useState(0); //
     const [winners, setWinners] = useState([]);
-    const [result, setResult] = useState({});
     const [setting, setSetting] = useState({
         background: '',
         title: '',
@@ -46,12 +46,19 @@ export default function LuckyDraw() {
     };
 
     const next = () => {
+        if (debounce) {
+            return;
+        }
         setCurrent((prev) => prev + 1);
         setShowUsers([]);
         setStep(0);
     };
 
-    const toggle = () => {
+    const toggle = async () => {
+        if (debounce) {
+            return;
+        }
+        setDebounce(true);
         if (!goingRef.current) {
             const winnerIds = winners.map((w) => w.id);
             let others = winnerIds.length ? userList.filter((u) => !winnerIds.includes(u.id)) : userList;
@@ -59,28 +66,32 @@ export default function LuckyDraw() {
                 setShowUsers(randomCountUser(others, rewardList[current]?.count));
             }, 20);
             setStep(1);
+            setDebounce(false);
         } else {
             clearInterval(goingRef.current);
             goingRef.current = false;
             setWinners((prev) => [...prev, ...showUsers]);
             setShowUsers(showUsers);
-            console.log('winners', winners);
+            await updateWinningResult({ id: rewardList[current]?.id, winning: showUsers });
             if (current === rewardList?.length - 1) {
                 setStep(3);
+                setDebounce(false);
             } else {
                 setStep(2);
+                setDebounce(false);
             }
         }
     };
 
     useEffect(() => {
-        let p1 = fetchRewardList();
+        let p1 = fetchNoWinningsRewards();
         let p2 = fetchUserList();
         let p3 = fetchSetting();
+        let p4 = getRewardCount();
 
-        Promise.all([p1, p2, p3])
+        Promise.all([p1, p2, p3, p4])
             .then((values) => {
-                if (values[0]?.success && values[1]?.success && values[2]?.success) {
+                if (values[0]?.success && values[1]?.success && values[2]?.success && values[3]?.success) {
                     if (!values[0]?.data?.length) {
                         enqueueSnackbar(t('noReward'), { variant: 'error' });
                         navigate('/reward');
@@ -91,7 +102,7 @@ export default function LuckyDraw() {
                         navigate('/user');
                         return;
                     }
-                    if (values[1].data.length < values[0].data.length) {
+                    if (values[1]?.data?.length < values[3]?.data[0]?.count) {
                         enqueueSnackbar(t('rewardMoreThanUser'), { variant: 'error' });
                         navigate('/user');
                         return;
@@ -100,6 +111,10 @@ export default function LuckyDraw() {
                     setUserList(values[1]?.data);
                     setSetting(values[2]?.data);
                     setLoading(false);
+                } else {
+                    enqueueSnackbar(t('dateError'), { variant: 'error' });
+                    navigate('/user');
+                    return;
                 }
             })
             .catch(() => {

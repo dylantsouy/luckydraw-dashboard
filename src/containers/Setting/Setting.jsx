@@ -1,7 +1,6 @@
 import { Button, InputAdornment, TextField } from '@mui/material';
 import { editSetting, fetchSetting } from 'apis/settingApi';
 import DropUploadNoName from 'components/common/DropUploadNoName';
-import { colorRegex } from 'helpers/regex';
 import { useTranslation } from 'langs/useTranslation';
 import { useSnackbar } from 'notistack';
 import React, { useCallback, useEffect, useState } from 'react';
