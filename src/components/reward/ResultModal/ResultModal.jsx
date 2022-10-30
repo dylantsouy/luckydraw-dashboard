@@ -17,7 +17,7 @@ import { useTranslation } from 'langs/useTranslation';
 export default function ResultModal(props) {
     const { t } = useTranslation('common');
     const { open, handleClose, resultData } = props;
-    console.log(resultData);
+
     return (
         <Dialog className='ResultModal' open={open} onClose={() => handleClose()}>
             <DialogTitle>

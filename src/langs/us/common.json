@@ -73,5 +73,7 @@
     "noReward": "No rewards, please reset",
     "change": "Change",
     "emptyReward": "Empty Result",
-    "dateError": "Date Error"
+    "dateError": "Date Error",
+    "noPermission": "You don't have permission, please contact manager",
+    "testing": "During the test, result will not be recorded"
 }

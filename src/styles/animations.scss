@@ -32,14 +32,25 @@
 
 @keyframes pulse {
     0% {
-      transform:scale(.9);
+        transform: scale(0.9);
     }
     70% {
-      translate:scale(1);
-      box-shadow: 0 0 0 50px rgba(#eed287, 0);
+        translate: scale(1);
+        box-shadow: 0 0 0 50px rgba(#eed287, 0);
     }
-      100% {
-      translate:scale(.9);
-      box-shadow: 0 0 0 0 rgba(#967c36, 0);
+    100% {
+        translate: scale(0.9);
+        box-shadow: 0 0 0 0 rgba(#967c36, 0);
     }
-  }
+}
+@keyframes testing {
+    0% {
+        color: #e06538;
+    }
+    50% {
+        color: #333;
+    }
+    100% {
+        color: #e06538;
+    }
+}

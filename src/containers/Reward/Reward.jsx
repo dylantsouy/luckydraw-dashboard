@@ -13,11 +13,12 @@ import { Refresh, Search } from '@mui/icons-material';
 import { deleteAllRewards, deleteReward, deleteRewards, fetchRewardList, updateWinningResult } from 'apis/rewardApi';
 import EditModal from 'components/reward/EditModal';
 import { getUserCount } from 'apis/userApi';
-import HasPermission from 'auths/HasPermission';
 import ResultModal from 'components/reward/ResultModal';
+import { useAuthStore } from 'store/auth';
 
 export default function Reward() {
     const { t } = useTranslation('common');
+    const { permissionArray } = useAuthStore();
     const { enqueueSnackbar } = useSnackbar();
     const [rewardList, setRewardList] = useState([]);
     const [searchValue, setSearchValue] = useState('');
@@ -89,6 +90,10 @@ export default function Reward() {
     };
 
     const confirmEmptyResult = async () => {
+        if (!permissionArray?.includes('action')) {
+            enqueueSnackbar(t('noPermission'), { variant: 'error' });
+            return;
+        }
         try {
             setDialogLoading(true);
             let result = await updateWinningResult({ id: emptyId, winning: null });
@@ -114,6 +119,10 @@ export default function Reward() {
     };
 
     const confirmDelete = async () => {
+        if (!permissionArray?.includes('action')) {
+            enqueueSnackbar(t('noPermission'), { variant: 'error' });
+            return;
+        }
         try {
             setDialogLoading(true);
             let result = await deleteReward(deleteData?.id);
@@ -131,6 +140,10 @@ export default function Reward() {
     };
 
     const confirmDeleteMutiple = async () => {
+        if (!permissionArray?.includes('action')) {
+            enqueueSnackbar(t('noPermission'), { variant: 'error' });
+            return;
+        }
         try {
             setDialogLoading(true);
             let result = await deleteRewards(selectRows);
@@ -149,6 +162,10 @@ export default function Reward() {
     };
 
     const confirmDeleteAll = async () => {
+        if (!permissionArray?.includes('action')) {
+            enqueueSnackbar(t('noPermission'), { variant: 'error' });
+            return;
+        }
         try {
             setDialogLoading(true);
             let result = await deleteAllRewards();
@@ -208,25 +225,23 @@ export default function Reward() {
                 {!loading && (
                     <div className='action-area'>
                         <div className='left'>
-                            <HasPermission permission='action'>
-                                <div className='recommend'>
-                                    {t('user')}
-                                    {t('number')} : <span>{userCount}</span> *{t('recommendCount')}*
-                                </div>
-                                <Button variant='contained' onClick={importHandler} color='third'>
-                                    {t('import')}
+                            <div className='recommend'>
+                                {t('user')}
+                                {t('number')} : <span>{userCount}</span> *{t('recommendCount')}*
+                            </div>
+                            <Button variant='contained' onClick={importHandler} color='third'>
+                                {t('import')}
+                            </Button>
+                            {rewardList?.length > 0 && (
+                                <Button variant='contained' onClick={deleteAllHandler} color='secondary'>
+                                    {t('delete') + t('all')}
                                 </Button>
-                                {rewardList?.length > 0 && (
-                                    <Button variant='contained' onClick={deleteAllHandler} color='secondary'>
-                                        {t('delete') + t('all')}
-                                    </Button>
-                                )}
-                                {selectRows?.length > 0 && (
-                                    <Button variant='contained' onClick={deleteMutipleHandler} color='secondary'>
-                                        {t('delete') + t('selected')}
-                                    </Button>
-                                )}
-                            </HasPermission>
+                            )}
+                            {selectRows?.length > 0 && (
+                                <Button variant='contained' onClick={deleteMutipleHandler} color='secondary'>
+                                    {t('delete') + t('selected')}
+                                </Button>
+                            )}
                         </div>
                         <div className='right'>
                             <div className='refresh' onClick={getRewardList}>

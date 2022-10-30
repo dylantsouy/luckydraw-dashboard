@@ -10,10 +10,11 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import './styles.scss';
 import Loading from 'components/common/Loading';
-import HasPermission from 'auths/HasPermission';
+import { useAuthStore } from 'store/auth';
 
 export default function Dashboard() {
     const { t } = useTranslation('common');
+    const { permissionArray } = useAuthStore();
     const { enqueueSnackbar } = useSnackbar();
     const [loading, setLoading] = useState(false);
     const [percentage, setPercentage] = useState(0);
@@ -44,6 +45,10 @@ export default function Dashboard() {
     };
 
     const confirm = async () => {
+        if (!permissionArray?.includes('action')) {
+            enqueueSnackbar(t('noPermission'), { variant: 'error' });
+            return;
+        }
         let data = {
             id: setting.id,
             background: setting.background.trim(),
@@ -202,18 +207,16 @@ export default function Dashboard() {
                         </div>
                     </div>
                     <div className='action'>
-                        <HasPermission permission='action'>
-                            <Button
-                                variant='contained'
-                                onClick={confirm}
-                                color='third'
-                                className='mt-5 mb-5'
-                                disabled={loading}
-                            >
-                                {t('confirm')}
-                                {t('edit')}
-                            </Button>
-                        </HasPermission>
+                        <Button
+                            variant='contained'
+                            onClick={confirm}
+                            color='third'
+                            className='mt-5 mb-5'
+                            disabled={loading}
+                        >
+                            {t('confirm')}
+                            {t('edit')}
+                        </Button>
                     </div>
                 </div>
             )}

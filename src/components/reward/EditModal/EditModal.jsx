@@ -8,9 +8,11 @@ import { useSnackbar } from 'notistack';
 import { editReward } from 'apis/rewardApi';
 import ConfirmButton from 'components/common/ConfirmButton';
 import NumberInput from 'components/common/NumberInput';
+import { useAuthStore } from 'store/auth';
 
 export default function EditModal(props) {
     const { t } = useTranslation('common');
+    const { permissionArray } = useAuthStore();
     const { open, handleClose, editData, setEditData } = props;
     const { enqueueSnackbar } = useSnackbar();
     const [loading, setLoading] = useState(false);
@@ -43,13 +45,17 @@ export default function EditModal(props) {
     }, [open]);
 
     const confirmHandler = async () => {
+        if (!permissionArray?.includes('action')) {
+            enqueueSnackbar(t('noPermission'), { variant: 'error' });
+            return;
+        }
         let data = {
             id: editData.id,
             name: editData.name.trim(),
             order: editData.order,
             count: editData.count,
         };
-        if (data.name.length === 0 || data.order.length === 0 || data.count.length === 0 ) {
+        if (data.name.length === 0 || data.order.length === 0 || data.count.length === 0) {
             setValidation({
                 name: { valid: !!data.name, error: data.name.length === 0 ? t('required') : '' },
                 order: { valid: !!data.order, error: data.order.length === 0 ? t('required') : '' },
@@ -74,7 +80,10 @@ export default function EditModal(props) {
     return (
         <Dialog className='editDialog' open={open} onClose={() => handleClose()}>
             <DialogTitle>
-                <span className='title-text'>{t('edit')}{t('reward')}</span>
+                <span className='title-text'>
+                    {t('edit')}
+                    {t('reward')}
+                </span>
             </DialogTitle>
             <DialogContent>
                 <div className='warn-text'>{t('orderWarn')}</div>
@@ -117,7 +126,7 @@ export default function EditModal(props) {
             </DialogContent>
             <DialogActions>
                 <ConfirmButton variant='contained' onClick={confirmHandler} loading={loading} text={t('confirm')} />
-                <Button onClick={()=>handleClose()}>{t('cancel')}</Button>
+                <Button onClick={() => handleClose()}>{t('cancel')}</Button>
             </DialogActions>
         </Dialog>
     );

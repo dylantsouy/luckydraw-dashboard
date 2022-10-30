@@ -10,7 +10,6 @@ import { deleteAllWinnings, deleteWinning, deleteWinnings, fetchWinningList } fr
 import { Button, InputAdornment, TextField } from '@mui/material';
 import { Stack } from '@mui/system';
 import { Refresh, Search } from '@mui/icons-material';
-import HasPermission from 'auths/HasPermission';
 
 export default function Winning() {
     const { t } = useTranslation('common');
@@ -134,18 +133,16 @@ export default function Winning() {
                 {!loading && (
                     <div className='action-area'>
                         <div className='left'>
-                            <HasPermission permission='action'>
-                                {winningList?.length > 0 && (
-                                    <Button variant='contained' onClick={deleteAllHandler} color='secondary'>
-                                        {t('delete') + t('all')}
-                                    </Button>
-                                )}
-                                {selectRows?.length > 0 && (
-                                    <Button variant='contained' onClick={deleteMutipleHandler} color='secondary'>
-                                        {t('delete') + t('selected')}
-                                    </Button>
-                                )}
-                            </HasPermission>
+                            {winningList?.length > 0 && (
+                                <Button variant='contained' onClick={deleteAllHandler} color='secondary'>
+                                    {t('delete') + t('all')}
+                                </Button>
+                            )}
+                            {selectRows?.length > 0 && (
+                                <Button variant='contained' onClick={deleteMutipleHandler} color='secondary'>
+                                    {t('delete') + t('selected')}
+                                </Button>
+                            )}
                         </div>
                         <div className='right'>
                             <div className='refresh' onClick={getWinningList}>

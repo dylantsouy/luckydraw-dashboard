@@ -14,11 +14,12 @@ import FileUploadModal from 'components/user/FileUploadModal';
 import { Stack } from '@mui/system';
 import { Refresh, Search } from '@mui/icons-material';
 import { getRewardCount } from 'apis/rewardApi';
-import HasPermission from 'auths/HasPermission';
+import { useAuthStore } from 'store/auth';
 
 export default function User() {
     const { t } = useTranslation('common');
     const { enqueueSnackbar } = useSnackbar();
+    const { permissionArray } = useAuthStore();
     const [userList, setUserList] = useState([]);
     const [searchValue, setSearchValue] = useState('');
     const [selectRows, setSelectRows] = useState([]);
@@ -95,6 +96,10 @@ export default function User() {
     };
 
     const confirmDelete = async () => {
+        if (!permissionArray?.includes('action')) {
+            enqueueSnackbar(t('noPermission'), { variant: 'error' });
+            return;
+        }
         try {
             setDialogLoading(true);
             let result = await deleteUser(deleteData?.id);
@@ -112,6 +117,10 @@ export default function User() {
     };
 
     const confirmDeleteMutiple = async () => {
+        if (!permissionArray?.includes('action')) {
+            enqueueSnackbar(t('noPermission'), { variant: 'error' });
+            return;
+        }
         try {
             setDialogLoading(true);
             let result = await deleteUsers(selectRows);
@@ -130,6 +139,10 @@ export default function User() {
     };
 
     const confirmDeleteAll = async () => {
+        if (!permissionArray?.includes('action')) {
+            enqueueSnackbar(t('noPermission'), { variant: 'error' });
+            return;
+        }
         try {
             setDialogLoading(true);
             let result = await deleteAllUsers();
@@ -190,27 +203,25 @@ export default function User() {
                 {!loading && (
                     <div className='action-area'>
                         <div className='left'>
-                            <HasPermission permission='action'>
-                                <div className='recommend'>
-                                    {t('rewardCount')} : <span>{rewardCount}</span> *{t('recommendCount')}*
-                                </div>
-                                <Button variant='contained' onClick={addHandler} color='primary'>
-                                    {t('create')}
+                            <div className='recommend'>
+                                {t('rewardCount')} : <span>{rewardCount}</span> *{t('recommendCount')}*
+                            </div>
+                            <Button variant='contained' onClick={addHandler} color='primary'>
+                                {t('create')}
+                            </Button>
+                            <Button variant='contained' onClick={importHandler} color='third'>
+                                {t('import')}
+                            </Button>
+                            {userList?.length > 0 && (
+                                <Button variant='contained' onClick={deleteAllHandler} color='secondary'>
+                                    {t('delete') + t('all')}
                                 </Button>
-                                <Button variant='contained' onClick={importHandler} color='third'>
-                                    {t('import')}
+                            )}
+                            {selectRows?.length > 0 && (
+                                <Button variant='contained' onClick={deleteMutipleHandler} color='secondary'>
+                                    {t('delete') + t('selected')}
                                 </Button>
-                                {userList?.length > 0 && (
-                                    <Button variant='contained' onClick={deleteAllHandler} color='secondary'>
-                                        {t('delete') + t('all')}
-                                    </Button>
-                                )}
-                                {selectRows?.length > 0 && (
-                                    <Button variant='contained' onClick={deleteMutipleHandler} color='secondary'>
-                                        {t('delete') + t('selected')}
-                                    </Button>
-                                )}
-                            </HasPermission>
+                            )}
                         </div>
                         <div className='right'>
                             <div className='refresh' onClick={getUserList}>

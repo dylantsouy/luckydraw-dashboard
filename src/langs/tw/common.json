@@ -73,5 +73,7 @@
     "noReward": "沒有抽獎項目, 請重新設定",
     "change": "更改",
     "emptyReward": "清空結果",
-    "dateError": "資料錯誤"
+    "dateError": "資料錯誤",
+    "noPermission": "您沒有權限執行此動作, 請洽管理人",
+    "testing": "測試中, 不會紀錄抽獎結果"
 }

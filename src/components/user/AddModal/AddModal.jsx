@@ -7,9 +7,11 @@ import { useTranslation } from 'langs/useTranslation';
 import { useSnackbar } from 'notistack';
 import { createUser } from 'apis/userApi';
 import ConfirmButton from 'components/common/ConfirmButton';
+import { useAuthStore } from 'store/auth';
 
 export default function AddModal(props) {
     const { t } = useTranslation('common');
+    const { permissionArray } = useAuthStore();
     const { open, handleClose } = props;
     const { enqueueSnackbar } = useSnackbar();
     const [loading, setLoading] = useState(false);
@@ -47,6 +49,10 @@ export default function AddModal(props) {
     }, [open]);
 
     const confirmHandler = async () => {
+        if (!permissionArray?.includes('action')) {
+            enqueueSnackbar(t('noPermission'), { variant: 'error' });
+            return;
+        }
         let data = {
             name: addData.name.trim(),
             code: addData.code.trim(),

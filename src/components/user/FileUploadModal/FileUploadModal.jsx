@@ -10,9 +10,11 @@ import ConfirmButton from 'components/common/ConfirmButton';
 import DropUpload from 'components/common/DropUpload';
 import TemplateFile from 'assets/files/importUser.xlsx';
 import { GetAppOutlined } from '@mui/icons-material';
+import { useAuthStore } from 'store/auth';
 
 export default function FileUploadModal(props) {
     const { t } = useTranslation('common');
+    const { permissionArray } = useAuthStore();
     const { open, handleClose } = props;
     const { enqueueSnackbar } = useSnackbar();
     const [loading, setLoading] = useState(false);
@@ -35,12 +37,16 @@ export default function FileUploadModal(props) {
             setPercentage(0);
             resetVaild();
             setAddData({
-                file:null,
+                file: null,
             });
         }
     }, [open, resetVaild]);
 
     const confirmHandler = async () => {
+        if (!permissionArray?.includes('action')) {
+            enqueueSnackbar(t('noPermission'), { variant: 'error' });
+            return;
+        }
         let data = {
             file: addData.file,
         };
@@ -106,7 +112,7 @@ export default function FileUploadModal(props) {
             </DialogContent>
             <DialogActions>
                 <ConfirmButton variant='contained' onClick={confirmHandler} loading={loading} text={t('confirm')} />
-                <Button disabled={loading} onClick={()=>handleClose()}>
+                <Button disabled={loading} onClick={() => handleClose()}>
                     {t('cancel')}
                 </Button>
             </DialogActions>

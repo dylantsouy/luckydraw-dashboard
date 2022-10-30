@@ -11,9 +11,11 @@ import { fetchUserList } from 'apis/userApi';
 import Loading from 'components/common/Loading';
 import { fetchSetting } from 'apis/settingApi';
 import { useNavigate } from 'react-router-dom';
+import { useAuthStore } from 'store/auth';
 
 export default function LuckyDraw() {
     const navigate = useNavigate();
+    const { permissionArray } = useAuthStore();
     const { t } = useTranslation('common');
     const goingRef = useRef(null);
     const { enqueueSnackbar } = useSnackbar();
@@ -32,6 +34,7 @@ export default function LuckyDraw() {
         textColor: '',
     });
     const [showUsers, setShowUsers] = useState([]);
+    const [test, setTest] = useState(false);
 
     const randomCountUser = (users, count) => {
         let list = [...users];
@@ -72,7 +75,9 @@ export default function LuckyDraw() {
             goingRef.current = false;
             setWinners((prev) => [...prev, ...showUsers]);
             setShowUsers(showUsers);
-            await updateWinningResult({ id: rewardList[current]?.id, winning: showUsers });
+            if (!test) {
+                await updateWinningResult({ id: rewardList[current]?.id, winning: showUsers });
+            }
             if (current === rewardList?.length - 1) {
                 setStep(3);
                 setDebounce(false);
@@ -107,6 +112,9 @@ export default function LuckyDraw() {
                         navigate('/user');
                         return;
                     }
+                    if (!permissionArray?.includes('action')) {
+                        setTest(true);
+                    }
                     setRewardList(values[0]?.data);
                     setUserList(values[1]?.data);
                     setSetting(values[2]?.data);
@@ -137,7 +145,10 @@ export default function LuckyDraw() {
                     <div className='grid-wrapper'>
                         <div className='title-set'>
                             <div className='title'>{setting?.title}</div>
-                            <div className='sub-title'>{setting?.subTitle}</div>
+                            <div className='sub-title'>
+                                {setting?.subTitle}
+                                {test && <div className='testing'>{t('testing')}</div>}
+                            </div>
                         </div>
                         <div className='top'>
                             <div className='reward'>

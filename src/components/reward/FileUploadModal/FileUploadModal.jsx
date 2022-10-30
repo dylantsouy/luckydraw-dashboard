@@ -9,9 +9,11 @@ import ConfirmButton from 'components/common/ConfirmButton';
 import DropUpload from 'components/common/DropUpload';
 import { uploadRewards } from 'apis/rewardApi';
 import NumberInput from 'components/common/NumberInput';
+import { useAuthStore } from 'store/auth';
 
 export default function FileUploadModal(props) {
     const { t } = useTranslation('common');
+    const { permissionArray } = useAuthStore();
     const { open, handleClose, rewardList } = props;
     const { enqueueSnackbar } = useSnackbar();
     const [loading, setLoading] = useState(false);
@@ -52,6 +54,10 @@ export default function FileUploadModal(props) {
     }, [open, resetVaild]);
 
     const confirmHandler = async () => {
+        if (!permissionArray?.includes('action')) {
+            enqueueSnackbar(t('noPermission'), { variant: 'error' });
+            return;
+        }
         let data = {
             file: addData.file,
             name: addData.name.trim(),
