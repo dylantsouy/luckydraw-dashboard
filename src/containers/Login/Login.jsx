@@ -26,7 +26,6 @@ export default function Login() {
     const login = async () => {
         try {
             let result = await loginApi(form);
-            console.log(result);
             if (result?.success) {
                 setAuthValue('user', result.data);
                 setAuthValue('token', result.token);
@@ -36,7 +35,6 @@ export default function Login() {
                 navigate('/user');
             }
         } catch (err) {
-            console.log(err.message);
             setLoading(false);
             enqueueSnackbar(t(err?.message), { variant: 'error' });
         }
