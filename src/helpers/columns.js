@@ -7,7 +7,6 @@ import 'react-medium-image-zoom/dist/styles.css';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import { transformedFormatBytes } from 'helpers/formatBytesTransformer';
-import HasPermission from 'auths/HasPermission';
 import { roleName } from 'auths/roleHandler';
 
 export const userColumn = (t, editHandler, deleteHandler) => {
@@ -216,7 +215,7 @@ export const adminColumn = (t, editHandler, deleteHandler, passwordHandler) => {
                         <Tooltip title={t('edit')} placement='right'>
                             <Edit className='action-icon' onClick={() => editHandler(params.row)} />
                         </Tooltip>
-                        <Tooltip title={t('change') + t('password')} placement='right'>
+                        <Tooltip title={t('changePassword')} placement='right'>
                             <Password className='action-icon ml-3 ' onClick={() => passwordHandler(params.row)} />
                         </Tooltip>
                         <Tooltip title={t('delete')} placement='right'>

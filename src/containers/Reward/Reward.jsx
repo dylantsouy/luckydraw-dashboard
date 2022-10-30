@@ -99,13 +99,13 @@ export default function Reward() {
             let result = await updateWinningResult({ id: emptyId, winning: null });
             const { success } = result;
             if (success) {
-                enqueueSnackbar(t('delete') + t('success'), { variant: 'success' });
+                enqueueSnackbar(t('deleteSuccess'), { variant: 'success' });
                 setShowEmptyDialog(false);
                 getRewardList();
             }
             setDialogLoading(false);
         } catch (err) {
-            enqueueSnackbar(t('delete') + t('failed'), { variant: 'error' });
+            enqueueSnackbar(t('deleteFailed'), { variant: 'error' });
             setDialogLoading(false);
         }
     };
@@ -128,13 +128,13 @@ export default function Reward() {
             let result = await deleteReward(deleteData?.id);
             const { success } = result;
             if (success) {
-                enqueueSnackbar(t('delete') + t('success'), { variant: 'success' });
+                enqueueSnackbar(t('deleteSuccess'), { variant: 'success' });
                 setShowDeleteDialog(false);
                 getRewardList();
             }
             setDialogLoading(false);
         } catch (err) {
-            enqueueSnackbar(t('delete') + t('failed'), { variant: 'error' });
+            enqueueSnackbar(t('deleteFailed'), { variant: 'error' });
             setDialogLoading(false);
         }
     };
@@ -149,14 +149,14 @@ export default function Reward() {
             let result = await deleteRewards(selectRows);
             const { success } = result;
             if (success) {
-                enqueueSnackbar(t('delete') + t('success'), { variant: 'success' });
+                enqueueSnackbar(t('deleteSuccess'), { variant: 'success' });
                 setShowDeleteMutipleDialog(false);
                 setSelectRows([]);
                 getRewardList();
             }
             setDialogLoading(false);
         } catch (err) {
-            enqueueSnackbar(t('delete') + t('failed'), { variant: 'error' });
+            enqueueSnackbar(t('deleteFailed'), { variant: 'error' });
             setDialogLoading(false);
         }
     };
@@ -171,13 +171,13 @@ export default function Reward() {
             let result = await deleteAllRewards();
             const { success } = result;
             if (success) {
-                enqueueSnackbar(t('delete') + t('success'), { variant: 'success' });
+                enqueueSnackbar(t('deleteSuccess'), { variant: 'success' });
                 setShowDeleteAllDialog(false);
                 getRewardList();
             }
             setDialogLoading(false);
         } catch (err) {
-            enqueueSnackbar(t('delete') + t('failed'), { variant: 'error' });
+            enqueueSnackbar(t('deleteFailed'), { variant: 'error' });
             setShowDeleteAllDialog(false);
         }
     };
@@ -226,20 +226,19 @@ export default function Reward() {
                     <div className='action-area'>
                         <div className='left'>
                             <div className='recommend'>
-                                {t('user')}
-                                {t('number')} : <span>{userCount}</span> *{t('recommendCount')}*
+                                {t('userCount')}: <span>{userCount}</span> *{t('recommendCount')}*
                             </div>
                             <Button variant='contained' onClick={importHandler} color='third'>
                                 {t('import')}
                             </Button>
                             {rewardList?.length > 0 && (
                                 <Button variant='contained' onClick={deleteAllHandler} color='secondary'>
-                                    {t('delete') + t('all')}
+                                    {t('deleteAll')}
                                 </Button>
                             )}
                             {selectRows?.length > 0 && (
                                 <Button variant='contained' onClick={deleteMutipleHandler} color='secondary'>
-                                    {t('delete') + t('selected')}
+                                    {t('deleteSelected')}
                                 </Button>
                             )}
                         </div>
@@ -313,28 +312,28 @@ export default function Reward() {
                 handlerOk={confirmDelete}
                 handleClose={() => setShowDeleteDialog(false)}
                 loading={dialogLoading}
-                text={`${t('confirmDelete')}${t('reward')}: ${deleteData?.name}?`}
+                text={`${t('confirmDelete')}: ${deleteData?.name}?`}
             />
             <ConfirmModal
                 open={showEmptyDialog}
                 handlerOk={confirmEmptyResult}
                 handleClose={() => setShowEmptyDialog(false)}
                 loading={dialogLoading}
-                text={`${t('confirm')}${t('emptyReward')}?`}
+                text={`${t('confirmEmptyReward')}?`}
             />
             <ConfirmModal
                 open={showDeleteAllDialog}
                 handlerOk={confirmDeleteAll}
                 handleClose={() => setShowDeleteAllDialog(false)}
                 loading={dialogLoading}
-                text={`${t('confirmDelete')}${t('all')}${t('reward')}?`}
+                text={`${t('confirmDeleteAllReward')}?`}
             />
             <ConfirmModal
                 open={showDeleteMutipleDialog}
                 handlerOk={confirmDeleteMutiple}
                 handleClose={() => setShowDeleteMutipleDialog(false)}
                 loading={dialogLoading}
-                text={`${t('confirmDelete')}${t('selected')}${t('reward')}?`}
+                text={`${t('confirmDeleteSelectedReward')}?`}
             />
             <EditModal
                 open={showEditDialog}

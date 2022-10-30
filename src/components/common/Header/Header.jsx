@@ -22,7 +22,7 @@ export default function Header(props) {
     const logout = () => {
         clear();
         navigate('/login');
-        enqueueSnackbar('登出成功', { variant: 'success' });
+        enqueueSnackbar(t('logoutSuccess'), { variant: 'success' });
     };
 
     const logoutHandler = (e) => {

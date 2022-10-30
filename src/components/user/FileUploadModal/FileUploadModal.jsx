@@ -65,7 +65,7 @@ export default function FileUploadModal(props) {
             setLoading(true);
             let result = await uploadUsers(data?.file, setPercentage);
             if (result?.success) {
-                enqueueSnackbar(t('upload') + t('success'), { variant: 'success' });
+                enqueueSnackbar(t('uploadSuccess'), { variant: 'success' });
                 handleClose(true);
                 setLoading(false);
             }
@@ -75,7 +75,7 @@ export default function FileUploadModal(props) {
                 setLoading(false);
                 return;
             }
-            enqueueSnackbar(t('upload') + t('failed'), { variant: 'error' });
+            enqueueSnackbar(t('uploadFailed'), { variant: 'error' });
             setLoading(false);
         }
     };

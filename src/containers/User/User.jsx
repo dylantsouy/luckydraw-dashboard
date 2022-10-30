@@ -105,13 +105,13 @@ export default function User() {
             let result = await deleteUser(deleteData?.id);
             const { success } = result;
             if (success) {
-                enqueueSnackbar(t('delete') + t('success'), { variant: 'success' });
+                enqueueSnackbar(t('deleteSuccess'), { variant: 'success' });
                 setShowDeleteDialog(false);
                 getUserList();
             }
             setDialogLoading(false);
         } catch (err) {
-            enqueueSnackbar(t('delete') + t('failed'), { variant: 'error' });
+            enqueueSnackbar(t('deleteFailed'), { variant: 'error' });
             setDialogLoading(false);
         }
     };
@@ -126,14 +126,14 @@ export default function User() {
             let result = await deleteUsers(selectRows);
             const { success } = result;
             if (success) {
-                enqueueSnackbar(t('delete') + t('success'), { variant: 'success' });
+                enqueueSnackbar(t('deleteSuccess'), { variant: 'success' });
                 setShowDeleteMutipleDialog(false);
                 setSelectRows([]);
                 getUserList();
             }
             setDialogLoading(false);
         } catch (err) {
-            enqueueSnackbar(t('delete') + t('failed'), { variant: 'error' });
+            enqueueSnackbar(t('deleteFailed'), { variant: 'error' });
             setDialogLoading(false);
         }
     };
@@ -148,13 +148,13 @@ export default function User() {
             let result = await deleteAllUsers();
             const { success } = result;
             if (success) {
-                enqueueSnackbar(t('delete') + t('success'), { variant: 'success' });
+                enqueueSnackbar(t('deleteSuccess'), { variant: 'success' });
                 setShowDeleteAllDialog(false);
                 getUserList();
             }
             setDialogLoading(false);
         } catch (err) {
-            enqueueSnackbar(t('delete') + t('failed'), { variant: 'error' });
+            enqueueSnackbar(t('deleteFailed'), { variant: 'error' });
             setShowDeleteAllDialog(false);
         }
     };
@@ -214,12 +214,12 @@ export default function User() {
                             </Button>
                             {userList?.length > 0 && (
                                 <Button variant='contained' onClick={deleteAllHandler} color='secondary'>
-                                    {t('delete') + t('all')}
+                                    {t('deleteAll')}
                                 </Button>
                             )}
                             {selectRows?.length > 0 && (
                                 <Button variant='contained' onClick={deleteMutipleHandler} color='secondary'>
-                                    {t('delete') + t('selected')}
+                                    {t('deleteSelected')}
                                 </Button>
                             )}
                         </div>
@@ -300,21 +300,21 @@ export default function User() {
                 handlerOk={confirmDelete}
                 handleClose={() => setShowDeleteDialog(false)}
                 loading={dialogLoading}
-                text={`${t('confirmDelete')}${t('user')}: ${deleteData?.name}?`}
+                text={`${t('confirmDelete')}: ${deleteData?.name}?`}
             />
             <ConfirmModal
                 open={showDeleteAllDialog}
                 handlerOk={confirmDeleteAll}
                 handleClose={() => setShowDeleteAllDialog(false)}
                 loading={dialogLoading}
-                text={`${t('confirmDelete')}${t('all')}${t('user')}?`}
+                text={`${t('confirmDeleteAllParticipants')}?`}
             />
             <ConfirmModal
                 open={showDeleteMutipleDialog}
                 handlerOk={confirmDeleteMutiple}
                 handleClose={() => setShowDeleteMutipleDialog(false)}
                 loading={dialogLoading}
-                text={`${t('confirmDelete')}${t('selected')}${t('user')}?`}
+                text={`${t('confirmDeleteSelectedParticipants')}?`}
             />
             <FileUploadModal open={showImportDialog} handleClose={handleCloseImport} />
         </div>

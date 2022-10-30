@@ -35,7 +35,7 @@ export default function FileUploadModal(props) {
             setPercentage(0);
             resetVaild();
             setAddData({
-                file:null,
+                file: null,
             });
         }
     }, [open, resetVaild]);
@@ -59,7 +59,7 @@ export default function FileUploadModal(props) {
             setLoading(true);
             let result = await uploadUsers(data?.file, setPercentage);
             if (result?.success) {
-                enqueueSnackbar(t('upload') + t('success'), { variant: 'success' });
+                enqueueSnackbar(t('uploadSuccess'), { variant: 'success' });
                 handleClose(true);
                 setLoading(false);
             }
@@ -69,7 +69,7 @@ export default function FileUploadModal(props) {
                 setLoading(false);
                 return;
             }
-            enqueueSnackbar(t('upload') + t('failed'), { variant: 'error' });
+            enqueueSnackbar(t('uploadFailed'), { variant: 'error' });
             setLoading(false);
         }
     };
@@ -106,7 +106,7 @@ export default function FileUploadModal(props) {
             </DialogContent>
             <DialogActions>
                 <ConfirmButton variant='contained' onClick={confirmHandler} loading={loading} text={t('confirm')} />
-                <Button disabled={loading} onClick={()=>handleClose()}>
+                <Button disabled={loading} onClick={() => handleClose()}>
                     {t('cancel')}
                 </Button>
             </DialogActions>

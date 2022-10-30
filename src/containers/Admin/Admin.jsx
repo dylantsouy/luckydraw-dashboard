@@ -101,13 +101,13 @@ export default function Admin() {
             let result = await deleteAdmin(deleteData?.id);
             const { success } = result;
             if (success) {
-                enqueueSnackbar(t('delete') + t('success'), { variant: 'success' });
+                enqueueSnackbar(t('deleteSuccess'), { variant: 'success' });
                 setShowDeleteDialog(false);
                 getAdminList();
             }
             setDialogLoading(false);
         } catch (err) {
-            enqueueSnackbar(t('delete') + t('failed'), { variant: 'error' });
+            enqueueSnackbar(t('deleteFailed'), { variant: 'error' });
             setDialogLoading(false);
         }
     };
@@ -118,14 +118,14 @@ export default function Admin() {
             let result = await deleteAdmins(selectRows);
             const { success } = result;
             if (success) {
-                enqueueSnackbar(t('delete') + t('success'), { variant: 'success' });
+                enqueueSnackbar(t('deleteSuccess'), { variant: 'success' });
                 setShowDeleteMutipleDialog(false);
                 setSelectRows([]);
                 getAdminList();
             }
             setDialogLoading(false);
         } catch (err) {
-            enqueueSnackbar(t('delete') + t('failed'), { variant: 'error' });
+            enqueueSnackbar(t('deleteFailed'), { variant: 'error' });
             setDialogLoading(false);
         }
     };
@@ -136,13 +136,13 @@ export default function Admin() {
             let result = await deleteAllAdmins();
             const { success } = result;
             if (success) {
-                enqueueSnackbar(t('delete') + t('success'), { variant: 'success' });
+                enqueueSnackbar(t('deleteSuccess'), { variant: 'success' });
                 setShowDeleteAllDialog(false);
                 getAdminList();
             }
             setDialogLoading(false);
         } catch (err) {
-            enqueueSnackbar(t('delete') + t('failed'), { variant: 'error' });
+            enqueueSnackbar(t('deleteFailed'), { variant: 'error' });
             setShowDeleteAllDialog(false);
         }
     };
@@ -180,12 +180,12 @@ export default function Admin() {
                                 </Button>
                                 {adminList?.length > 0 && (
                                     <Button variant='contained' onClick={deleteAllHandler} color='secondary'>
-                                        {t('delete') + t('all')}
+                                        {t('deleteAll')}
                                     </Button>
                                 )}
                                 {selectRows?.length > 0 && (
                                     <Button variant='contained' onClick={deleteMutipleHandler} color='secondary'>
-                                        {t('delete') + t('selected')}
+                                        {t('deleteSelected')}
                                     </Button>
                                 )}
                             </div>
@@ -272,21 +272,21 @@ export default function Admin() {
                 handlerOk={confirmDelete}
                 handleClose={() => setShowDeleteDialog(false)}
                 loading={dialogLoading}
-                text={`${t('confirmDelete')}${t('admin')}: ${deleteData?.username}?`}
+                text={`${t('confirmDelete')}: ${deleteData?.username}?`}
             />
             <ConfirmModal
                 open={showDeleteAllDialog}
                 handlerOk={confirmDeleteAll}
                 handleClose={() => setShowDeleteAllDialog(false)}
                 loading={dialogLoading}
-                text={`${t('confirmDelete')}${t('all')}${t('admin')}?`}
+                text={`${t('confirmDeleteAllAdmin')}?`}
             />
             <ConfirmModal
                 open={showDeleteMutipleDialog}
                 handlerOk={confirmDeleteMutiple}
                 handleClose={() => setShowDeleteMutipleDialog(false)}
                 loading={dialogLoading}
-                text={`${t('confirmDelete')}${t('selected')}${t('admin')}?`}
+                text={`${t('confirmDeleteSelectedAdmin')}?`}
             />
         </div>
     );

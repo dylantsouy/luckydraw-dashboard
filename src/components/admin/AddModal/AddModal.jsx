@@ -98,12 +98,12 @@ export default function AddModal(props) {
             setLoading(true);
             let result = await signupApi(data);
             if (result?.success) {
-                enqueueSnackbar(t('create') + t('success'), { variant: 'success' });
+                enqueueSnackbar(t('createSuccess'), { variant: 'success' });
                 handleClose(true);
                 setLoading(false);
             }
         } catch (err) {
-            enqueueSnackbar(t('create') + t('failed'), { variant: 'error' });
+            enqueueSnackbar(t('createFailed'), { variant: 'error' });
             setLoading(false);
         }
     };
@@ -111,10 +111,7 @@ export default function AddModal(props) {
     return (
         <Dialog className='editDialog' open={open} onClose={() => handleClose()}>
             <DialogTitle>
-                <span className='code-text'>
-                    {t('create')}
-                    {t('admin')}
-                </span>
+                <span className='code-text'>{t('createAdmin')}</span>
             </DialogTitle>
             <DialogContent>
                 <TextField

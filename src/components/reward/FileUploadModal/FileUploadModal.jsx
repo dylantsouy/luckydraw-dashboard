@@ -87,7 +87,7 @@ export default function FileUploadModal(props) {
             setLoading(true);
             let result = await uploadRewards(data, setPercentage);
             if (result?.success) {
-                enqueueSnackbar(t('upload') + t('success'), { variant: 'success' });
+                enqueueSnackbar(t('uploadSuccess'), { variant: 'success' });
                 handleClose(true);
                 setLoading(false);
             }
@@ -97,7 +97,7 @@ export default function FileUploadModal(props) {
                 setLoading(false);
                 return;
             }
-            enqueueSnackbar(t('upload') + t('failed'), { variant: 'error' });
+            enqueueSnackbar(t('uploadFailed'), { variant: 'error' });
             setLoading(false);
         }
     };
@@ -123,9 +123,7 @@ export default function FileUploadModal(props) {
                 onClose={() => (loading ? () => {} : handleClose())}
             >
                 <DialogTitle>
-                    <span className='title-text'>
-                        {t('upload')} {t('image')}
-                    </span>
+                    <span className='title-text'>{t('createReward')}</span>
                 </DialogTitle>
                 <DialogContent>
                     <NumberInput

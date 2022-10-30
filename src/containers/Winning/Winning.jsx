@@ -61,13 +61,13 @@ export default function Winning() {
             let result = await deleteWinning(deleteData?.id);
             const { success } = result;
             if (success) {
-                enqueueSnackbar(t('delete') + t('success'), { variant: 'success' });
+                enqueueSnackbar(t('deleteSuccess'), { variant: 'success' });
                 setShowDeleteDialog(false);
                 getWinningList();
             }
             setDialogLoading(false);
         } catch (err) {
-            enqueueSnackbar(t('delete') + t('failed'), { variant: 'error' });
+            enqueueSnackbar(t('deleteFailed'), { variant: 'error' });
             setDialogLoading(false);
         }
     };
@@ -78,14 +78,14 @@ export default function Winning() {
             let result = await deleteWinnings(selectRows);
             const { success } = result;
             if (success) {
-                enqueueSnackbar(t('delete') + t('success'), { variant: 'success' });
+                enqueueSnackbar(t('deleteSuccess'), { variant: 'success' });
                 setShowDeleteMutipleDialog(false);
                 setSelectRows([]);
                 getWinningList();
             }
             setDialogLoading(false);
         } catch (err) {
-            enqueueSnackbar(t('delete') + t('failed'), { variant: 'error' });
+            enqueueSnackbar(t('deleteFailed'), { variant: 'error' });
             setDialogLoading(false);
         }
     };
@@ -96,13 +96,13 @@ export default function Winning() {
             let result = await deleteAllWinnings();
             const { success } = result;
             if (success) {
-                enqueueSnackbar(t('delete') + t('success'), { variant: 'success' });
+                enqueueSnackbar(t('deleteSuccess'), { variant: 'success' });
                 setShowDeleteAllDialog(false);
                 getWinningList();
             }
             setDialogLoading(false);
         } catch (err) {
-            enqueueSnackbar(t('delete') + t('failed'), { variant: 'error' });
+            enqueueSnackbar(t('deleteFailed'), { variant: 'error' });
             setShowDeleteAllDialog(false);
         }
     };
@@ -135,12 +135,12 @@ export default function Winning() {
                         <div className='left'>
                             {winningList?.length > 0 && (
                                 <Button variant='contained' onClick={deleteAllHandler} color='secondary'>
-                                    {t('delete') + t('all')}
+                                    {t('deleteAll')}
                                 </Button>
                             )}
                             {selectRows?.length > 0 && (
                                 <Button variant='contained' onClick={deleteMutipleHandler} color='secondary'>
-                                    {t('delete') + t('selected')}
+                                    {t('deleteSelected')}
                                 </Button>
                             )}
                         </div>
@@ -214,21 +214,21 @@ export default function Winning() {
                 handlerOk={confirmDelete}
                 handleClose={() => setShowDeleteDialog(false)}
                 loading={dialogLoading}
-                text={`${t('confirmDelete')}${t('winning')}?`}
+                text={`${t('confirmDelete')}?`}
             />
             <ConfirmModal
                 open={showDeleteAllDialog}
                 handlerOk={confirmDeleteAll}
                 handleClose={() => setShowDeleteAllDialog(false)}
                 loading={dialogLoading}
-                text={`${t('confirmDelete')}${t('all')}${t('winning')}?`}
+                text={`${t('confirmDeleteAllWinning')}?`}
             />
             <ConfirmModal
                 open={showDeleteMutipleDialog}
                 handlerOk={confirmDeleteMutiple}
                 handleClose={() => setShowDeleteMutipleDialog(false)}
                 loading={dialogLoading}
-                text={`${t('confirmDelete')}${t('selected')}${t('winning')}?`}
+                text={`${t('confirmDeleteSelectedWinning')}?`}
             />
         </div>
     );

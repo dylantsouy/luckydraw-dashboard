@@ -31,7 +31,7 @@ export default function Login() {
                 setAuthValue('token', result.token);
                 setAuthValue('permissionArray', permissionHandler(result.data.role));
                 setLoading(false);
-                enqueueSnackbar(t('login') + t('success'), { variant: 'success' });
+                enqueueSnackbar(t('loginSuccess'), { variant: 'success' });
                 navigate('/user');
             }
         } catch (err) {

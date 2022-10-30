@@ -59,12 +59,12 @@ export default function EditModal(props) {
         try {
             let result = await changePassword(data);
             if (result.success) {
-                enqueueSnackbar(t('update') + t('success'), { variant: 'success' });
+                enqueueSnackbar(t('editSuccess'), { variant: 'success' });
                 handleClose(true);
                 setLoading(false);
             }
         } catch (err) {
-            enqueueSnackbar(t('update') + t('failed'), { variant: 'error' });
+            enqueueSnackbar(t('editFailed'), { variant: 'error' });
             setLoading(false);
         }
     };
@@ -72,10 +72,7 @@ export default function EditModal(props) {
     return (
         <Dialog className='editDialog' open={open} onClose={() => handleClose()}>
             <DialogTitle>
-                <span className='title-text'>
-                    {t('change')}
-                    {t('password')}
-                </span>
+                <span className='title-text'>{t('changePassword')}</span>
             </DialogTitle>
             <DialogContent>
                 <TextField

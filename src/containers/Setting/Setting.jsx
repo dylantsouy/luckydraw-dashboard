@@ -62,14 +62,14 @@ export default function Dashboard() {
         try {
             let result = await editSetting(data, setPercentage);
             if (result.success) {
-                enqueueSnackbar(t('update') + t('success'), { variant: 'success' });
+                enqueueSnackbar(t('editSuccess'), { variant: 'success' });
                 getSetting();
                 setFile([]);
                 setPercentage(0);
                 setLoading(false);
             }
         } catch (err) {
-            enqueueSnackbar(t('update') + t('failed'), { variant: 'error' });
+            enqueueSnackbar(t('editFailed'), { variant: 'error' });
             setLoading(false);
         }
     };
@@ -214,8 +214,7 @@ export default function Dashboard() {
                             className='mt-5 mb-5'
                             disabled={loading}
                         >
-                            {t('confirm')}
-                            {t('edit')}
+                            {t('confirmEdit')}
                         </Button>
                     </div>
                 </div>
