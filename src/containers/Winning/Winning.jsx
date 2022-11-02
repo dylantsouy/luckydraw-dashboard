@@ -5,23 +5,19 @@ import './styles.scss';
 import { winningColumn } from 'helpers/columns';
 import { useSnackbar } from 'notistack';
 import { useTranslation } from 'langs/useTranslation';
-import ConfirmModal from 'components/common/ConfirmModal';
 import { deleteAllWinnings, deleteWinning, deleteWinnings, fetchWinningList } from 'apis/winningApi';
 import { Button, InputAdornment, TextField } from '@mui/material';
 import { Stack } from '@mui/system';
 import { Refresh, Search } from '@mui/icons-material';
+import { useStore } from 'store/store';
 
 export default function Winning() {
     const { t } = useTranslation('common');
+    const { setValue, setModalHandler, closeModal } = useStore();
     const { enqueueSnackbar } = useSnackbar();
     const [winningList, setWinningList] = useState([]);
     const [searchValue, setSearchValue] = useState('');
     const [selectRows, setSelectRows] = useState([]);
-    const [showDeleteAllDialog, setShowDeleteAllDialog] = useState(false);
-    const [showDeleteMutipleDialog, setShowDeleteMutipleDialog] = useState(false);
-    const [dialogLoading, setDialogLoading] = useState(false);
-    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-    const [deleteData, setDeleteData] = useState({});
     const [perPage, setPerPage] = useState(10);
     const [loading, setLoading] = useState(true);
 
@@ -43,67 +39,77 @@ export default function Winning() {
     };
 
     const deleteHandler = (e) => {
-        setShowDeleteDialog(true);
-        setDeleteData(e);
+        setModalHandler({
+            func: () => confirmDelete(e),
+            text: `${t('confirmDelete')}: ${e?.username}?`,
+        });
     };
 
     const deleteMutipleHandler = () => {
-        setShowDeleteMutipleDialog(true);
+        setModalHandler({
+            func: confirmDeleteMutiple,
+            text: `${t('confirmDeleteSelectedAdmin')}?`,
+        });
     };
 
     const deleteAllHandler = () => {
-        setShowDeleteAllDialog(true);
+        setModalHandler({
+            func: confirmDeleteAll,
+            text: `${t('confirmDeleteAllAdmin')}?`,
+        });
     };
-
-    const confirmDelete = async () => {
+    const confirmDelete = async (e) => {
         try {
-            setDialogLoading(true);
-            let result = await deleteWinning(deleteData?.id);
+            setValue('modalLoading', true);
+            let result = await deleteWinning(e?.id);
             const { success } = result;
             if (success) {
                 enqueueSnackbar(t('deleteSuccess'), { variant: 'success' });
-                setShowDeleteDialog(false);
+                closeModal();
                 getWinningList();
             }
-            setDialogLoading(false);
+
+            setValue('modalLoading', false);
         } catch (err) {
             enqueueSnackbar(t('deleteFailed'), { variant: 'error' });
-            setDialogLoading(false);
+            setValue('modalLoading', false);
         }
     };
 
     const confirmDeleteMutiple = async () => {
         try {
-            setDialogLoading(true);
+            setValue('modalLoading', true);
             let result = await deleteWinnings(selectRows);
             const { success } = result;
             if (success) {
                 enqueueSnackbar(t('deleteSuccess'), { variant: 'success' });
-                setShowDeleteMutipleDialog(false);
+                closeModal();
                 setSelectRows([]);
                 getWinningList();
             }
-            setDialogLoading(false);
+
+            setValue('modalLoading', false);
         } catch (err) {
             enqueueSnackbar(t('deleteFailed'), { variant: 'error' });
-            setDialogLoading(false);
+            setValue('modalLoading', false);
         }
     };
 
     const confirmDeleteAll = async () => {
         try {
-            setDialogLoading(true);
+            setValue('modalLoading', true);
             let result = await deleteAllWinnings();
             const { success } = result;
             if (success) {
                 enqueueSnackbar(t('deleteSuccess'), { variant: 'success' });
-                setShowDeleteAllDialog(false);
+                closeModal();
                 getWinningList();
             }
-            setDialogLoading(false);
+
+            setValue('modalLoading', false);
         } catch (err) {
             enqueueSnackbar(t('deleteFailed'), { variant: 'error' });
-            setShowDeleteAllDialog(false);
+            setValue('modalLoading', false);
         }
     };
 
@@ -209,27 +215,6 @@ export default function Winning() {
                     )}
                 </div>
             </div>
-            <ConfirmModal
-                open={showDeleteDialog}
-                handlerOk={confirmDelete}
-                handleClose={() => setShowDeleteDialog(false)}
-                loading={dialogLoading}
-                text={`${t('confirmDelete')}?`}
-            />
-            <ConfirmModal
-                open={showDeleteAllDialog}
-                handlerOk={confirmDeleteAll}
-                handleClose={() => setShowDeleteAllDialog(false)}
-                loading={dialogLoading}
-                text={`${t('confirmDeleteAllWinning')}?`}
-            />
-            <ConfirmModal
-                open={showDeleteMutipleDialog}
-                handlerOk={confirmDeleteMutiple}
-                handleClose={() => setShowDeleteMutipleDialog(false)}
-                loading={dialogLoading}
-                text={`${t('confirmDeleteSelectedWinning')}?`}
-            />
         </div>
     );
 }

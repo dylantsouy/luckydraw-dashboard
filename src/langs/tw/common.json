@@ -104,5 +104,6 @@
     "loginSuccess": "登入成功",
     "logoutSuccess": "登出成功",
     "confirmDeleteSelectedWinning": "確認刪除選取的全部抽獎紀錄",
-    "confirmDeleteAllWinning": "確認刪除全部抽獎紀錄"
+    "confirmDeleteAllWinning": "確認刪除全部抽獎紀錄",
+    "emptyReward": "清空結果"
 }

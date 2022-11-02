@@ -5,7 +5,6 @@ import './styles.scss';
 import { rewardColumn } from 'helpers/columns';
 import { useSnackbar } from 'notistack';
 import { useTranslation } from 'langs/useTranslation';
-import ConfirmModal from 'components/common/ConfirmModal';
 import { Button, InputAdornment, TextField } from '@mui/material';
 import FileUploadModal from 'components/reward/FileUploadModal';
 import { Stack } from '@mui/system';
@@ -15,24 +14,19 @@ import EditModal from 'components/reward/EditModal';
 import { getUserCount } from 'apis/userApi';
 import ResultModal from 'components/reward/ResultModal';
 import { useAuthStore } from 'store/auth';
+import { useStore } from 'store/store';
 
 export default function Reward() {
     const { t } = useTranslation('common');
     const { permissionArray } = useAuthStore();
     const { enqueueSnackbar } = useSnackbar();
+    const { setValue, setModalHandler, closeModal } = useStore();
     const [rewardList, setRewardList] = useState([]);
     const [searchValue, setSearchValue] = useState('');
     const [selectRows, setSelectRows] = useState([]);
-    const [showDeleteAllDialog, setShowDeleteAllDialog] = useState(false);
-    const [showDeleteMutipleDialog, setShowDeleteMutipleDialog] = useState(false);
     const [showImportDialog, setShowimportDialog] = useState(false);
-    const [dialogLoading, setDialogLoading] = useState(false);
-    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
     const [showEditDialog, setShowEditDialog] = useState(false);
-    const [showEmptyDialog, setShowEmptyDialog] = useState(false);
     const [showResultDialog, setShowResultDialog] = useState(false);
-    const [emptyId, setEmptyId] = useState(false);
-    const [deleteData, setDeleteData] = useState({});
     const [editData, setEditData] = useState({});
     const [resultData, setResultData] = useState([]);
     const [perPage, setPerPage] = useState(10);
@@ -63,10 +57,32 @@ export default function Reward() {
     };
 
     const deleteHandler = (e) => {
-        setShowDeleteDialog(true);
-        setDeleteData(e);
+        setModalHandler({
+            func: () => confirmDelete(e),
+            text: `${t('confirmDelete')}: ${e?.username}?`,
+        });
     };
 
+    const deleteMutipleHandler = () => {
+        setModalHandler({
+            func: confirmDeleteMutiple,
+            text: `${t('confirmDeleteSelectedReward')}?`,
+        });
+    };
+
+    const deleteAllHandler = () => {
+        setModalHandler({
+            func: confirmDeleteAll,
+            text: `${t('confirmDeleteAllReward')}?`,
+        });
+    };
+
+    const emptyRewardHandler = (e) => {
+        setModalHandler({
+            func: () => confirmEmptyResult(e),
+            text: `${t('confirmEmptyReward')}?`,
+        });
+    };
     const editHandler = (e) => {
         setShowEditDialog(true);
         setEditData(e);
@@ -84,58 +100,45 @@ export default function Reward() {
         setShowResultDialog(true);
     };
 
-    const emptyRewardHandler = (e) => {
-        setShowEmptyDialog(true);
-        setEmptyId(e?.id);
-    };
-
-    const confirmEmptyResult = async () => {
+    const confirmEmptyResult = async (e) => {
         if (!permissionArray?.includes('action')) {
             enqueueSnackbar(t('noPermission'), { variant: 'error' });
             return;
         }
         try {
-            setDialogLoading(true);
-            let result = await updateWinningResult({ id: emptyId, winning: null });
+            setValue('modalLoading', true);
+            let result = await updateWinningResult({ id: e?.id, winning: null });
             const { success } = result;
             if (success) {
                 enqueueSnackbar(t('deleteSuccess'), { variant: 'success' });
-                setShowEmptyDialog(false);
+                closeModal();
                 getRewardList();
             }
-            setDialogLoading(false);
+            setValue('modalLoading', false);
         } catch (err) {
             enqueueSnackbar(t('deleteFailed'), { variant: 'error' });
-            setDialogLoading(false);
+            setValue('modalLoading', false);
         }
     };
 
-    const deleteMutipleHandler = () => {
-        setShowDeleteMutipleDialog(true);
-    };
-
-    const deleteAllHandler = () => {
-        setShowDeleteAllDialog(true);
-    };
-
-    const confirmDelete = async () => {
+    const confirmDelete = async (e) => {
         if (!permissionArray?.includes('action')) {
             enqueueSnackbar(t('noPermission'), { variant: 'error' });
             return;
         }
         try {
-            setDialogLoading(true);
-            let result = await deleteReward(deleteData?.id);
+            setValue('modalLoading', true);
+            let result = await deleteReward(e?.id);
             const { success } = result;
             if (success) {
                 enqueueSnackbar(t('deleteSuccess'), { variant: 'success' });
-                setShowDeleteDialog(false);
+                closeModal();
                 getRewardList();
             }
-            setDialogLoading(false);
+            setValue('modalLoading', false);
         } catch (err) {
             enqueueSnackbar(t('deleteFailed'), { variant: 'error' });
-            setDialogLoading(false);
+            setValue('modalLoading', false);
         }
     };
 
@@ -145,19 +148,19 @@ export default function Reward() {
             return;
         }
         try {
-            setDialogLoading(true);
+            setValue('modalLoading', true);
             let result = await deleteRewards(selectRows);
             const { success } = result;
             if (success) {
                 enqueueSnackbar(t('deleteSuccess'), { variant: 'success' });
-                setShowDeleteMutipleDialog(false);
+                closeModal();
                 setSelectRows([]);
                 getRewardList();
             }
-            setDialogLoading(false);
+            setValue('modalLoading', false);
         } catch (err) {
             enqueueSnackbar(t('deleteFailed'), { variant: 'error' });
-            setDialogLoading(false);
+            setValue('modalLoading', false);
         }
     };
 
@@ -167,18 +170,18 @@ export default function Reward() {
             return;
         }
         try {
-            setDialogLoading(true);
+            setValue('modalLoading', true);
             let result = await deleteAllRewards();
             const { success } = result;
             if (success) {
                 enqueueSnackbar(t('deleteSuccess'), { variant: 'success' });
-                setShowDeleteAllDialog(false);
+                closeModal();
                 getRewardList();
             }
-            setDialogLoading(false);
+            setValue('modalLoading', false);
         } catch (err) {
             enqueueSnackbar(t('deleteFailed'), { variant: 'error' });
-            setShowDeleteAllDialog(false);
+            setValue('modalLoading', false);
         }
     };
 
@@ -307,34 +310,6 @@ export default function Reward() {
                     )}
                 </div>
             </div>
-            <ConfirmModal
-                open={showDeleteDialog}
-                handlerOk={confirmDelete}
-                handleClose={() => setShowDeleteDialog(false)}
-                loading={dialogLoading}
-                text={`${t('confirmDelete')}: ${deleteData?.name}?`}
-            />
-            <ConfirmModal
-                open={showEmptyDialog}
-                handlerOk={confirmEmptyResult}
-                handleClose={() => setShowEmptyDialog(false)}
-                loading={dialogLoading}
-                text={`${t('confirmEmptyReward')}?`}
-            />
-            <ConfirmModal
-                open={showDeleteAllDialog}
-                handlerOk={confirmDeleteAll}
-                handleClose={() => setShowDeleteAllDialog(false)}
-                loading={dialogLoading}
-                text={`${t('confirmDeleteAllReward')}?`}
-            />
-            <ConfirmModal
-                open={showDeleteMutipleDialog}
-                handlerOk={confirmDeleteMutiple}
-                handleClose={() => setShowDeleteMutipleDialog(false)}
-                loading={dialogLoading}
-                text={`${t('confirmDeleteSelectedReward')}?`}
-            />
             <EditModal
                 open={showEditDialog}
                 editData={editData}

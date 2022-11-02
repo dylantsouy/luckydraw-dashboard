@@ -104,5 +104,6 @@
     "loginSuccess": "Login Success",
     "logoutSuccess": "Logout Success",
     "confirmDeleteSelectedWinning": "Confirm Delete Selected Winnings",
-    "confirmDeleteAllWinning": "Confirm Delete All Winnings"
+    "confirmDeleteAllWinning": "Confirm Delete All Winnings",
+    "emptyReward": "Empty Reward"
 }

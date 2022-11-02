@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import Sidebar from 'components/common/Sidebar';
 import './styles.scss';
 import { useAuthStore } from 'store/auth';
+import ConfirmModal from 'components/common/ConfirmModal';
 
 const Layout = (props) => {
     const { children } = props;
@@ -31,6 +32,7 @@ const Layout = (props) => {
                             <Header />
                             {children}
                         </div>
+                        <ConfirmModal />
                     </div>
                 );
         }

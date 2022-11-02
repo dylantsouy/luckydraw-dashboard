@@ -5,7 +5,6 @@ import './styles.scss';
 import { userColumn } from 'helpers/columns';
 import { useSnackbar } from 'notistack';
 import { useTranslation } from 'langs/useTranslation';
-import ConfirmModal from 'components/common/ConfirmModal';
 import { deleteAllUsers, deleteUser, deleteUsers, fetchUserList } from 'apis/userApi';
 import EditModal from 'components/user/EditModal';
 import AddModal from 'components/user/AddModal';
@@ -15,23 +14,20 @@ import { Stack } from '@mui/system';
 import { Refresh, Search } from '@mui/icons-material';
 import { getRewardCount } from 'apis/rewardApi';
 import { useAuthStore } from 'store/auth';
+import { useStore } from 'store/store';
 
 export default function User() {
     const { t } = useTranslation('common');
+    const { setValue, setModalHandler, closeModal } = useStore();
     const { enqueueSnackbar } = useSnackbar();
     const { permissionArray } = useAuthStore();
     const [userList, setUserList] = useState([]);
     const [searchValue, setSearchValue] = useState('');
     const [selectRows, setSelectRows] = useState([]);
     const [showEditDialog, setShowEditDialog] = useState(false);
-    const [showDeleteAllDialog, setShowDeleteAllDialog] = useState(false);
-    const [showDeleteMutipleDialog, setShowDeleteMutipleDialog] = useState(false);
     const [showImportDialog, setShowimportDialog] = useState(false);
-    const [dialogLoading, setDialogLoading] = useState(false);
-    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
     const [showAddDialog, setShowAddDialog] = useState(false);
     const [editData, setEditData] = useState({});
-    const [deleteData, setDeleteData] = useState({});
     const [perPage, setPerPage] = useState(10);
     const [rewardCount, setRewardCount] = useState(0);
     const [loading, setLoading] = useState(true);
@@ -64,16 +60,24 @@ export default function User() {
     };
 
     const deleteHandler = (e) => {
-        setShowDeleteDialog(true);
-        setDeleteData(e);
+        setModalHandler({
+            func: () => confirmDelete(e),
+            text: `${t('confirmDelete')}: ${e?.username}?`,
+        });
     };
 
     const deleteMutipleHandler = () => {
-        setShowDeleteMutipleDialog(true);
+        setModalHandler({
+            func: confirmDeleteMutiple,
+            text: `${t('confirmDeleteSelectedParticipants')}?`,
+        });
     };
 
     const deleteAllHandler = () => {
-        setShowDeleteAllDialog(true);
+        setModalHandler({
+            func: confirmDeleteAll,
+            text: `${t('confirmDeleteAllParticipants')}?`,
+        });
     };
 
     const handleCloseAdd = (refresh) => {
@@ -95,24 +99,24 @@ export default function User() {
         }
     };
 
-    const confirmDelete = async () => {
+    const confirmDelete = async (e) => {
         if (!permissionArray?.includes('action')) {
             enqueueSnackbar(t('noPermission'), { variant: 'error' });
             return;
         }
         try {
-            setDialogLoading(true);
-            let result = await deleteUser(deleteData?.id);
+            setValue('modalLoading', true);
+            let result = await deleteUser(e?.id);
             const { success } = result;
             if (success) {
                 enqueueSnackbar(t('deleteSuccess'), { variant: 'success' });
-                setShowDeleteDialog(false);
+                closeModal();
                 getUserList();
             }
-            setDialogLoading(false);
+            setValue('modalLoading', false);
         } catch (err) {
             enqueueSnackbar(t('deleteFailed'), { variant: 'error' });
-            setDialogLoading(false);
+            setValue('modalLoading', false);
         }
     };
 
@@ -122,19 +126,19 @@ export default function User() {
             return;
         }
         try {
-            setDialogLoading(true);
+            setValue('modalLoading', true);
             let result = await deleteUsers(selectRows);
             const { success } = result;
             if (success) {
                 enqueueSnackbar(t('deleteSuccess'), { variant: 'success' });
-                setShowDeleteMutipleDialog(false);
+                closeModal();
                 setSelectRows([]);
                 getUserList();
             }
-            setDialogLoading(false);
+            setValue('modalLoading', false);
         } catch (err) {
             enqueueSnackbar(t('deleteFailed'), { variant: 'error' });
-            setDialogLoading(false);
+            setValue('modalLoading', false);
         }
     };
 
@@ -144,18 +148,18 @@ export default function User() {
             return;
         }
         try {
-            setDialogLoading(true);
+            setValue('modalLoading', true);
             let result = await deleteAllUsers();
             const { success } = result;
             if (success) {
                 enqueueSnackbar(t('deleteSuccess'), { variant: 'success' });
-                setShowDeleteAllDialog(false);
+                closeModal();
                 getUserList();
             }
-            setDialogLoading(false);
+            setValue('modalLoading', false);
         } catch (err) {
             enqueueSnackbar(t('deleteFailed'), { variant: 'error' });
-            setShowDeleteAllDialog(false);
+            setValue('modalLoading', false);
         }
     };
 
@@ -295,27 +299,6 @@ export default function User() {
                 handleClose={handleCloseEdit}
             />
             <AddModal open={showAddDialog} handleClose={handleCloseAdd} />
-            <ConfirmModal
-                open={showDeleteDialog}
-                handlerOk={confirmDelete}
-                handleClose={() => setShowDeleteDialog(false)}
-                loading={dialogLoading}
-                text={`${t('confirmDelete')}: ${deleteData?.name}?`}
-            />
-            <ConfirmModal
-                open={showDeleteAllDialog}
-                handlerOk={confirmDeleteAll}
-                handleClose={() => setShowDeleteAllDialog(false)}
-                loading={dialogLoading}
-                text={`${t('confirmDeleteAllParticipants')}?`}
-            />
-            <ConfirmModal
-                open={showDeleteMutipleDialog}
-                handlerOk={confirmDeleteMutiple}
-                handleClose={() => setShowDeleteMutipleDialog(false)}
-                loading={dialogLoading}
-                text={`${t('confirmDeleteSelectedParticipants')}?`}
-            />
             <FileUploadModal open={showImportDialog} handleClose={handleCloseImport} />
         </div>
     );
