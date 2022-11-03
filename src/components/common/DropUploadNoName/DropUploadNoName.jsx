@@ -6,7 +6,7 @@ import { useTranslation } from 'langs/useTranslation';
 import { useDropzone } from 'react-dropzone';
 import ProgressLinear from '../ProgressLinear';
 
-export default function DropUpload(props) {
+export default function DropUploadNoName(props) {
     const { setAddData, validation, setError, percentage, setPercentage, disabled, accept, acceptWarn } = props;
     const { t } = useTranslation('common');
     const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
@@ -79,6 +79,7 @@ export default function DropUpload(props) {
                         <div className='placeholder-bottom'>
                             {t('onlyAccept')} <em className='third'>{acceptWarn}</em>
                         </div>
+                        <div className='placeholder-bottom'>{t('FileSizeOver')}</div>
                     </div>
                 )}
             </div>
@@ -88,7 +89,7 @@ export default function DropUpload(props) {
     );
 }
 
-DropUpload.propTypes = {
+DropUploadNoName.propTypes = {
     setAddData: PropTypes.func.isRequired,
     setError: PropTypes.func.isRequired,
     validation: PropTypes.object.isRequired,

@@ -69,6 +69,11 @@ export default function Dashboard() {
                 setLoading(false);
             }
         } catch (err) {
+            if (err.message === 'File size over 1MB') {
+                enqueueSnackbar(t('FileSizeOver'), { variant: 'error' });
+                setLoading(false);
+                return;
+            }
             enqueueSnackbar(t('editFailed'), { variant: 'error' });
             setLoading(false);
         }

@@ -82,6 +82,7 @@ export default function DropUpload(props) {
                         <div className='placeholder-bottom'>
                             {t('onlyAccept')} <em className='third'>{acceptWarn}</em>
                         </div>
+                        <div className='placeholder-bottom'>{t('FileSizeOver')}</div>
                     </div>
                 )}
             </div>

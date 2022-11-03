@@ -110,5 +110,6 @@
     "companyName": "公司名",
     "username must be unique": "用戶名已被使用",
     "email must be unique": "郵箱已被使用",
-    "signupSuccess": "註冊成功"
+    "signupSuccess": "註冊成功",
+    "FileSizeOver": "檔案大小限制 1 MB"
 }

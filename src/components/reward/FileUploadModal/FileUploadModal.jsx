@@ -97,6 +97,11 @@ export default function FileUploadModal(props) {
                 setLoading(false);
                 return;
             }
+            if (err.message === 'File size over 1MB') {
+                enqueueSnackbar(t('FileSizeOver'), { variant: 'error' });
+                setLoading(false);
+                return;
+            }
             enqueueSnackbar(t('uploadFailed'), { variant: 'error' });
             setLoading(false);
         }

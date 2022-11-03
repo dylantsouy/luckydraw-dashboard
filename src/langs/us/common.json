@@ -110,5 +110,6 @@
     "companyName": "Company Name",
     "username must be unique": "Username must be unique",
     "email must be unique": "Email must be unique",
-    "signupSuccess": "Signup Success"
+    "signupSuccess": "Signup Success",
+    "FileSizeOver": "File Size Limit 1 MB"
 }
