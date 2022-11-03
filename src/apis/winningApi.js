@@ -1,7 +1,7 @@
 import { fetcher } from './apiSetup';
 
 export const fetchWinningList = async () => {
-    const { success, data } = await fetcher('/winnings', 'GET', {});
+    const { success, data } = await fetcher('/winnings', 'GET', {}, true);
 
     return { success, data };
 };

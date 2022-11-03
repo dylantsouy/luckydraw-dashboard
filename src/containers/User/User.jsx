@@ -62,7 +62,7 @@ export default function User() {
     const deleteHandler = (e) => {
         setModalHandler({
             func: () => confirmDelete(e),
-            text: `${t('confirmDelete')}: ${e?.username}?`,
+            text: `${t('confirmDelete')}: ${e?.name}?`,
         });
     };
 

@@ -59,7 +59,7 @@ export default function Reward() {
     const deleteHandler = (e) => {
         setModalHandler({
             func: () => confirmDelete(e),
-            text: `${t('confirmDelete')}: ${e?.username}?`,
+            text: `${t('confirmDelete')}: ${e?.name}?`,
         });
     };
 
@@ -170,8 +170,9 @@ export default function Reward() {
             return;
         }
         try {
+            let ids = rewardList.map((e) => e.id);
             setValue('modalLoading', true);
-            let result = await deleteAllRewards();
+            let result = await deleteAllRewards(ids);
             const { success } = result;
             if (success) {
                 enqueueSnackbar(t('deleteSuccess'), { variant: 'success' });

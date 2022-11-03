@@ -17,8 +17,8 @@ import { useTranslation } from 'langs/useTranslation';
 import { useSnackbar } from 'notistack';
 import ConfirmButton from 'components/common/ConfirmButton';
 import { emailRegex, passwordRegex, usernameRegex } from 'helpers/regex';
-import { signupApi } from 'apis/authApi';
 import { roleName } from 'auths/roleHandler';
+import { createAdmin } from 'apis/adminApi';
 
 export default function AddModal(props) {
     const { t } = useTranslation('common');
@@ -29,7 +29,7 @@ export default function AddModal(props) {
         username: '',
         password: '',
         email: '',
-        role: 0,
+        role: 1,
     });
     const [validation, setValidation] = useState({
         username: { valid: true, error: '' },
@@ -60,7 +60,7 @@ export default function AddModal(props) {
                 password: '',
                 username: '',
                 email: '',
-                role: 0,
+                role: 1,
             });
         }
     }, [open]);
@@ -96,7 +96,7 @@ export default function AddModal(props) {
         }
         try {
             setLoading(true);
-            let result = await signupApi(data);
+            let result = await createAdmin(data);
             if (result?.success) {
                 enqueueSnackbar(t('createSuccess'), { variant: 'success' });
                 handleClose(true);
@@ -171,7 +171,6 @@ export default function AddModal(props) {
                         label='role'
                         onChange={(e) => handleChange('role', e)}
                     >
-                        <MenuItem value={0}>{roleName(0, t)}</MenuItem>
                         <MenuItem value={1}>{roleName(1, t)}</MenuItem>
                         <MenuItem value={2}>{roleName(2, t)}</MenuItem>
                     </Select>

@@ -1,7 +1,7 @@
 import { fetcher } from './apiSetup';
 
 export const fetchAdminList = async () => {
-    const { success, data } = await fetcher('/admins', 'GET', {});
+    const { success, data } = await fetcher('/admins', 'GET', {}, true);
 
     return { success, data };
 };
@@ -13,7 +13,7 @@ export const editAdmin = async (props) => {
 };
 
 export const createAdmin = async (props) => {
-    const { data, success } = await fetcher(`/admins`, 'POST', props);
+    const { data, success } = await fetcher(`/admins/createAdmin`, 'POST', props);
     return { success, data };
 };
 

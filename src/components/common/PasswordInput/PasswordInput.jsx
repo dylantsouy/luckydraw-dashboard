@@ -7,12 +7,12 @@ import { useTranslation } from 'langs/useTranslation';
 export default function PasswordInput(props) {
     const { t } = useTranslation('common');
     const [showPassword, setShowPassword] = useState(false);
-    const { onChange, value, variant, error, helperText, required, disabled } = props;
+    const { onChange, value, variant, error, helperText, required, disabled, id } = props;
     return (
         <TextField
             margin='dense'
+            id={id}
             label={t('password')}
-            id='password'
             type={showPassword ? 'text' : 'password'}
             value={value}
             fullWidth
@@ -23,6 +23,10 @@ export default function PasswordInput(props) {
             error={error}
             helperText={helperText}
             InputProps={{
+                autoComplete: 'off',
+                form: {
+                    autoComplete: 'off',
+                },
                 // <-- This is where the toggle button is added.
                 endAdornment: (
                     <InputAdornment position='end'>
@@ -48,4 +52,5 @@ PasswordInput.propTypes = {
     helperText: PropTypes.string,
     required: PropTypes.bool,
     disabled: PropTypes.bool,
+    id: PropTypes.string,
 };

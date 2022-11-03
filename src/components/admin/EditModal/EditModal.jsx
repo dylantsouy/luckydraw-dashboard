@@ -122,21 +122,37 @@ export default function EditModal(props) {
                     }}
                     onChange={(e) => handleChange('email', e)}
                 />
-                <FormControl className='mt-6' fullWidth>
-                    <InputLabel id='role-select-label'>{t('role')}</InputLabel>
-                    <Select
-                        labelId='role-select-label'
-                        id='role-select'
-                        variant='outlined'
-                        value={editData.role}
-                        label='role'
-                        onChange={(e) => handleChange('role', e)}
-                    >
-                        <MenuItem value={0}>{roleName(0, t)}</MenuItem>
-                        <MenuItem value={1}>{roleName(1, t)}</MenuItem>
-                        <MenuItem value={2}>{roleName(2, t)}</MenuItem>
-                    </Select>
-                </FormControl>
+                {editData?.role === 0 ? (
+                    <FormControl className='mt-6' fullWidth>
+                        <InputLabel id='role-select-label'>{t('role')}</InputLabel>
+                        <Select
+                            labelId='role-select-label'
+                            id='role-select'
+                            variant='outlined'
+                            disabled
+                            value={editData.role}
+                            label='role'
+                            onChange={(e) => handleChange('role', e)}
+                        >
+                            <MenuItem value={0}>{roleName(0, t)}</MenuItem>
+                        </Select>
+                    </FormControl>
+                ) : (
+                    <FormControl className='mt-6' fullWidth>
+                        <InputLabel id='role-select-label'>{t('role')}</InputLabel>
+                        <Select
+                            labelId='role-select-label'
+                            id='role-select'
+                            variant='outlined'
+                            value={editData.role}
+                            label='role'
+                            onChange={(e) => handleChange('role', e)}
+                        >
+                            <MenuItem value={1}>{roleName(1, t)}</MenuItem>
+                            <MenuItem value={2}>{roleName(2, t)}</MenuItem>
+                        </Select>
+                    </FormControl>
+                )}
             </DialogContent>
             <DialogActions>
                 <ConfirmButton variant='contained' onClick={confirmHandler} loading={loading} text={t('confirm')} />

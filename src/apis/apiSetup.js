@@ -5,18 +5,20 @@
 import axios from 'axios';
 
 export const urlDeterminator = () => {
-    return 'https://luckydraw-server.herokuapp.com/api';
+    return 'http://localhost:5000/api';
 };
 
 export const apiUrl = urlDeterminator();
 
-export const fetcher = async (url, method = 'GET', data = {}) => {
+export const fetcher = async (url, method = 'GET', data = {}, company = false) => {
     try {
         const auth = localStorage.getItem('auth');
         const token = JSON.parse(auth)?.state?.token;
+        const companyId = JSON.parse(auth)?.state?.user?.companyId;
+        data.companyId = companyId;
         const result = await axios({
             method,
-            url: `${apiUrl}${url}`,
+            url: `${apiUrl}${url}${company ? '/' + companyId : ''}`,
             data,
             headers: { 'Content-Type': 'application/json', 'x-access-token': token },
         });
@@ -32,13 +34,15 @@ export const fetcher = async (url, method = 'GET', data = {}) => {
     }
 };
 
-export const percentageFetcher = async (url, method = 'GET', data = {}, setPercentTage) => {
+export const percentageFetcher = async (url, method = 'GET', data = {}, setPercentTage, company = false) => {
     try {
         const auth = localStorage.getItem('auth');
         const token = JSON.parse(auth)?.state?.token;
+        const companyId = JSON.parse(auth)?.state?.user?.companyId;
+        data.append('companyId', companyId);
         const result = await axios({
             method,
-            url: `${apiUrl}${url}`,
+            url: `${apiUrl}${url}${company ? '/' + companyId : ''}`,
             data,
             headers: { 'Content-Type': 'application/json', 'x-access-token': token },
             onUploadProgress: (progressEvent) => {

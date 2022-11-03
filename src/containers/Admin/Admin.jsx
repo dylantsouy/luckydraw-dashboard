@@ -226,6 +226,7 @@ export default function Admin() {
                             rowsPerPageOptions={[10, 25, 50, 100]}
                             onPageSizeChange={(p) => setPerPage(p)}
                             checkboxSelection
+                            isRowSelectable={(params) => params.row.role !== 0}
                             onSelectionModelChange={(ids) => {
                                 onSelectionModelChange(ids);
                             }}

@@ -35,7 +35,7 @@
     "onlyAccept": "只接受檔案類型為",
     "imageAccept": "圖片類型",
     "downloadTemplate": "下載模板",
-    "uploadExist": "上傳的名單都已存在",
+    "uploadExist": "上傳的名單都已存在, 或是名單格式有誤",
     "all": "全部",
     "import": "匯入",
     "selected": "選取",
@@ -105,5 +105,10 @@
     "logoutSuccess": "登出成功",
     "confirmDeleteSelectedWinning": "確認刪除選取的全部抽獎紀錄",
     "confirmDeleteAllWinning": "確認刪除全部抽獎紀錄",
-    "emptyReward": "清空結果"
+    "emptyReward": "清空結果",
+    "register": "註冊",
+    "companyName": "公司名",
+    "username must be unique": "用戶名已被使用",
+    "email must be unique": "郵箱已被使用",
+    "signupSuccess": "註冊成功"
 }

@@ -218,9 +218,11 @@ export const adminColumn = (t, editHandler, deleteHandler, passwordHandler) => {
                         <Tooltip title={t('changePassword')} placement='right'>
                             <Password className='action-icon ml-3 ' onClick={() => passwordHandler(params.row)} />
                         </Tooltip>
-                        <Tooltip title={t('delete')} placement='right'>
-                            <Delete className='action-icon ml-3 warn' onClick={() => deleteHandler(params.row)} />
-                        </Tooltip>
+                        {params.row.role !== 0 && (
+                            <Tooltip title={t('delete')} placement='right'>
+                                <Delete className='action-icon ml-3 warn' onClick={() => deleteHandler(params.row)} />
+                            </Tooltip>
+                        )}
                     </>
                 );
             },

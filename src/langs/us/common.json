@@ -35,7 +35,7 @@
     "onlyAccept": "Only accept files of type",
     "imageAccept": "Image Type",
     "downloadTemplate": "Download Template",
-    "uploadExist": "All of ID in uploaded list already exists",
+    "uploadExist": "All of ID in uploaded list already exists, or format incorrect",
     "all": "All",
     "import": "Import",
     "selected": "Selected",
@@ -105,5 +105,10 @@
     "logoutSuccess": "Logout Success",
     "confirmDeleteSelectedWinning": "Confirm Delete Selected Winnings",
     "confirmDeleteAllWinning": "Confirm Delete All Winnings",
-    "emptyReward": "Empty Reward"
+    "emptyReward": "Empty Reward",
+    "register": "Register",
+    "companyName": "Company Name",
+    "username must be unique": "Username must be unique",
+    "email must be unique": "Email must be unique",
+    "signupSuccess": "Signup Success"
 }

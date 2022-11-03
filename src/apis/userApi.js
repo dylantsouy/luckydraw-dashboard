@@ -1,7 +1,7 @@
 import { fetcher, percentageFetcher } from './apiSetup';
 
 export const fetchUserList = async () => {
-    const { success, data } = await fetcher('/users', 'GET', {});
+    const { success, data } = await fetcher(`/users`, 'GET', {}, true);
 
     return { success, data };
 };

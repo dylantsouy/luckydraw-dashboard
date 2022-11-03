@@ -1,7 +1,7 @@
 import { fetcher, percentageFetcher } from './apiSetup';
 
 export const fetchRewardList = async () => {
-    const { success, data } = await fetcher('/rewards', 'GET', {});
+    const { success, data } = await fetcher('/rewards', 'GET', {}, true);
 
     return { success, data };
 };
@@ -17,8 +17,8 @@ export const deleteReward = async (id) => {
     return { success, data };
 };
 
-export const deleteAllRewards = async () => {
-    const { data, success } = await fetcher(`/rewards/deleteAll`, 'POST', {});
+export const deleteAllRewards = async (ids) => {
+    const { data, success } = await fetcher(`/rewards/deleteAll`, 'POST', { ids });
     return { success, data };
 };
 
