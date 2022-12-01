@@ -156,8 +156,10 @@ export default function LuckyDraw() {
                         <div className='top'>
                             <div className='reward'>
                                 <div className='reward-set'>
-                                    <div className='reward-name'>{rewardList[current]?.name}</div>
-                                    <div className='reward-count'>數量:{rewardList[current]?.count}</div>
+                                    <div className='reward-name-norwd'>
+                                        <div className='reward-name'>{rewardList[current]?.name}</div>
+                                        <div className='reward-count'>數量:{rewardList[current]?.count}</div>
+                                    </div>
                                     <div className='reward-img'>
                                         <LazyLoadImage
                                             className='reward-image'
@@ -165,6 +167,10 @@ export default function LuckyDraw() {
                                             alt='reward-image'
                                             effect='blur'
                                         />
+                                    </div>
+                                    <div className='reward-name-rwd'>
+                                        <div className='reward-name'>{rewardList[current]?.name}</div>
+                                        <div className='reward-count'>數量:{rewardList[current]?.count}</div>
                                     </div>
                                 </div>
                             </div>

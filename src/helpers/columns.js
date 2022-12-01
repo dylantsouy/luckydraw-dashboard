@@ -57,6 +57,36 @@ export const userColumn = (t, editHandler, deleteHandler) => {
 export const rewardColumn = (t, deleteHandler, editHandler, emptyRewardHandler, showResultHandler) => {
     return [
         {
+            field: 'winning',
+            filterable: false,
+            headerName: t('winning'),
+            minWidth: 120,
+            renderCell: (params) => {
+                return (
+                    <>
+                        {params.row?.winning ? (
+                            <>
+                                <Tooltip title={t('see')} placement='right'>
+                                    <RemoveRedEye
+                                        className='action-icon success'
+                                        onClick={() => showResultHandler(params.row)}
+                                    />
+                                </Tooltip>
+                                <Tooltip title={t('emptyReward')} placement='right'>
+                                    <Delete
+                                        className='action-icon ml-3 warn'
+                                        onClick={() => emptyRewardHandler(params.row)}
+                                    />
+                                </Tooltip>
+                            </>
+                        ) : (
+                            <div>尚未抽獎</div>
+                        )}
+                    </>
+                );
+            },
+        },
+        {
             field: 'url',
             filterable: false,
             headerName: t('image'),
@@ -100,36 +130,6 @@ export const rewardColumn = (t, deleteHandler, editHandler, emptyRewardHandler, 
             minWidth: 110,
             renderCell: (params) => {
                 return <>{params.row?.size ? transformedFormatBytes(params.row?.size) : '-'}</>;
-            },
-        },
-        {
-            field: 'winning',
-            filterable: false,
-            headerName: t('winning'),
-            minWidth: 120,
-            renderCell: (params) => {
-                return (
-                    <>
-                        {params.row?.winning ? (
-                            <>
-                                <Tooltip title={t('see')} placement='right'>
-                                    <RemoveRedEye
-                                        className='action-icon success'
-                                        onClick={() => showResultHandler(params.row)}
-                                    />
-                                </Tooltip>
-                                <Tooltip title={t('emptyReward')} placement='right'>
-                                    <Delete
-                                        className='action-icon ml-3 warn'
-                                        onClick={() => emptyRewardHandler(params.row)}
-                                    />
-                                </Tooltip>
-                            </>
-                        ) : (
-                            <div>尚未抽獎</div>
-                        )}
-                    </>
-                );
             },
         },
         {
