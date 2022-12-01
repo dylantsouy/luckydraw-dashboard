@@ -27,7 +27,8 @@ export const fetcher = async (url, method = 'GET', data = {}, company = false) =
         };
     } catch (err) {
         if (err?.response?.data?.message === 'Unauthorized' || err?.response?.data?.message === 'No token provided') {
-            localStorage.clear();
+            localStorage.setItem('auth', null);
+            window.location.reload();
         }
         throw new Error(err?.response?.data?.message);
     }
@@ -55,7 +56,8 @@ export const percentageFetcher = async (url, method = 'GET', data = {}, setPerce
         };
     } catch (err) {
         if (err?.response?.data?.message === 'Unauthorized' || err?.response?.data?.message === 'No token provided') {
-            localStorage.clear();
+            localStorage.setItem('auth', null);
+            window.location.reload();
         }
         throw new Error(err?.response?.data?.message);
     }

@@ -68,7 +68,7 @@ export default function Sidebar() {
                     <div className='bottom'>Dashboard</div>
                 </div>
             </div>
-            <div className='logo'>
+            <div className='logo' onClick={() => goHandler('/user')}>
                 <img src={logo} alt='logo' />
             </div>
             <Box className='menuSliderContainer' component='div'>
