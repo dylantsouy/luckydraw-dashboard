@@ -147,6 +147,7 @@
                             height: 100%;
                             @media screen and (max-width: 600px) {
                                 max-height: 140px;
+                                max-width: 140px;
                             }
                             .lazy-load-image-loaded{
                                 width: 100%;
