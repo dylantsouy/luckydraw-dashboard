@@ -47,6 +47,8 @@
     "search": "輸入搜尋",
     "email": "信箱",
     "regexError": "格式錯誤",
+    "regexErrorUsername": "格式錯誤，須為8 ~ 50 位英數組成",
+    "regexErrorEmail": "郵箱格式錯誤",
     "type": "類型",
     "size": "容量",
     "order": "抽獎順序",
@@ -111,5 +113,7 @@
     "username must be unique": "用戶名已被使用",
     "email must be unique": "郵箱已被使用",
     "signupSuccess": "註冊成功",
-    "FileSizeOver": "檔案大小限制 1 MB"
+    "FileSizeOver": "檔案大小限制 1 MB",
+    "requiredRegex": "此欄位必填",
+    "RememberAccount": "記住帳號"
 }

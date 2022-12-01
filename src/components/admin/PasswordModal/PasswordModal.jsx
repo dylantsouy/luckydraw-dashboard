@@ -50,7 +50,7 @@ export default function EditModal(props) {
             setValidation({
                 password: {
                     valid: passwordRegex(data.password),
-                    error: !passwordRegex(data.password) ? t('regexError') : '',
+                    error: !passwordRegex(data.password) ? t('regexErrorUsername') : '',
                 },
             });
             return;

@@ -19,6 +19,21 @@
         .MuiButtonBase-root {
             width: 100%;
         }
+        .check-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0px;
+            color: $gray;
+            .MuiFormControlLabel-root {
+                white-space: nowrap;
+                padding-right: 15px;
+            }
+            .type-block{
+                display: flex;
+                width: 100px;
+            }
+        }
     }
     .bottom{
         display: flex;
@@ -94,11 +109,6 @@
             color: #3e4046;
             margin-bottom: 24px;
             font-family: Georgia, serif;
-        }
-
-        span {
-            margin-top: 16px;
-            text-align: center;
         }
     }
 }

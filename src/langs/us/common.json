@@ -47,6 +47,8 @@
     "search": "Search",
     "email": "Email",
     "regexError": "Format error",
+    "regexErrorUsername": "Format error, must be 8 to 50 alphanumeric characters",
+    "regexErrorEmail": "Email format error",
     "type": "Type",
     "size": "Size",
     "order": "Order",
@@ -111,5 +113,7 @@
     "username must be unique": "Username must be unique",
     "email must be unique": "Email must be unique",
     "signupSuccess": "Signup Success",
-    "FileSizeOver": "File Size Limit 1 MB"
+    "FileSizeOver": "File Size Limit 1 MB",
+    "requiredRegex": "This Field is required",
+    "RememberAccount": "Remember Account"
 }

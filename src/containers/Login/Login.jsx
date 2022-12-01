@@ -11,15 +11,22 @@ import { useTranslation } from 'langs/useTranslation';
 import { loginApi, signupApi } from 'apis/authApi';
 import logo from 'assets/images/logo.png';
 import { emailRegex, usernameRegex } from 'helpers/regex';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import { useRememberStorageStore } from 'store/store';
 
 export default function Login() {
     const { setAuthValue } = useAuthStore();
+    const { setValue, isRemember, rememberUsername } = useRememberStorageStore();
     const { t } = useTranslation('common');
     const navigate = useNavigate();
     const { enqueueSnackbar } = useSnackbar();
     const [type, setType] = useState('login');
     const [loading, setLoading] = useState(false);
-    const [formLogin, setFormLogin] = useState({ passwordLogin: '', usernameLogin: '' });
+    const [formLogin, setFormLogin] = useState({
+        passwordLogin: '',
+        usernameLogin: isRemember ? rememberUsername : '',
+    });
     const [validationLogin, setValidationLogin] = useState({
         username: { valid: true, error: '' },
         password: { valid: true, error: '' },
@@ -36,6 +43,10 @@ export default function Login() {
         company: { valid: true, error: '' },
         email: { valid: true, error: '' },
     });
+    const toggleRemember = (e) => {
+        setValue('isRemember', e.target.checked);
+    };
+
     const changeType = (type) => {
         setValidationSignup({
             username: { valid: true, error: '' },
@@ -51,6 +62,7 @@ export default function Login() {
         setFormLogin({ usernameLogin: '', passwordLogin: '' });
         setType(type);
     };
+
     const loginSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -59,24 +71,28 @@ export default function Login() {
             setValidationLogin({
                 username: {
                     valid: !!formLogin.usernameLogin,
-                    error: !formLogin.usernameLogin ? '此欄位必填' : '',
+                    error: !formLogin.usernameLogin ? t('requiredRegex') : '',
                 },
                 password: {
                     valid: !!formLogin.passwordLogin,
-                    error: !formLogin.passwordLogin ? '此欄位必填' : '',
+                    error: !formLogin.passwordLogin ? t('requiredRegex') : '',
                 },
             });
             setLoading(false);
             return;
         }
-        if (!usernameRegex(formLogin.usernameLogin)) {
+        if (!usernameRegex(formLogin.usernameLogin) || !usernameRegex(formLogin.passwordLogin)) {
             setValidationLogin({
                 username: {
                     valid: usernameRegex(formLogin.usernameLogin),
-                    error: !usernameRegex(formLogin.usernameLogin) ? t('regexError') : '',
+                    error: !usernameRegex(formLogin.usernameLogin) ? t('regexErrorUsername') : '',
                 },
-                password: { valid: true, error: '' },
+                password: {
+                    valid: usernameRegex(formSignup.passwordRegister),
+                    error: !usernameRegex(formSignup.passwordRegister) ? t('regexErrorUsername') : '',
+                },
             });
+            setLoading(false);
             return;
         }
 
@@ -94,7 +110,9 @@ export default function Login() {
                 setAuthValue('user', result.data);
                 setAuthValue('token', result.token);
                 setAuthValue('permissionArray', permissionHandler(result.data.role));
-                setLoading(false);
+                if (isRemember) {
+                    setValue('rememberUsername', data.username);
+                }
                 enqueueSnackbar(t('loginSuccess'), { variant: 'success' });
                 navigate('/user');
             }
@@ -128,6 +146,7 @@ export default function Login() {
             [e.target.id]: e.target.value,
         });
     };
+
     const signupSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -136,37 +155,45 @@ export default function Login() {
             setValidationSignup({
                 username: {
                     valid: !!formSignup.usernameRegister,
-                    error: !formSignup.usernameRegister ? '此欄位必填' : '',
+                    error: !formSignup.usernameRegister ? t('requiredRegex') : '',
                 },
                 password: {
                     valid: !!formSignup.passwordRegister,
-                    error: !formSignup.passwordRegister ? '此欄位必填' : '',
+                    error: !formSignup.passwordRegister ? t('requiredRegex') : '',
                 },
                 email: {
                     valid: !!formSignup.email,
-                    error: !formSignup.email ? '此欄位必填' : '',
+                    error: !formSignup.email ? t('requiredRegex') : '',
                 },
                 company: {
                     valid: !!formSignup.company,
-                    error: !formSignup.company ? '此欄位必填' : '',
+                    error: !formSignup.company ? t('requiredRegex') : '',
                 },
             });
             setLoading(false);
             return;
         }
-        if (!usernameRegex(formSignup.usernameRegister) || !emailRegex(formSignup.email)) {
+        if (
+            !usernameRegex(formSignup.passwordRegister) ||
+            !usernameRegex(formSignup.usernameRegister) ||
+            !emailRegex(formSignup.email)
+        ) {
             setValidationSignup({
                 username: {
                     valid: usernameRegex(formSignup.usernameRegister),
-                    error: !usernameRegex(formSignup.usernameRegister) ? t('regexError') : '',
+                    error: !usernameRegex(formSignup.usernameRegister) ? t('regexErrorUsername') : '',
                 },
                 email: {
                     valid: emailRegex(formSignup.email),
-                    error: !emailRegex(formSignup.email) ? t('regexError') : '',
+                    error: !emailRegex(formSignup.email) ? t('regexErrorEmail') : '',
                 },
-                password: { valid: true, error: '' },
+                password: {
+                    valid: usernameRegex(formSignup.passwordRegister),
+                    error: !usernameRegex(formSignup.passwordRegister) ? t('regexErrorUsername') : '',
+                },
                 company: { valid: true, error: '' },
             });
+            setLoading(false);
             return;
         }
 
@@ -183,10 +210,10 @@ export default function Login() {
         try {
             let result = await signupApi(data);
             if (result?.success) {
-                setLoading(false);
                 enqueueSnackbar(t('signupSuccess'), { variant: 'success' });
                 changeType('login');
             }
+            setLoading(false);
         } catch (err) {
             setLoading(false);
             enqueueSnackbar(t(err?.message), { variant: 'error' });
@@ -231,6 +258,23 @@ export default function Login() {
                                 error={!validationLogin.password.valid}
                                 helperText={validationLogin.password.error}
                             />
+                            <div className='check-area'>
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            checked={isRemember}
+                                            onChange={(e) => toggleRemember(e)}
+                                            sx={{
+                                                color: '#a2a2a2',
+                                                '&.Mui-checked': {
+                                                    color: '#605bff ',
+                                                },
+                                            }}
+                                        />
+                                    }
+                                    label={t('RememberAccount')}
+                                />
+                            </div>
                             <div className='mt-2' />
                             <ConfirmButton variant='contained' type='submit' loading={loading} text={t('login')} />
                         </form>
@@ -297,6 +341,7 @@ export default function Login() {
                         <Button
                             variant='standard'
                             color='third'
+                            disabled={loading}
                             className='changeTypeBtn'
                             onClick={() => changeType(type === 'login' ? 'register' : 'login')}
                         >

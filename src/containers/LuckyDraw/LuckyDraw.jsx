@@ -142,6 +142,9 @@ export default function LuckyDraw() {
                         backgroundImage: setting?.background ? `url(${setting?.background})` : `url(${background})`,
                     }}
                 >
+                    {/* <div className="sidebar-btn">
+                        <DehazeIcon/>
+                    </div> */}
                     <div className='grid-wrapper'>
                         <div className='title-set'>
                             <div className='title'>{setting?.title}</div>

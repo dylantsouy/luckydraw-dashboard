@@ -84,13 +84,13 @@ export default function AddModal(props) {
             setValidation({
                 username: {
                     valid: usernameRegex(data.username),
-                    error: !usernameRegex(data.username) ? t('regexError') : '',
+                    error: !usernameRegex(data.username) ? t('regexErrorUsername') : '',
                 },
                 password: {
                     valid: passwordRegex(data.password),
-                    error: !passwordRegex(data.password) ? t('regexError') : '',
+                    error: !passwordRegex(data.password) ? t('regexErrorUsername') : '',
                 },
-                email: { valid: emailRegex(data.email), error: !emailRegex(data.email) ? t('regexError') : '' },
+                email: { valid: emailRegex(data.email), error: !emailRegex(data.email) ? t('regexErrorEmail') : '' },
             });
             return;
         }

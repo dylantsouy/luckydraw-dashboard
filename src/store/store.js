@@ -41,3 +41,20 @@ export const useStorageStore = create(
         }
     )
 );
+
+export const useRememberStorageStore = create(
+    persist(
+        (set) => ({
+            isRemember: false,
+            rememberUsername: '',
+            setValue: (key, value) =>
+                set(() => ({
+                    [key]: value,
+                })),
+        }),
+        {
+            name: 'isRemember',
+            getStorage: () => localStorage,
+        }
+    )
+);
