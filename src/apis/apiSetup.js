@@ -5,7 +5,7 @@
 import axios from 'axios';
 
 export const urlDeterminator = () => {
-    return 'https://luckydraw-server.herokuapp.com/api';
+    return 'https://luckydraw-server.onrender.com/api';
 };
 
 export const apiUrl = urlDeterminator();

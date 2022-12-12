@@ -87,8 +87,11 @@ Then in the Sidebar.tsx:
 
 ## 🚀 Deployment <a name = "deployment"></a>
 
-Deploy By github page
-https://dylantsouy.github.io/luckydraw-dashboard/
+Frontend Deploy By github page
+https://pages.github.com/
+
+API Deploy By Render
+https://render.com/
 
 ## ⛏️ Built Using <a name = "built_using"></a>
 
@@ -99,6 +102,7 @@ https://dylantsouy.github.io/luckydraw-dashboard/
 - [NodeJs](https://nodejs.org/en/) - Server Environment
 - [Express](https://expressjs.com/) - Server Framework
 - [Sequelize](https://sequelize.org/) - Node.js ORM
+- [Render](https://render.com/) - Clould
 
 ## ✍️ Authors <a name = "authors"></a>
 
