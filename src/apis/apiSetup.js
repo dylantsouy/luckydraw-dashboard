@@ -62,3 +62,38 @@ export const percentageFetcher = async (url, method = 'GET', data = {}, setPerce
         throw new Error(err?.response?.data?.message);
     }
 };
+
+export const swrFetcher = async (url, data, company = false) => {
+    try {
+        const auth = localStorage.getItem('auth');
+        const token = JSON.parse(auth)?.state?.token;
+        const companyId = JSON.parse(auth)?.state?.user?.companyId;
+
+        const result = await axios.get(`${apiUrl}${url}${company ? '/' + companyId : ''}`, {
+            headers: { 'Content-Type': 'application/json', 'x-access-token': token },
+            params: data,
+        });
+        return result?.data;
+    } catch (err) {
+        if (err?.response?.data?.message === 'Unauthorized' || err?.response?.data?.message === 'No token provided') {
+            localStorage.setItem('auth', null);
+            window.location.reload();
+        }
+        throw new Error(err?.response?.data?.message);
+    }
+};
+
+export const loadingHandler = (data, error) => {
+    if (error) {
+        return true;
+    }
+    if (data?.success) {
+        return false;
+    } else {
+        if (data?.errors?.errMsg === 'No Record') {
+            return false;
+        } else {
+            return true;
+        }
+    }
+};

@@ -1,6 +1,5 @@
 import { DataGrid } from '@mui/x-data-grid';
 import React, { useState, useEffect, useCallback } from 'react';
-import Loading from 'components/common/Loading';
 import './styles.scss';
 import { rewardColumn } from 'helpers/columns';
 import { useSnackbar } from 'notistack';
@@ -8,20 +7,22 @@ import { useTranslation } from 'langs/useTranslation';
 import { Button, InputAdornment, TextField } from '@mui/material';
 import FileUploadModal from 'components/reward/FileUploadModal';
 import { Stack } from '@mui/system';
-import { Refresh, Search } from '@mui/icons-material';
-import { deleteAllRewards, deleteReward, deleteRewards, fetchRewardList, updateWinningResult } from 'apis/rewardApi';
+import { Search } from '@mui/icons-material';
+import { deleteAllRewards, deleteReward, deleteRewards, updateWinningResult } from 'apis/rewardApi';
 import EditModal from 'components/reward/EditModal';
 import { getUserCount } from 'apis/userApi';
 import ResultModal from 'components/reward/ResultModal';
 import { useAuthStore } from 'store/auth';
 import { useStore } from 'store/store';
+import useRewardList from 'hooks/useRewardList';
+import DataGridSkeleton from 'components/common/DataGridSkeleton/DataGridSkeleton';
 
 export default function Reward() {
     const { t } = useTranslation('common');
     const { permissionArray } = useAuthStore();
     const { enqueueSnackbar } = useSnackbar();
+    const { data: rewardList, isLoading, mutate } = useRewardList();
     const { setValue, setModalHandler, closeModal } = useStore();
-    const [rewardList, setRewardList] = useState([]);
     const [searchValue, setSearchValue] = useState('');
     const [selectRows, setSelectRows] = useState([]);
     const [showImportDialog, setShowimportDialog] = useState(false);
@@ -30,15 +31,14 @@ export default function Reward() {
     const [editData, setEditData] = useState({});
     const [resultData, setResultData] = useState([]);
     const [perPage, setPerPage] = useState(10);
-    const [userCount, setUserCount] = useState(0);
-    const [loading, setLoading] = useState(true);
+    const [userCount, setUserCount] = useState('-');
 
     const handleSearch = (e) => {
         setSearchValue(e.target.value);
     };
 
     const filterList = () => {
-        return rewardList.filter((e) => e.name?.includes(searchValue));
+        return isLoading ? [] : rewardList?.filter((e) => e.name?.includes(searchValue));
     };
 
     const onSelectionModelChange = (ids) => {
@@ -52,7 +52,7 @@ export default function Reward() {
     const handleCloseImport = (refresh) => {
         setShowimportDialog(false);
         if (refresh) {
-            getRewardList();
+            mutate();
         }
     };
 
@@ -91,7 +91,7 @@ export default function Reward() {
     const handleCloseEdit = (refresh) => {
         setShowEditDialog(false);
         if (refresh) {
-            getRewardList();
+            mutate();
         }
     };
 
@@ -112,7 +112,7 @@ export default function Reward() {
             if (success) {
                 enqueueSnackbar(t('deleteSuccess'), { variant: 'success' });
                 closeModal();
-                getRewardList();
+                mutate();
             }
             setValue('modalLoading', false);
         } catch (err) {
@@ -133,7 +133,7 @@ export default function Reward() {
             if (success) {
                 enqueueSnackbar(t('deleteSuccess'), { variant: 'success' });
                 closeModal();
-                getRewardList();
+                mutate();
             }
             setValue('modalLoading', false);
         } catch (err) {
@@ -155,7 +155,7 @@ export default function Reward() {
                 enqueueSnackbar(t('deleteSuccess'), { variant: 'success' });
                 closeModal();
                 setSelectRows([]);
-                getRewardList();
+                mutate();
             }
             setValue('modalLoading', false);
         } catch (err) {
@@ -177,7 +177,7 @@ export default function Reward() {
             if (success) {
                 enqueueSnackbar(t('deleteSuccess'), { variant: 'success' });
                 closeModal();
-                getRewardList();
+                mutate();
             }
             setValue('modalLoading', false);
         } catch (err) {
@@ -185,26 +185,6 @@ export default function Reward() {
             setValue('modalLoading', false);
         }
     };
-
-    const getRewardList = useCallback(async () => {
-        try {
-            setLoading(true);
-            let result = await fetchRewardList();
-            const { success, data } = result;
-            if (success) {
-                setRewardList(data);
-            }
-            setLoading(false);
-        } catch (err) {
-            enqueueSnackbar(t(err?.message), { variant: 'error' });
-            setLoading(false);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [enqueueSnackbar]);
-
-    useEffect(() => {
-        getRewardList();
-    }, [getRewardList]);
 
     const getCount = useCallback(async () => {
         try {
@@ -226,89 +206,89 @@ export default function Reward() {
     return (
         <div className='reward-wrapper'>
             <div className='container'>
-                {!loading && (
-                    <div className='action-area'>
-                        <div className='left'>
-                            <div className='recommend'>
-                                {t('userCount')}: <span>{userCount}</span> *{t('recommendCount')}*
-                            </div>
-                            <Button variant='contained' onClick={importHandler} color='third'>
-                                {t('import')}
-                            </Button>
-                            {rewardList?.length > 0 && (
-                                <Button variant='contained' onClick={deleteAllHandler} color='secondary'>
-                                    {t('deleteAll')}
-                                </Button>
-                            )}
-                            {selectRows?.length > 0 && (
-                                <Button variant='contained' onClick={deleteMutipleHandler} color='secondary'>
-                                    {t('deleteSelected')}
-                                </Button>
-                            )}
+                <div className='action-area'>
+                    <div className='left'>
+                        <div className='recommend'>
+                            {t('userCount')}: <span>{userCount}</span> *{t('recommendCount')}*
                         </div>
-                        <div className='right'>
-                            <div className='refresh' onClick={getRewardList}>
-                                <Refresh color='primary' />
-                            </div>
-                            <TextField
-                                margin='dense'
-                                label={t('search')}
-                                type='text'
-                                value={searchValue}
-                                fullWidth
-                                variant='standard'
-                                onChange={(e) => handleSearch(e)}
-                                InputProps={{
-                                    endAdornment: <InputAdornment position='end'>{<Search />}</InputAdornment>,
-                                }}
-                            />
-                        </div>
+                        <Button variant='contained' onClick={importHandler} color='third' disabled={isLoading}>
+                            {t('import')}
+                        </Button>
+                        <Button
+                            variant='contained'
+                            onClick={deleteAllHandler}
+                            color='secondary'
+                            disabled={isLoading || !rewardList?.length}
+                        >
+                            {t('deleteAll')}
+                        </Button>
+                        <Button
+                            variant='contained'
+                            onClick={deleteMutipleHandler}
+                            color='secondary'
+                            disabled={isLoading || !selectRows?.length}
+                        >
+                            {t('deleteSelected')}
+                        </Button>
                     </div>
-                )}
-                <div className='table-wrapper'>
-                    {loading ? (
-                        <Loading size={40} />
-                    ) : (
-                        <DataGrid
-                            className='table-root'
-                            rows={filterList(rewardList)}
-                            columns={rewardColumn(t, deleteHandler, editHandler, emptyRewardHandler, showResultHandler)}
-                            pageSize={perPage}
-                            getRowId={(row) => row.id}
-                            rowsPerPageOptions={[10, 25, 50, 100]}
-                            onPageSizeChange={(p) => setPerPage(p)}
-                            checkboxSelection
-                            onSelectionModelChange={(ids) => {
-                                onSelectionModelChange(ids);
-                            }}
-                            disableSelectionOnClick={true}
-                            sortingOrder={['desc', 'asc']}
-                            componentsProps={{
-                                pagination: {
-                                    labelRowsPerPage: t('perPage'),
-                                },
-                            }}
-                            localeText={{
-                                columnMenuUnsort: t('columnMenuUnsort'),
-                                columnMenuSortAsc: t('columnMenuSortAsc'),
-                                columnMenuSortDesc: t('columnMenuSortDesc'),
-                                columnMenuShowColumns: t('columnMenuShowColumns'),
-                                columnMenuHideColumn: t('columnMenuHideColumn'),
-                            }}
-                            components={{
-                                NoRowsOverlay: () => (
-                                    <Stack height='100%' alignItems='center' justifyContent='center'>
-                                        {t('noRaws')}
-                                    </Stack>
-                                ),
-                                NoResultsOverlay: () => (
-                                    <Stack height='100%' alignItems='center' justifyContent='center'>
-                                        {t('noRaws')}
-                                    </Stack>
-                                ),
+                    <div className='right'>
+                        <TextField
+                            margin='dense'
+                            label={t('search')}
+                            type='text'
+                            value={searchValue}
+                            disabled={isLoading}
+                            fullWidth
+                            variant='standard'
+                            onChange={(e) => handleSearch(e)}
+                            InputProps={{
+                                endAdornment: <InputAdornment position='end'>{<Search />}</InputAdornment>,
                             }}
                         />
-                    )}
+                    </div>
+                </div>
+                <div className='table-wrapper'>
+                    <DataGrid
+                        className='table-root'
+                        rows={filterList(rewardList)}
+                        columns={rewardColumn(t, deleteHandler, editHandler, emptyRewardHandler, showResultHandler)}
+                        pageSize={perPage}
+                        getRowId={(row) => row.id}
+                        rowsPerPageOptions={[10, 25, 50, 100]}
+                        onPageSizeChange={(p) => setPerPage(p)}
+                        checkboxSelection
+                        onSelectionModelChange={(ids) => {
+                            onSelectionModelChange(ids);
+                        }}
+                        disableSelectionOnClick={true}
+                        sortingOrder={['desc', 'asc']}
+                        componentsProps={{
+                            pagination: {
+                                labelRowsPerPage: t('perPage'),
+                            },
+                        }}
+                        localeText={{
+                            columnMenuUnsort: t('columnMenuUnsort'),
+                            columnMenuSortAsc: t('columnMenuSortAsc'),
+                            columnMenuSortDesc: t('columnMenuSortDesc'),
+                            columnMenuShowColumns: t('columnMenuShowColumns'),
+                            columnMenuHideColumn: t('columnMenuHideColumn'),
+                        }}
+                        loading={isLoading}
+                        components={{
+                            NoRowsOverlay: () => (
+                                <Stack height='100%' alignItems='center' justifyContent='center'>
+                                    {t('noRaws')}
+                                </Stack>
+                            ),
+                            NoResultsOverlay: () => (
+                                <Stack height='100%' alignItems='center' justifyContent='center'>
+                                    {t('noRaws')}
+                                </Stack>
+                            ),
+                            LoadingOverlay: DataGridSkeleton,
+                        }}
+                    />
                 </div>
             </div>
             <EditModal

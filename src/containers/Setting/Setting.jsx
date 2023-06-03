@@ -1,32 +1,33 @@
-import { Button, InputAdornment, TextField } from '@mui/material';
-import { editSetting, fetchSetting } from 'apis/settingApi';
+import { Button, InputAdornment, Skeleton, TextField } from '@mui/material';
+import { editSetting } from 'apis/settingApi';
 import DropUploadNoName from 'components/common/DropUploadNoName';
 import { useTranslation } from 'langs/useTranslation';
 import { useSnackbar } from 'notistack';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Zoom from 'react-medium-image-zoom';
 import 'react-medium-image-zoom/dist/styles.css';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import './styles.scss';
-import Loading from 'components/common/Loading';
 import { useAuthStore } from 'store/auth';
+import useSetting from 'hooks/useSetting';
 
-export default function Dashboard() {
+export default function Setting() {
     const { t } = useTranslation('common');
     const { permissionArray } = useAuthStore();
     const { enqueueSnackbar } = useSnackbar();
-    const [loading, setLoading] = useState(false);
-    const [percentage, setPercentage] = useState(0);
-    const [loadingAll, setLoadingAll] = useState(true);
-    const [file, setFile] = useState([]);
-    const [setting, setSetting] = useState({
-        background: '',
+    const { data: settingData, isLoading, mutate } = useSetting();
+    const [formData, setFormData] = useState({
+        bgColor: '',
         title: '',
         subTitle: '',
-        bgColor: '',
+        background: '',
         textColor: '',
     });
+    const [loading, setLoading] = useState(false);
+
+    const [percentage, setPercentage] = useState(0);
+    const [file, setFile] = useState([]);
     const [validation, setValidation] = useState({
         file: { valid: true, error: '' },
     });
@@ -38,8 +39,8 @@ export default function Dashboard() {
         setValidation({
             file: { valid: true, error: '' },
         });
-        setSetting((prevState) => ({
-            ...prevState,
+        setFormData((prevFormData) => ({
+            ...prevFormData,
             [type]: e,
         }));
     };
@@ -50,12 +51,12 @@ export default function Dashboard() {
             return;
         }
         let data = {
-            id: setting.id,
-            background: setting.background.trim(),
-            title: setting.title.trim(),
-            subTitle: setting.subTitle.trim(),
-            bgColor: setting.bgColor.trim(),
-            textColor: setting.textColor.trim(),
+            id: formData.id,
+            background: formData.background.trim(),
+            title: formData.title.trim(),
+            subTitle: formData.subTitle.trim(),
+            bgColor: formData.bgColor.trim(),
+            textColor: formData.textColor.trim(),
             file: file?.file,
         };
         setLoading(true);
@@ -63,167 +64,159 @@ export default function Dashboard() {
             let result = await editSetting(data, setPercentage);
             if (result.success) {
                 enqueueSnackbar(t('editSuccess'), { variant: 'success' });
-                getSetting();
+                mutate();
                 setFile([]);
                 setPercentage(0);
-                setLoading(false);
             }
+            setLoading(false);
         } catch (err) {
+            setLoading(false);
             if (err.message === 'File size over 1MB') {
                 enqueueSnackbar(t('FileSizeOver'), { variant: 'error' });
-                setLoading(false);
                 return;
             }
             enqueueSnackbar(t('editFailed'), { variant: 'error' });
-            setLoading(false);
         }
     };
 
-    const getSetting = useCallback(async () => {
-        try {
-            setLoadingAll(true);
-            let result = await fetchSetting();
-            const { success, data } = result;
-            if (success) {
-                setSetting(data);
-            }
-            setLoadingAll(false);
-        } catch (err) {
-            enqueueSnackbar(t(err?.message), { variant: 'error' });
-            setLoadingAll(false);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [enqueueSnackbar]);
-
     useEffect(() => {
-        getSetting();
-    }, [getSetting]);
+        if (settingData) {
+            setFormData((prevFormData) => ({
+                ...prevFormData,
+                bgColor: settingData.bgColor || '',
+                title: settingData.title || '',
+                subTitle: settingData.subTitle || '',
+                background: settingData.background || '',
+                textColor: settingData.textColor || '',
+            }));
+        }
+    }, [settingData]);
 
     return (
         <>
-            {loadingAll ? (
-                <Loading size={40} />
-            ) : (
-                <div className='setting-wrapper'>
-                    <div className='content'>
-                        <div className='setting-items'>
-                            <div className='setting-item'>
-                                <div className='label'>{t('bgColor')}</div>
-                                <div className='color-picker'>
-                                    <input
-                                        type='color'
-                                        disabled={loading}
-                                        value={`#${setting.bgColor}`}
-                                        className='colorInput'
-                                        onChange={(e) => handleChange('bgColor', e.target.value?.slice(1))}
-                                    />
-                                    <TextField
-                                        id='input-with-icon-textfield'
-                                        label=''
-                                        disabled={loading}
-                                        value={setting.bgColor}
-                                        InputProps={{
-                                            startAdornment: <InputAdornment position='start'>#</InputAdornment>,
-                                        }}
-                                        onChange={(e) => handleChange('bgColor', e.target.value)}
-                                        variant='standard'
-                                    />
-                                </div>
-                            </div>
-                            <div className='setting-item'>
-                                <div className='label'>{t('textColor')}</div>
-                                <div className='color-picker'>
-                                    <input
-                                        type='color'
-                                        disabled={loading}
-                                        value={`#${setting.textColor}`}
-                                        className='colorInput'
-                                        onChange={(e) => handleChange('textColor', e.target.value?.slice(1))}
-                                    />
-                                    <TextField
-                                        id='input-with-icon-textfield'
-                                        label=''
-                                        disabled={loading}
-                                        value={setting.textColor}
-                                        InputProps={{
-                                            startAdornment: <InputAdornment position='start'>#</InputAdornment>,
-                                        }}
-                                        onChange={(e) => handleChange('textColor', e.target.value)}
-                                        variant='standard'
-                                    />
-                                </div>
-                            </div>
-                            <div className='setting-item'>
-                                <div className='label'>{t('title')}</div>
-                                <TextField
-                                    fullWidth
-                                    id='input-with-icon-textfield'
-                                    label=''
-                                    disabled={loading}
-                                    value={setting.title}
-                                    onChange={(e) => handleChange('title', e.target.value)}
-                                    variant='standard'
+            <div className='setting-wrapper'>
+                <div className='content'>
+                    <div className='setting-items'>
+                        <div className='setting-item'>
+                            <div className='label'>{t('bgColor')}</div>
+                            <div className='color-picker'>
+                                <input
+                                    type='color'
+                                    disabled={isLoading}
+                                    value={`#${formData?.bgColor}`}
+                                    className='colorInput'
+                                    onChange={(e) => handleChange('bgColor', e.target.value?.slice(1))}
                                 />
-                            </div>
-                            <div className='setting-item'>
-                                <div className='label'>{t('subTitle')}</div>
                                 <TextField
-                                    fullWidth
                                     id='input-with-icon-textfield'
                                     label=''
-                                    disabled={loading}
-                                    value={setting.subTitle}
-                                    onChange={(e) => handleChange('subTitle', e.target.value)}
+                                    disabled={isLoading}
+                                    value={formData?.bgColor}
+                                    InputProps={{
+                                        startAdornment: <InputAdornment position='start'>#</InputAdornment>,
+                                    }}
+                                    onChange={(e) => handleChange('bgColor', e.target.value)}
                                     variant='standard'
                                 />
                             </div>
                         </div>
-
-                        <div className='setting-items'>
-                            <div className='setting-item'>
-                                <div className='label'>{t('background')}</div>
-                                {!!setting.background && (
-                                    <Zoom>
-                                        <div className='background-img'>
-                                            <LazyLoadImage
-                                                alt={'background'}
-                                                height={'100%'}
-                                                effect='blur'
-                                                src={setting.background}
-                                                width={'100%'}
-                                            />
-                                        </div>
-                                    </Zoom>
-                                )}
-                                <div className='upload-area'>
-                                    <DropUploadNoName
-                                        setAddData={setFile}
-                                        setError={setValidation}
-                                        validation={validation}
-                                        percentage={percentage}
-                                        setPercentage={setPercentage}
-                                        accept={{
-                                            'image/*': ['.jpeg', '.png', '.gif', '.webp'],
-                                        }}
-                                        acceptWarn={t('imageAccept')}
-                                    />
-                                </div>
+                        <div className='setting-item'>
+                            <div className='label'>{t('textColor')}</div>
+                            <div className='color-picker'>
+                                <input
+                                    type='color'
+                                    disabled={isLoading}
+                                    value={`#${formData?.textColor}`}
+                                    className='colorInput'
+                                    onChange={(e) => handleChange('textColor', e.target.value?.slice(1))}
+                                />
+                                <TextField
+                                    id='input-with-icon-textfield'
+                                    label=''
+                                    disabled={isLoading}
+                                    value={formData?.textColor}
+                                    InputProps={{
+                                        startAdornment: <InputAdornment position='start'>#</InputAdornment>,
+                                    }}
+                                    onChange={(e) => handleChange('textColor', e.target.value)}
+                                    variant='standard'
+                                />
                             </div>
+                        </div>
+                        <div className='setting-item'>
+                            <div className='label'>{t('title')}</div>
+                            <TextField
+                                fullWidth
+                                id='input-with-icon-textfield'
+                                label=''
+                                disabled={isLoading}
+                                value={formData?.title}
+                                onChange={(e) => handleChange('title', e.target.value)}
+                                variant='standard'
+                            />
+                        </div>
+                        <div className='setting-item'>
+                            <div className='label'>{t('subTitle')}</div>
+                            <TextField
+                                fullWidth
+                                id='input-with-icon-textfield'
+                                label=''
+                                disabled={isLoading}
+                                value={formData?.subTitle}
+                                onChange={(e) => handleChange('subTitle', e.target.value)}
+                                variant='standard'
+                            />
                         </div>
                     </div>
-                    <div className='action'>
-                        <Button
-                            variant='contained'
-                            onClick={confirm}
-                            color='third'
-                            className='mt-5 mb-5'
-                            disabled={loading}
-                        >
-                            {t('confirmEdit')}
-                        </Button>
+
+                    <div className='setting-items'>
+                        <div className='setting-item'>
+                            <div className='label'>{t('background')}</div>
+                            {isLoading ? (
+                                <Skeleton variant='rounded' height={200} />
+                            ) : !formData?.background ? (
+                                <div className='background-img'>{t('noRaws')}</div>
+                            ) : (
+                                <Zoom>
+                                    <div className='background-img'>
+                                        <LazyLoadImage
+                                            alt={'background'}
+                                            height={'100%'}
+                                            width={'100%'}
+                                            effect='blur'
+                                            src={formData?.background}
+                                        />
+                                    </div>
+                                </Zoom>
+                            )}
+                            <div className='upload-area'>
+                                <DropUploadNoName
+                                    setAddData={setFile}
+                                    setError={setValidation}
+                                    validation={validation}
+                                    percentage={percentage}
+                                    setPercentage={setPercentage}
+                                    accept={{
+                                        'image/*': ['.jpeg', '.png', '.gif', '.webp'],
+                                    }}
+                                    acceptWarn={t('imageAccept')}
+                                />
+                            </div>
+                        </div>
                     </div>
                 </div>
-            )}
+                <div className='action'>
+                    <Button
+                        variant='contained'
+                        onClick={confirm}
+                        color='third'
+                        className='mt-5 mb-5'
+                        disabled={isLoading || loading}
+                    >
+                        {t('confirmEdit')}
+                    </Button>
+                </div>
+            </div>
         </>
     );
 }

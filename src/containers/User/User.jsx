@@ -1,27 +1,28 @@
 import { DataGrid } from '@mui/x-data-grid';
 import React, { useState, useEffect, useCallback } from 'react';
-import Loading from 'components/common/Loading';
 import './styles.scss';
 import { userColumn } from 'helpers/columns';
 import { useSnackbar } from 'notistack';
 import { useTranslation } from 'langs/useTranslation';
-import { deleteAllUsers, deleteUser, deleteUsers, fetchUserList } from 'apis/userApi';
+import { deleteAllUsers, deleteUser, deleteUsers } from 'apis/userApi';
 import EditModal from 'components/user/EditModal';
 import AddModal from 'components/user/AddModal';
 import { Button, InputAdornment, TextField } from '@mui/material';
 import FileUploadModal from 'components/user/FileUploadModal';
 import { Stack } from '@mui/system';
-import { Refresh, Search } from '@mui/icons-material';
+import { Search } from '@mui/icons-material';
 import { getRewardCount } from 'apis/rewardApi';
 import { useAuthStore } from 'store/auth';
 import { useStore } from 'store/store';
+import useUserList from 'hooks/useUserList';
+import DataGridSkeleton from 'components/common/DataGridSkeleton/DataGridSkeleton';
 
 export default function User() {
     const { t } = useTranslation('common');
     const { setValue, setModalHandler, closeModal } = useStore();
     const { enqueueSnackbar } = useSnackbar();
+    const { data: userList, isLoading, mutate } = useUserList();
     const { permissionArray } = useAuthStore();
-    const [userList, setUserList] = useState([]);
     const [searchValue, setSearchValue] = useState('');
     const [selectRows, setSelectRows] = useState([]);
     const [showEditDialog, setShowEditDialog] = useState(false);
@@ -29,15 +30,14 @@ export default function User() {
     const [showAddDialog, setShowAddDialog] = useState(false);
     const [editData, setEditData] = useState({});
     const [perPage, setPerPage] = useState(10);
-    const [rewardCount, setRewardCount] = useState(0);
-    const [loading, setLoading] = useState(true);
+    const [rewardCount, setRewardCount] = useState('-');
 
     const handleSearch = (e) => {
         setSearchValue(e.target.value);
     };
 
     const filterList = () => {
-        return userList.filter((e) => e.name?.includes(searchValue) || e.code?.includes(searchValue));
+        return isLoading ? [] : userList?.filter((e) => e.name?.includes(searchValue) || e.code?.includes(searchValue));
     };
 
     const onSelectionModelChange = (ids) => {
@@ -51,7 +51,7 @@ export default function User() {
     const handleCloseImport = (refresh) => {
         setShowimportDialog(false);
         if (refresh) {
-            getUserList();
+            mutate();
         }
     };
 
@@ -83,7 +83,7 @@ export default function User() {
     const handleCloseAdd = (refresh) => {
         setShowAddDialog(false);
         if (refresh) {
-            getUserList();
+            mutate();
         }
     };
 
@@ -95,7 +95,7 @@ export default function User() {
     const handleCloseEdit = (refresh) => {
         setShowEditDialog(false);
         if (refresh) {
-            getUserList();
+            mutate();
         }
     };
 
@@ -111,7 +111,7 @@ export default function User() {
             if (success) {
                 enqueueSnackbar(t('deleteSuccess'), { variant: 'success' });
                 closeModal();
-                getUserList();
+                mutate();
             }
             setValue('modalLoading', false);
         } catch (err) {
@@ -133,7 +133,7 @@ export default function User() {
                 enqueueSnackbar(t('deleteSuccess'), { variant: 'success' });
                 closeModal();
                 setSelectRows([]);
-                getUserList();
+                mutate();
             }
             setValue('modalLoading', false);
         } catch (err) {
@@ -154,7 +154,7 @@ export default function User() {
             if (success) {
                 enqueueSnackbar(t('deleteSuccess'), { variant: 'success' });
                 closeModal();
-                getUserList();
+                mutate();
             }
             setValue('modalLoading', false);
         } catch (err) {
@@ -162,27 +162,6 @@ export default function User() {
             setValue('modalLoading', false);
         }
     };
-
-    const getUserList = useCallback(async () => {
-        try {
-            setLoading(true);
-            let result = await fetchUserList();
-            const { success, data } = result;
-            if (success) {
-                setUserList(data);
-                setSelectRows([]);
-            }
-            setLoading(false);
-        } catch (err) {
-            enqueueSnackbar(t(err?.message), { variant: 'error' });
-            setLoading(false);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [enqueueSnackbar]);
-
-    useEffect(() => {
-        getUserList();
-    }, [getUserList]);
 
     const getCount = useCallback(async () => {
         try {
@@ -204,92 +183,92 @@ export default function User() {
     return (
         <div className='user-wrapper'>
             <div className='container'>
-                {!loading && (
-                    <div className='action-area'>
-                        <div className='left'>
-                            <div className='recommend'>
-                                {t('rewardCount')} : <span>{rewardCount}</span> *{t('recommendCount')}*
-                            </div>
-                            <Button variant='contained' onClick={addHandler} color='primary'>
-                                {t('create')}
-                            </Button>
-                            <Button variant='contained' onClick={importHandler} color='third'>
-                                {t('import')}
-                            </Button>
-                            {userList?.length > 0 && (
-                                <Button variant='contained' onClick={deleteAllHandler} color='secondary'>
-                                    {t('deleteAll')}
-                                </Button>
-                            )}
-                            {selectRows?.length > 0 && (
-                                <Button variant='contained' onClick={deleteMutipleHandler} color='secondary'>
-                                    {t('deleteSelected')}
-                                </Button>
-                            )}
+                <div className='action-area'>
+                    <div className='left'>
+                        <div className='recommend'>
+                            {t('rewardCount')} : <span>{rewardCount}</span> *{t('recommendCount')}*
                         </div>
-                        <div className='right'>
-                            <div className='refresh' onClick={getUserList}>
-                                <Refresh color='primary' />
-                            </div>
-                            <TextField
-                                margin='dense'
-                                label={t('search')}
-                                type='text'
-                                value={searchValue}
-                                fullWidth
-                                variant='standard'
-                                onChange={(e) => handleSearch(e)}
-                                InputProps={{
-                                    endAdornment: <InputAdornment position='end'>{<Search />}</InputAdornment>,
-                                }}
-                            />
-                        </div>
+                        <Button variant='contained' onClick={addHandler} color='primary' disabled={isLoading}>
+                            {t('create')}
+                        </Button>
+                        <Button variant='contained' onClick={importHandler} color='third' disabled={isLoading}>
+                            {t('import')}
+                        </Button>
+                        <Button
+                            variant='contained'
+                            onClick={deleteAllHandler}
+                            color='secondary'
+                            disabled={isLoading || !userList?.length}
+                        >
+                            {t('deleteAll')}
+                        </Button>
+                        <Button
+                            variant='contained'
+                            onClick={deleteMutipleHandler}
+                            color='secondary'
+                            disabled={isLoading || !selectRows?.length}
+                        >
+                            {t('deleteSelected')}
+                        </Button>
                     </div>
-                )}
-                <div className='table-wrapper'>
-                    {loading ? (
-                        <Loading size={40} />
-                    ) : (
-                        <DataGrid
-                            className='table-root'
-                            rows={filterList(userList)}
-                            columns={userColumn(t, editHandler, deleteHandler)}
-                            pageSize={perPage}
-                            getRowId={(row) => row.id}
-                            rowsPerPageOptions={[10, 25, 50, 100]}
-                            onPageSizeChange={(p) => setPerPage(p)}
-                            checkboxSelection
-                            onSelectionModelChange={(ids) => {
-                                onSelectionModelChange(ids);
-                            }}
-                            disableSelectionOnClick={true}
-                            sortingOrder={['desc', 'asc']}
-                            componentsProps={{
-                                pagination: {
-                                    labelRowsPerPage: t('perPage'),
-                                },
-                            }}
-                            localeText={{
-                                columnMenuUnsort: t('columnMenuUnsort'),
-                                columnMenuSortAsc: t('columnMenuSortAsc'),
-                                columnMenuSortDesc: t('columnMenuSortDesc'),
-                                columnMenuShowColumns: t('columnMenuShowColumns'),
-                                columnMenuHideColumn: t('columnMenuHideColumn'),
-                            }}
-                            components={{
-                                NoRowsOverlay: () => (
-                                    <Stack height='100%' alignItems='center' justifyContent='center'>
-                                        {t('noRaws')}
-                                    </Stack>
-                                ),
-                                NoResultsOverlay: () => (
-                                    <Stack height='100%' alignItems='center' justifyContent='center'>
-                                        {t('noRaws')}
-                                    </Stack>
-                                ),
+                    <div className='right'>
+                        <TextField
+                            margin='dense'
+                            label={t('search')}
+                            type='text'
+                            value={searchValue}
+                            fullWidth
+                            disabled={isLoading}
+                            variant='standard'
+                            onChange={(e) => handleSearch(e)}
+                            InputProps={{
+                                endAdornment: <InputAdornment position='end'>{<Search />}</InputAdornment>,
                             }}
                         />
-                    )}
+                    </div>
+                </div>
+                <div className='table-wrapper'>
+                    <DataGrid
+                        className='table-root'
+                        rows={filterList(userList)}
+                        columns={userColumn(t, editHandler, deleteHandler)}
+                        pageSize={perPage}
+                        getRowId={(row) => row.id}
+                        rowsPerPageOptions={[10, 25, 50, 100]}
+                        onPageSizeChange={(p) => setPerPage(p)}
+                        checkboxSelection
+                        onSelectionModelChange={(ids) => {
+                            onSelectionModelChange(ids);
+                        }}
+                        disableSelectionOnClick={true}
+                        sortingOrder={['desc', 'asc']}
+                        componentsProps={{
+                            pagination: {
+                                labelRowsPerPage: t('perPage'),
+                            },
+                        }}
+                        localeText={{
+                            columnMenuUnsort: t('columnMenuUnsort'),
+                            columnMenuSortAsc: t('columnMenuSortAsc'),
+                            columnMenuSortDesc: t('columnMenuSortDesc'),
+                            columnMenuShowColumns: t('columnMenuShowColumns'),
+                            columnMenuHideColumn: t('columnMenuHideColumn'),
+                        }}
+                        loading={isLoading}
+                        components={{
+                            NoRowsOverlay: () => (
+                                <Stack height='100%' alignItems='center' justifyContent='center'>
+                                    {t('noRaws')}
+                                </Stack>
+                            ),
+                            NoResultsOverlay: () => (
+                                <Stack height='100%' alignItems='center' justifyContent='center'>
+                                    {t('noRaws')}
+                                </Stack>
+                            ),
+                            LoadingOverlay: DataGridSkeleton,
+                        }}
+                    />
                 </div>
             </div>
             <EditModal

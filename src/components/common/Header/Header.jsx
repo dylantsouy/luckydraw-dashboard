@@ -36,7 +36,7 @@ export default function Header(props) {
     };
 
     return login ? (
-        <div className='header-wrapper'>
+        <div className='header-wrapper login'>
             <div></div>
             <div className='buttonWrapper'>
                 <LangSelect />

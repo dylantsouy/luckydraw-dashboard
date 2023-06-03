@@ -1,6 +1,5 @@
 import { DataGrid } from '@mui/x-data-grid';
-import React, { useState, useEffect, useCallback } from 'react';
-import Loading from 'components/common/Loading';
+import React, { useState } from 'react';
 import './styles.scss';
 import { adminColumn } from 'helpers/columns';
 import { useSnackbar } from 'notistack';
@@ -9,24 +8,25 @@ import EditModal from 'components/admin/EditModal';
 import AddModal from 'components/admin/AddModal';
 import { Button, InputAdornment, TextField } from '@mui/material';
 import { Stack } from '@mui/system';
-import { Refresh, Search } from '@mui/icons-material';
-import { deleteAdmin, deleteAdmins, deleteAllAdmins, fetchAdminList } from 'apis/adminApi';
+import { Search } from '@mui/icons-material';
+import { deleteAdmin, deleteAdmins, deleteAllAdmins } from 'apis/adminApi';
 import HasPermission from 'auths/HasPermission';
 import PasswordModal from 'components/admin/PasswordModal';
 import { useStore } from 'store/store';
+import useAdminList from 'hooks/useAdminList';
+import DataGridSkeleton from 'components/common/DataGridSkeleton/DataGridSkeleton';
 
 export default function Admin() {
     const { t } = useTranslation('common');
     const { setValue, setModalHandler, closeModal } = useStore();
+    const { data: adminList, isLoading, mutate } = useAdminList();
     const { enqueueSnackbar } = useSnackbar();
-    const [adminList, setAdminList] = useState([]);
     const [searchValue, setSearchValue] = useState('');
     const [selectRows, setSelectRows] = useState([]);
     const [showEditDialog, setShowEditDialog] = useState(false);
     const [showAddDialog, setShowAddDialog] = useState(false);
     const [editData, setEditData] = useState({});
     const [perPage, setPerPage] = useState(10);
-    const [loading, setLoading] = useState(true);
     const [changePasswordId, setChangePasswordId] = useState('');
     const [showPasswordDialog, setShowPasswordDialog] = useState(false);
 
@@ -35,7 +35,9 @@ export default function Admin() {
     };
 
     const filterList = () => {
-        return adminList.filter((e) => e.username?.includes(searchValue) || e.email?.includes(searchValue));
+        return isLoading
+            ? []
+            : adminList?.filter((e) => e.username?.includes(searchValue) || e.email?.includes(searchValue));
     };
 
     const onSelectionModelChange = (ids) => {
@@ -75,14 +77,14 @@ export default function Admin() {
     const handleClosePassword = (refresh) => {
         setShowPasswordDialog(false);
         if (refresh) {
-            getAdminList();
+            mutate();
         }
     };
 
     const handleCloseAdd = (refresh) => {
         setShowAddDialog(false);
         if (refresh) {
-            getAdminList();
+            mutate();
         }
     };
 
@@ -95,7 +97,7 @@ export default function Admin() {
     const handleCloseEdit = (refresh) => {
         setShowEditDialog(false);
         if (refresh) {
-            getAdminList();
+            mutate();
         }
     };
 
@@ -107,7 +109,7 @@ export default function Admin() {
             if (success) {
                 enqueueSnackbar(t('deleteSuccess'), { variant: 'success' });
                 closeModal();
-                getAdminList();
+                mutate();
             }
             setValue('modalLoading', false);
         } catch (err) {
@@ -125,7 +127,7 @@ export default function Admin() {
                 enqueueSnackbar(t('deleteSuccess'), { variant: 'success' });
                 closeModal();
                 setSelectRows([]);
-                getAdminList();
+                mutate();
             }
             setValue('modalLoading', false);
         } catch (err) {
@@ -142,7 +144,7 @@ export default function Admin() {
             if (success) {
                 enqueueSnackbar(t('deleteSuccess'), { variant: 'success' });
                 closeModal();
-                getAdminList();
+                mutate();
             }
             setValue('modalLoading', false);
         } catch (err) {
@@ -151,113 +153,92 @@ export default function Admin() {
         }
     };
 
-    const getAdminList = useCallback(async () => {
-        try {
-            setLoading(true);
-            let result = await fetchAdminList();
-            const { success, data } = result;
-            if (success) {
-                setAdminList(data);
-                setSelectRows([]);
-            }
-            setLoading(false);
-        } catch (err) {
-            enqueueSnackbar(t(err?.message), { variant: 'error' });
-            setLoading(false);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [enqueueSnackbar]);
-
-    useEffect(() => {
-        getAdminList();
-    }, [getAdminList]);
-
     return (
         <div className='admin-wrapper'>
             <div className='container'>
-                {!loading && (
-                    <div className='action-area'>
-                        <HasPermission permission='action'>
-                            <div className='left'>
-                                <Button variant='contained' onClick={addHandler} color='primary'>
-                                    {t('create')}
-                                </Button>
-                                {adminList?.length > 0 && (
-                                    <Button variant='contained' onClick={deleteAllHandler} color='secondary'>
-                                        {t('deleteAll')}
-                                    </Button>
-                                )}
-                                {selectRows?.length > 0 && (
-                                    <Button variant='contained' onClick={deleteMutipleHandler} color='secondary'>
-                                        {t('deleteSelected')}
-                                    </Button>
-                                )}
-                            </div>
-                        </HasPermission>
-                        <div className='right'>
-                            <div className='refresh' onClick={getAdminList}>
-                                <Refresh color='primary' />
-                            </div>
-                            <TextField
-                                margin='dense'
-                                label={t('search')}
-                                type='text'
-                                value={searchValue}
-                                fullWidth
-                                variant='standard'
-                                onChange={(e) => handleSearch(e)}
-                                InputProps={{
-                                    endAdornment: <InputAdornment position='end'>{<Search />}</InputAdornment>,
-                                }}
-                            />
+                <div className='action-area'>
+                    <HasPermission permission='action'>
+                        <div className='left'>
+                            <Button variant='contained' onClick={addHandler} color='primary' disabled={isLoading}>
+                                {t('create')}
+                            </Button>
+                            <Button
+                                variant='contained'
+                                onClick={deleteAllHandler}
+                                color='secondary'
+                                disabled={isLoading || !adminList?.length}
+                            >
+                                {t('deleteAll')}
+                            </Button>
+                            <Button
+                                variant='contained'
+                                onClick={deleteMutipleHandler}
+                                color='secondary'
+                                disabled={isLoading || !selectRows?.length}
+                            >
+                                {t('deleteSelected')}
+                            </Button>
                         </div>
-                    </div>
-                )}
-                <div className='table-wrapper'>
-                    {loading ? (
-                        <Loading size={40} />
-                    ) : (
-                        <DataGrid
-                            className='table-root'
-                            rows={filterList(adminList)}
-                            columns={adminColumn(t, editHandler, deleteHandler, passwordHandler)}
-                            pageSize={perPage}
-                            getRowId={(row) => row.id}
-                            rowsPerPageOptions={[10, 25, 50, 100]}
-                            onPageSizeChange={(p) => setPerPage(p)}
-                            checkboxSelection
-                            isRowSelectable={(params) => params.row.role !== 0}
-                            onSelectionModelChange={(ids) => {
-                                onSelectionModelChange(ids);
-                            }}
-                            disableSelectionOnClick={true}
-                            sortingOrder={['desc', 'asc']}
-                            componentsProps={{
-                                pagination: {
-                                    labelRowsPerPage: t('perPage'),
-                                },
-                            }}
-                            localeText={{
-                                columnMenuUnsort: t('columnMenuUnsort'),
-                                columnMenuSortAsc: t('columnMenuSortAsc'),
-                                columnMenuSortDesc: t('columnMenuSortDesc'),
-                                columnMenuShowColumns: t('columnMenuShowColumns'),
-                                columnMenuHideColumn: t('columnMenuHideColumn'),
-                            }}
-                            components={{
-                                NoRowsOverlay: () => (
-                                    <Stack height='100%' alignItems='center' justifyContent='center'>
-                                        {t('noRaws')}
-                                    </Stack>
-                                ),
-                                NoResultsOverlay: () => (
-                                    <Stack height='100%' alignItems='center' justifyContent='center'>
-                                        {t('noRaws')}
-                                    </Stack>
-                                ),
+                    </HasPermission>
+                    <div className='right'>
+                        <TextField
+                            margin='dense'
+                            label={t('search')}
+                            type='text'
+                            value={searchValue}
+                            disabled={isLoading}
+                            fullWidth
+                            variant='standard'
+                            onChange={(e) => handleSearch(e)}
+                            InputProps={{
+                                endAdornment: <InputAdornment position='end'>{<Search />}</InputAdornment>,
                             }}
                         />
-                    )}
+                    </div>
+                </div>
+                <div className='table-wrapper'>
+                    <DataGrid
+                        className='table-root'
+                        rows={filterList(adminList)}
+                        columns={adminColumn(t, editHandler, deleteHandler, passwordHandler)}
+                        pageSize={perPage}
+                        getRowId={(row) => row.id}
+                        rowsPerPageOptions={[10, 25, 50, 100]}
+                        onPageSizeChange={(p) => setPerPage(p)}
+                        checkboxSelection
+                        isRowSelectable={(params) => params.row.role !== 0}
+                        onSelectionModelChange={(ids) => {
+                            onSelectionModelChange(ids);
+                        }}
+                        disableSelectionOnClick={true}
+                        sortingOrder={['desc', 'asc']}
+                        componentsProps={{
+                            pagination: {
+                                labelRowsPerPage: t('perPage'),
+                            },
+                        }}
+                        localeText={{
+                            columnMenuUnsort: t('columnMenuUnsort'),
+                            columnMenuSortAsc: t('columnMenuSortAsc'),
+                            columnMenuSortDesc: t('columnMenuSortDesc'),
+                            columnMenuShowColumns: t('columnMenuShowColumns'),
+                            columnMenuHideColumn: t('columnMenuHideColumn'),
+                        }}
+                        loading={isLoading}
+                        components={{
+                            NoRowsOverlay: () => (
+                                <Stack height='100%' alignItems='center' justifyContent='center'>
+                                    {t('noRaws')}
+                                </Stack>
+                            ),
+                            NoResultsOverlay: () => (
+                                <Stack height='100%' alignItems='center' justifyContent='center'>
+                                    {t('noRaws')}
+                                </Stack>
+                            ),
+                            LoadingOverlay: DataGridSkeleton,
+                        }}
+                    />
                 </div>
             </div>
             <EditModal

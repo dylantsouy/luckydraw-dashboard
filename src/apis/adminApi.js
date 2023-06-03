@@ -1,11 +1,5 @@
 import { fetcher } from './apiSetup';
 
-export const fetchAdminList = async () => {
-    const { success, data } = await fetcher('/admins', 'GET', {}, true);
-
-    return { success, data };
-};
-
 export const editAdmin = async (props) => {
     const { id } = props;
     const { data, success } = await fetcher(`/admins/${id}`, 'PUT', props);
