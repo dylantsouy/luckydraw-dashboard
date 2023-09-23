@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "description": "server for luckydraw",
     "author": "Dylan Tsou",
-    "homepage": "https://dylantsouy.github.io/luckydraw-frontend",
+    "homepage": "https://dylantsouy.github.io/luckydraw-dashboard",
     "private": true,
     "dependencies": {
         "@emotion/react": "^11.10.0",
