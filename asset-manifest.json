@@ -1,17 +1,20 @@
 {
   "files": {
-    "main.css": "/luckydraw-frontend/static/css/main.87848019.css",
-    "main.js": "/luckydraw-frontend/static/js/main.1786eac1.js",
-    "static/js/787.ce35f3ca.chunk.js": "/luckydraw-frontend/static/js/787.ce35f3ca.chunk.js",
-    "static/media/background.png": "/luckydraw-frontend/static/media/background.25d0bd1d5823faf814a3.png",
-    "static/media/importUser.xlsx": "/luckydraw-frontend/static/media/importUser.f646f39072e25352d21b.xlsx",
-    "index.html": "/luckydraw-frontend/index.html",
-    "main.87848019.css.map": "/luckydraw-frontend/static/css/main.87848019.css.map",
-    "main.1786eac1.js.map": "/luckydraw-frontend/static/js/main.1786eac1.js.map",
-    "787.ce35f3ca.chunk.js.map": "/luckydraw-frontend/static/js/787.ce35f3ca.chunk.js.map"
+    "main.css": "/luckydraw-dashboard/static/css/main.f5020826.css",
+    "main.js": "/luckydraw-dashboard/static/js/main.1cab4384.js",
+    "static/js/787.ce35f3ca.chunk.js": "/luckydraw-dashboard/static/js/787.ce35f3ca.chunk.js",
+    "static/media/background.png": "/luckydraw-dashboard/static/media/background.25d0bd1d5823faf814a3.png",
+    "static/media/importUser.xlsx": "/luckydraw-dashboard/static/media/importUser.f646f39072e25352d21b.xlsx",
+    "static/media/logo.svg": "/luckydraw-dashboard/static/media/logo.b95a7a96574fac1d5e1452bbf01fc1c7.svg",
+    "static/media/logo_small.svg": "/luckydraw-dashboard/static/media/logo_small.557836f452aeae3c027e803dbe02a3de.svg",
+    "index.html": "/luckydraw-dashboard/index.html",
+    "static/media/add.svg": "/luckydraw-dashboard/static/media/add.10a2a741ceb2086fc960e5250d049441.svg",
+    "main.f5020826.css.map": "/luckydraw-dashboard/static/css/main.f5020826.css.map",
+    "main.1cab4384.js.map": "/luckydraw-dashboard/static/js/main.1cab4384.js.map",
+    "787.ce35f3ca.chunk.js.map": "/luckydraw-dashboard/static/js/787.ce35f3ca.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.87848019.css",
-    "static/js/main.1786eac1.js"
+    "static/css/main.f5020826.css",
+    "static/js/main.1cab4384.js"
   ]
 }
