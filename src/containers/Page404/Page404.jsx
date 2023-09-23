@@ -18,10 +18,6 @@ export default function Page404() {
                 <Button variant='contained' onClick={() => goHome()}>
                     Go Home
                 </Button>
-                <div className='bottom'>
-                    <div className='logo'>LuckyDraw</div>
-                    <div className='version'>v1.0.0</div>
-                </div>
             </div>
         </>
     );
