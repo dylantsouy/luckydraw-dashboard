@@ -132,7 +132,7 @@ p {
     cursor: pointer;
     transition: 0.3s !important;
     color: $primary;
-    background-color: $primary_light;
+    background-color: $primary_lighter;
     width: 30px !important;
     height: 30px !important;
     padding: 6px;
@@ -304,7 +304,7 @@ p {
 }
 
 .SnackbarItem-variantSuccess {
-    background-color: $third_color !important;
+    background-color: $primary !important;
 }
 
 .SnackbarItem-variantError {

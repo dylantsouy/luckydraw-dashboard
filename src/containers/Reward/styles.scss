@@ -1,5 +1,9 @@
 @import 'src/styles/mixins.scss';
 
 .reward-wrapper {
+    .recommend{
+        display: flex;
+        align-items: center;
+    }
     @include wrapper()
 }

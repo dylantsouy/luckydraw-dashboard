@@ -1,5 +1,9 @@
 @import 'src/styles/mixins.scss';
 
 .user-wrapper {
+    .recommend{
+        display: flex;
+        align-items: center;
+    }
     @include wrapper()
 }

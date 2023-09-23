@@ -16,12 +16,7 @@ const Layout = (props) => {
     const pageHandler = () => {
         switch (pathname) {
             case '/login':
-                return (
-                    <>
-                        <Header login={true} />
-                        {children}
-                    </>
-                );
+                return <>{children}</>;
             case '/luckyDraw':
                 return <>{children}</>;
             default:

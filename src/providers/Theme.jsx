@@ -5,8 +5,8 @@ import PropTypes from 'prop-types';
 const theme = createTheme({
     palette: {
         primary: {
-            main: '#605bff',
-            contrastText: '#e2e1ff',
+            main: '#3B9974',
+            contrastText: '#d0e6dd',
         },
         secondary: {
             main: '#fd7468',
@@ -17,7 +17,7 @@ const theme = createTheme({
             contrastText: '#eaf2f4',
         },
         gray: {
-            main: '#a2a2a2',
+            main: '#afafaf',
             contrastText: '#fff',
         },
     },

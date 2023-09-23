@@ -115,5 +115,12 @@
     "signupSuccess": "註冊成功",
     "FileSizeOver": "檔案大小限制 1 MB",
     "requiredRegex": "此欄位必填",
-    "RememberAccount": "記住帳號"
+    "RememberAccount": "記住帳號",
+    "goRegister": "去註冊",
+    "goLogin": "回登入",
+    "passwordPlaceholder": "請輸入 8 字元以上密碼",
+    "usernamePlaceholder": "請輸入 8 字元以上帳號",
+    "emailPlaceholder": "請輸入 Email",
+    "companyNamePlaceholder": "請輸入公司名",
+    "loginTimeout": "伺服器進入休眠，自動重啟中"
 }

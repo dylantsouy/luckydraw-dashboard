@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "description": "server for luckydraw",
     "author": "Dylan Tsou",
-    "homepage":"https://dylantsouy.github.io/luckydraw-frontend",
+    "homepage": "https://dylantsouy.github.io/luckydraw-frontend",
     "private": true,
     "dependencies": {
         "@emotion/react": "^11.10.0",
@@ -15,6 +15,7 @@
         "@testing-library/react": "^13.4.0",
         "@testing-library/user-event": "^13.5.0",
         "axios": "^0.27.2",
+        "browserslist": "^4.21.7",
         "buffer": "^6.0.3",
         "dayjs": "^1.10.6",
         "localforage": "^1.10.0",

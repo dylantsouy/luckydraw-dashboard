@@ -17,12 +17,11 @@
         justify-content: center;
         .logo {
             display: block;
-            width: 35px;
-            height: 35px;
             margin-right: 10px;
-            img {
-                width: 100%;
-                height: 100%;
+            margin-top: 25px;
+            svg{
+                width: 120px;
+                height: 120px;
             }
         }
         .logo-text {
@@ -36,15 +35,19 @@
     }
     .logo {
         display: none;
+        svg{
+            width: 42px;
+            height: 42px;
+        }
     }
     .menuSliderContainer {
         margin-top: 90px;
         .listItem {
-            color: $primary_light;
+            color: $primary_lighter;
             margin: 5px 0;
             position: relative;
             .listItemIcon {
-                color: $primary_light;
+                color: $primary_lighter;
             }
             &.active {
                 color: #fff;

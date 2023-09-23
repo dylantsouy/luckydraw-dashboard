@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'langs/useTranslation';
 import HasPermission from 'auths/HasPermission';
 import { useStorageStore } from 'store/store';
-import logo from 'assets/images/logo.png';
+import { Logo, LogoSmall } from 'assets/icons';
 
 export default function Sidebar() {
     const { t } = useTranslation('common');
@@ -61,15 +61,11 @@ export default function Sidebar() {
         <div className={`sidebar-wrapper ${sidebarShow === 'close' ? 'hidden' : ''}`}>
             <div className='title' onClick={() => goHandler('/user')}>
                 <div className='logo'>
-                    <img src={logo} alt='logo' />
-                </div>
-                <div className='logo-text'>
-                    <div className='top'>Luckdraw</div>
-                    <div className='bottom'>Dashboard</div>
+                    <Logo />
                 </div>
             </div>
             <div className='logo' onClick={() => goHandler('/user')}>
-                <img src={logo} alt='logo' />
+                <LogoSmall />
             </div>
             <Box className='menuSliderContainer' component='div'>
                 <List>

@@ -13,6 +13,7 @@ export default function PasswordInput(props) {
             margin='dense'
             id={id}
             label={t('password')}
+            placeholder={t('passwordPlaceholder')}
             type={showPassword ? 'text' : 'password'}
             value={value}
             fullWidth

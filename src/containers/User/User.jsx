@@ -7,7 +7,7 @@ import { useTranslation } from 'langs/useTranslation';
 import { deleteAllUsers, deleteUser, deleteUsers } from 'apis/userApi';
 import EditModal from 'components/user/EditModal';
 import AddModal from 'components/user/AddModal';
-import { Button, InputAdornment, TextField } from '@mui/material';
+import { Button, InputAdornment, Skeleton, TextField } from '@mui/material';
 import FileUploadModal from 'components/user/FileUploadModal';
 import { Stack } from '@mui/system';
 import { Search } from '@mui/icons-material';
@@ -186,7 +186,11 @@ export default function User() {
                 <div className='action-area'>
                     <div className='left'>
                         <div className='recommend'>
-                            {t('rewardCount')} : <span>{rewardCount}</span> *{t('recommendCount')}*
+                            {t('rewardCount')} :{' '}
+                            <span className='mr-1 ml-1'>
+                                {isLoading ? <Skeleton variant='rounded' width={25} height={15} /> : rewardCount}
+                            </span>{' '}
+                            *{t('recommendCount')}*
                         </div>
                         <Button variant='contained' onClick={addHandler} color='primary' disabled={isLoading}>
                             {t('create')}

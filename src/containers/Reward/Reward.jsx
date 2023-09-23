@@ -4,7 +4,7 @@ import './styles.scss';
 import { rewardColumn } from 'helpers/columns';
 import { useSnackbar } from 'notistack';
 import { useTranslation } from 'langs/useTranslation';
-import { Button, InputAdornment, TextField } from '@mui/material';
+import { Button, InputAdornment, Skeleton, TextField } from '@mui/material';
 import FileUploadModal from 'components/reward/FileUploadModal';
 import { Stack } from '@mui/system';
 import { Search } from '@mui/icons-material';
@@ -209,7 +209,11 @@ export default function Reward() {
                 <div className='action-area'>
                     <div className='left'>
                         <div className='recommend'>
-                            {t('userCount')}: <span>{userCount}</span> *{t('recommendCount')}*
+                            {t('userCount')}:{' '}
+                            <span className='mr-1 ml-1'>
+                                {isLoading ? <Skeleton variant='rounded' width={25} height={15} /> : userCount}
+                            </span>{' '}
+                            *{t('recommendCount')}*
                         </div>
                         <Button variant='contained' onClick={importHandler} color='third' disabled={isLoading}>
                             {t('import')}

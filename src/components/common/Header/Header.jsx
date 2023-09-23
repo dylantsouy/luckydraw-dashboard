@@ -2,7 +2,6 @@ import { Tooltip } from '@mui/material';
 import React from 'react';
 import LangSelect from '../LangSelect';
 import './styles.scss';
-import PropTypes from 'prop-types';
 import FormatIndentIncreaseIcon from '@mui/icons-material/FormatIndentIncrease';
 import FormatIndentDecreaseIcon from '@mui/icons-material/FormatIndentDecrease';
 import { Logout } from '@mui/icons-material';
@@ -12,9 +11,8 @@ import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import { useTranslation } from 'langs/useTranslation';
 
-export default function Header(props) {
+export default function Header() {
     const { t } = useTranslation('common');
-    const { login } = props;
     const { clear } = useAuthStore();
     const { enqueueSnackbar } = useSnackbar();
     const navigate = useNavigate();
@@ -35,14 +33,7 @@ export default function Header(props) {
         setSidebarShow(e);
     };
 
-    return login ? (
-        <div className='header-wrapper login'>
-            <div></div>
-            <div className='buttonWrapper'>
-                <LangSelect />
-            </div>
-        </div>
-    ) : (
+    return (
         <div className={`header-wrapper`}>
             <div className='header-left'>
                 <div className='header-bar'>
@@ -63,7 +54,3 @@ export default function Header(props) {
         </div>
     );
 }
-
-Header.propTypes = {
-    login: PropTypes.bool,
-};
