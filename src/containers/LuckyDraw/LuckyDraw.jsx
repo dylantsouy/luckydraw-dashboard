@@ -8,10 +8,10 @@ import 'react-medium-image-zoom/dist/styles.css';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import { fetchUserList } from 'apis/userApi';
-import Loading from 'components/common/Loading';
 import { fetchSetting } from 'apis/settingApi';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from 'store/auth';
+import DrawLoading from 'components/common/DrawLoading';
 
 export default function LuckyDraw() {
     const navigate = useNavigate();
@@ -134,7 +134,7 @@ export default function LuckyDraw() {
     return (
         <div className='luckydraw-wrapper'>
             {loading ? (
-                <Loading />
+                <DrawLoading />
             ) : (
                 <div
                     className='content'
