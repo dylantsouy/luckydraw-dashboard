@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/luckydraw-dashboard/static/css/main.fa1f8f66.css",
-    "main.js": "/luckydraw-dashboard/static/js/main.c9b7fd18.js",
+    "main.js": "/luckydraw-dashboard/static/js/main.d05e7204.js",
     "static/js/787.ce35f3ca.chunk.js": "/luckydraw-dashboard/static/js/787.ce35f3ca.chunk.js",
     "static/media/background.png": "/luckydraw-dashboard/static/media/background.25d0bd1d5823faf814a3.png",
     "static/media/importUser.xlsx": "/luckydraw-dashboard/static/media/importUser.f646f39072e25352d21b.xlsx",
@@ -10,11 +10,11 @@
     "index.html": "/luckydraw-dashboard/index.html",
     "static/media/add.svg": "/luckydraw-dashboard/static/media/add.10a2a741ceb2086fc960e5250d049441.svg",
     "main.fa1f8f66.css.map": "/luckydraw-dashboard/static/css/main.fa1f8f66.css.map",
-    "main.c9b7fd18.js.map": "/luckydraw-dashboard/static/js/main.c9b7fd18.js.map",
+    "main.d05e7204.js.map": "/luckydraw-dashboard/static/js/main.d05e7204.js.map",
     "787.ce35f3ca.chunk.js.map": "/luckydraw-dashboard/static/js/787.ce35f3ca.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.fa1f8f66.css",
-    "static/js/main.c9b7fd18.js"
+    "static/js/main.d05e7204.js"
   ]
 }
