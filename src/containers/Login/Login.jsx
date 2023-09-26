@@ -116,9 +116,11 @@ export default function Login() {
             password: formLogin.passwordLogin.trim(),
         };
 
-        const timeoutId = setTimeout(() => {
-            setServerResponseTimeout(timeoutId);
-        }, 2000);
+        if (!serverResponseTimeout) {
+            const timeoutId = setTimeout(() => {
+                setServerResponseTimeout(timeoutId);
+            }, 2000);
+        }
 
         try {
             let result = await loginApi(data);
@@ -227,9 +229,11 @@ export default function Login() {
             email: formSignup.email.trim(),
             company: formSignup.company.trim(),
         };
-        const timeoutId = setTimeout(() => {
-            setServerResponseTimeout(timeoutId);
-        }, 2000);
+        if (!serverResponseTimeout) {
+            const timeoutId = setTimeout(() => {
+                setServerResponseTimeout(timeoutId);
+            }, 2000);
+        }
         try {
             let result = await signupApi(data);
             if (result?.success) {
@@ -246,7 +250,7 @@ export default function Login() {
             enqueueSnackbar(t(err?.message), { variant: 'error' });
         }
     };
-    console.log('serverResponseTimeout', serverResponseTimeout);
+
     return (
         <>
             <div className='LoginPage'>
