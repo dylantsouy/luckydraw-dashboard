@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, TextField } from '@mui/material';
 import './styles.scss';
@@ -23,7 +23,6 @@ export default function Login() {
     const navigate = useNavigate();
     const { enqueueSnackbar } = useSnackbar();
     const [type, setType] = useState('login');
-    const [serverResponseTimeout, setServerResponseTimeout] = useState(null);
     const [loading, setLoading] = useState(false);
     const [formLogin, setFormLogin] = useState({
         passwordLogin: '',
@@ -48,15 +47,6 @@ export default function Login() {
     const toggleRemember = (e) => {
         setValue('isRemember', e.target.checked);
     };
-
-    useEffect(() => {
-        return () => {
-            if (serverResponseTimeout) {
-                clearTimeout(serverResponseTimeout);
-                setServerResponseTimeout(null);
-            }
-        };
-    }, [serverResponseTimeout]);
 
     const changeType = (type) => {
         setValidationSignup({
@@ -116,17 +106,9 @@ export default function Login() {
             password: formLogin.passwordLogin.trim(),
         };
 
-        if (!serverResponseTimeout) {
-            const timeoutId = setTimeout(() => {
-                setServerResponseTimeout(timeoutId);
-            }, 2000);
-        }
-
         try {
             let result = await loginApi(data);
             if (result?.success) {
-                clearTimeout(serverResponseTimeout);
-                setServerResponseTimeout(null);
                 setAuthValue('user', result.data);
                 setAuthValue('token', result.token);
                 setAuthValue('permissionArray', permissionHandler(result.data.role));
@@ -138,8 +120,6 @@ export default function Login() {
             }
             setLoading(false);
         } catch (err) {
-            clearTimeout(serverResponseTimeout);
-            setServerResponseTimeout(null);
             setLoading(false);
             enqueueSnackbar(t(err?.message), { variant: 'error' });
         }
@@ -229,23 +209,14 @@ export default function Login() {
             email: formSignup.email.trim(),
             company: formSignup.company.trim(),
         };
-        if (!serverResponseTimeout) {
-            const timeoutId = setTimeout(() => {
-                setServerResponseTimeout(timeoutId);
-            }, 2000);
-        }
         try {
             let result = await signupApi(data);
             if (result?.success) {
-                clearTimeout(serverResponseTimeout);
-                setServerResponseTimeout(null);
                 enqueueSnackbar(t('signupSuccess'), { variant: 'success' });
                 changeType('login');
             }
             setLoading(false);
         } catch (err) {
-            clearTimeout(serverResponseTimeout);
-            setServerResponseTimeout(null);
             setLoading(false);
             enqueueSnackbar(t(err?.message), { variant: 'error' });
         }
@@ -326,8 +297,8 @@ export default function Login() {
                                     variant='contained'
                                     onClick={handleSubmitLogin}
                                     loading={loading}
-                                    serverResponseTimeout={serverResponseTimeout}
-                                    text={serverResponseTimeout ? t('loginTimeout') : t('login')}
+                                    serverResponseTimeout={true}
+                                    text={loading ? 'Loading' : t('login')}
                                 />
                                 <div className='version'>v{process.env.REACT_APP_VERSION}</div>
                             </form>
@@ -354,8 +325,8 @@ export default function Login() {
                                     variant='contained'
                                     onClick={handleSubmitLogin}
                                     loading={loading}
-                                    serverResponseTimeout={serverResponseTimeout}
-                                    text={serverResponseTimeout ? t('loginTimeout') : t('login')}
+                                    serverResponseTimeout={true}
+                                    text={loading ? 'Loading' : t('login')}
                                 />
                                 <div className='version'>v{process.env.REACT_APP_VERSION}</div>
                             </div>
@@ -435,8 +406,8 @@ export default function Login() {
                                     variant='contained'
                                     onClick={handleSubmitRegister}
                                     loading={loading}
-                                    serverResponseTimeout={serverResponseTimeout}
-                                    text={serverResponseTimeout ? t('loginTimeout') : t('register')}
+                                    serverResponseTimeout={true}
+                                    text={loading ? 'Loading' : t('register')}
                                 />
                                 <div className='version'>v{process.env.REACT_APP_VERSION}</div>
                             </form>
@@ -447,8 +418,8 @@ export default function Login() {
                                     variant='contained'
                                     onClick={handleSubmitRegister}
                                     loading={loading}
-                                    serverResponseTimeout={serverResponseTimeout}
-                                    text={serverResponseTimeout ? t('loginTimeout') : t('register')}
+                                    serverResponseTimeout={true}
+                                    text={loading ? 'Loading' : t('register')}
                                 />
                                 <div className='version'>v{process.env.REACT_APP_VERSION}</div>
                             </div>

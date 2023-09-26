@@ -122,5 +122,5 @@
     "usernamePlaceholder": "請輸入 8 字元以上帳號",
     "emailPlaceholder": "請輸入 Email",
     "companyNamePlaceholder": "請輸入公司名",
-    "loginTimeout": "伺服器進入休眠，自動重啟中"
+    "loginTimeout": "若等候較長，即伺服器進入休眠，將為您自動重啟中"
 }
