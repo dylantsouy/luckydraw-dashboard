@@ -53,6 +53,7 @@ export default function Login() {
         return () => {
             if (serverResponseTimeout) {
                 clearTimeout(serverResponseTimeout);
+                setServerResponseTimeout(null);
             }
         };
     }, [serverResponseTimeout]);
@@ -123,6 +124,7 @@ export default function Login() {
             let result = await loginApi(data);
             if (result?.success) {
                 clearTimeout(serverResponseTimeout);
+                setServerResponseTimeout(null);
                 setAuthValue('user', result.data);
                 setAuthValue('token', result.token);
                 setAuthValue('permissionArray', permissionHandler(result.data.role));
@@ -135,7 +137,7 @@ export default function Login() {
             setLoading(false);
         } catch (err) {
             clearTimeout(serverResponseTimeout);
-
+            setServerResponseTimeout(null);
             setLoading(false);
             enqueueSnackbar(t(err?.message), { variant: 'error' });
         }
@@ -232,17 +234,19 @@ export default function Login() {
             let result = await signupApi(data);
             if (result?.success) {
                 clearTimeout(serverResponseTimeout);
+                setServerResponseTimeout(null);
                 enqueueSnackbar(t('signupSuccess'), { variant: 'success' });
                 changeType('login');
             }
             setLoading(false);
         } catch (err) {
             clearTimeout(serverResponseTimeout);
+            setServerResponseTimeout(null);
             setLoading(false);
             enqueueSnackbar(t(err?.message), { variant: 'error' });
         }
     };
-
+    console.log('serverResponseTimeout', serverResponseTimeout);
     return (
         <>
             <div className='LoginPage'>
