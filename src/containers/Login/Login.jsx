@@ -89,8 +89,8 @@ export default function Login() {
                     error: !usernameRegex(formLogin.usernameLogin) ? t('regexErrorUsername') : '',
                 },
                 password: {
-                    valid: usernameRegex(formSignup.passwordRegister),
-                    error: !usernameRegex(formSignup.passwordRegister) ? t('regexErrorUsername') : '',
+                    valid: usernameRegex(formLogin.passwordLogin),
+                    error: !usernameRegex(formLogin.passwordLogin) ? t('regexErrorUsername') : '',
                 },
             });
             setLoading(false);
